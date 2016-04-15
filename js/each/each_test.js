@@ -1,8 +1,8 @@
-var each  = require('can/util/array/each');
-require('can/test/test');
-require('steal-qunit');
+var each  = require('can-util/js/each/');
 
-QUnit.module('can/util/array/each');
+var QUnit = require('steal-qunit');
+
+QUnit.module('can-util/js/each');
 
 // The following test is from jQuery’s solution to this bug:
 // https://github.com/jquery/jquery/pull/2185
