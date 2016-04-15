@@ -1,4 +1,4 @@
-var global = require('can/util/global');
+var getDocument = require('../document/');
 module.exports = function(el) {
-	return (el.ownerDocument || el) === global.document;
+	return (el.ownerDocument || el) === getDocument();
 };
