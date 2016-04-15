@@ -1,8 +1,10 @@
-require('can/util/attr/attr');
-require('can/view/stache/stache');
-require('steal-qunit');
+var domAttr = require('can-util/dom/attr/');
+var domEvents = require('can-util/dom/events/');
 
-QUnit.module("can/util/attr");
+
+QUnit = require('steal-qunit');
+
+QUnit.module("can-util/dom/attr");
 
 test("attributes event", function () {
 
@@ -15,11 +17,11 @@ test("attributes event", function () {
 		equal(ev.oldValue, null, "oldValue");
 
 		equal(div.getAttribute(ev.attributeName), "bar");
-		can.unbind.call(can.$(div), "attributes", attrHandler1);
+		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
 	};
-	can.bind.call(can.$(div), "attributes", attrHandler1);
+	domEvents.addEventListener.call(div, "attributes", attrHandler1);
 
-	can.attr.set(div, "foo", "bar");
+	domAttr.set(div, "foo", "bar");
 
 	stop();
 
@@ -36,8 +38,8 @@ test("attributes event", function () {
 			can.unbind.call(can.$(div), "attributes", attrHandler);
 			start();
 		};
-		can.bind.call(can.$(div), "attributes", attrHandler);
-		can.attr.remove(div, "foo");
+		domEvents.removeEventListener.call(div, "attributes", attrHandler);
+		domAttr.remove(div, "foo");
 
 	}, 50);
 

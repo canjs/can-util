@@ -1,23 +1,26 @@
 // # can/util/attr.js
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
-var can = require('can/util/can');
+var setImmediate = require("../../js/setImmediate/");
+var getDocument = require("../document/");
+var global = require("../../js/global/")();
+var isOfGlobalDocument = require("../isOfGlobalDocument/");
+var isArray = require("../../js/isArray/");
+var domData = require("../data/");
+var domDispatch = require("../dispatch/dispatch");
+
 
 // Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 // the triggering of `attributes` event async.
-var setImmediate = can.global.setImmediate || function (cb) {
-		return setTimeout(cb, 0);
-	},
-	// this is a hack to deal with a problem with can-simple-dom
-	formElements = {"input": true, "textarea": true, "select": true},
+var formElements = {"input": true, "textarea": true, "select": true},
 	hasProperty = function(el,attrName){
-		return (attrName in el) || (can.document && formElements[el.nodeName.toLowerCase()]);
+		return (attrName in el) || (getDocument() && formElements[el.nodeName.toLowerCase()]);
 	},
 	attr = {
 		// This property lets us know if the browser supports mutation observers.
 		// If they are supported then that will be setup in can/util/util and those native events will be used to inform observers of attribute changes.
 		// Otherwise this module handles triggering an `attributes` event on the element.
-		MutationObserver: can.global.MutationObserver || can.global.WebKitMutationObserver || can.global.MozMutationObserver,
+		MutationObserver: global.MutationObserver || global.WebKitMutationObserver || global.MozMutationObserver,
 
 		/**
 		 * @property {Object.<String,(String|Boolean|function)>} can.view.attr.map
@@ -77,7 +80,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 				}
 			},
 			style: (function () {
-				var el = can.global.document && document.createElement('div');
+				var el = global.document && getDocument().createElement('div');
 				if ( el && el.style && ("cssText" in el.style) ) {
 					return function (el, val) {
 						return el.style.cssText = (val || "");
@@ -117,7 +120,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 		// ## attr.set
 		// Set the value an attribute on an element.
 		set: function (el, attrName, val) {
-			var usingMutationObserver = can.isDOM(el) && attr.MutationObserver;
+			var usingMutationObserver = isOfGlobalDocument(el) && attr.MutationObserver;
 			attrName = attrName.toLowerCase();
 			var oldValue;
 			// In order to later trigger an event we need to compare the new value to the old value,
@@ -141,7 +144,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 				newValue = el[attrName] = true;
 
 				if (attrName === "checked" && el.type === "radio") {
-					if (can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
+					if (isArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
 						el.defaultChecked = true;
 					}
 				}
@@ -153,7 +156,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 				if (el[prop] !== val || el.nodeName.toUpperCase() === 'OPTION') {
 					el[prop] = val;
 				}
-				if (prop === "value" && can.inArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
+				if (prop === "value" && attr.defaultValue.indexOf((el.nodeName+"").toLowerCase()) >= 0) {
 					el.defaultValue = val;
 				}
 			} else {
@@ -166,7 +169,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 			}
 		},
 		setAttribute: (function(){
-			var doc = can.global.document;
+			var doc = getDocument();
 			if(doc && document.createAttribute) {
 				try {
 					doc.createAttribute("{}");
@@ -201,10 +204,10 @@ var setImmediate = can.global.setImmediate || function (cb) {
 		// ## attr.trigger
 		// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 		trigger: function (el, attrName, oldValue) {
-			if (can.data(can.$(el), "canHasAttributesBindings")) {
+			if (setData.get(el, "canHasAttributesBindings")) {
 				attrName = attrName.toLowerCase();
 				return setImmediate(function () {
-					can.trigger(el, {
+					domDispatch.call(el, {
 						type: "attributes",
 						attributeName: attrName,
 						target: el,
@@ -258,7 +261,7 @@ var setImmediate = can.global.setImmediate || function (cb) {
 		// Checks if an element contains an attribute.
 		// For browsers that support `hasAttribute`, creates a function that calls hasAttribute, otherwise creates a function that uses `getAttribute` to check that the attribute is not null.
 		has: (function () {
-			var el = can.global.document && document.createElement('div');
+			var el = getDocument() && document.createElement('div');
 			if (el && el.hasAttribute) {
 				return function (el, name) {
 					return el.hasAttribute(name);
