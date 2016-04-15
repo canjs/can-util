@@ -1,4 +1,4 @@
-var each = require('./each');
+var each = require('can-util/js/each/');
 
 function makeArray(arr) {
 	var ret = [];
