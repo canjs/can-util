@@ -9,6 +9,8 @@ var isArray = require("../../js/isArray/");
 var domData = require("../data/");
 var domDispatch = require("../dispatch/dispatch");
 
+require("../events/attributes/");
+
 
 // Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 // the triggering of `attributes` event async.

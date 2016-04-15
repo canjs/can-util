@@ -11,7 +11,6 @@ test("attributes event", function () {
 	var div = document.createElement("div");
 
 	var attrHandler1 = function(ev) {
-
 		equal(ev.attributeName, "foo", "attribute name is correct");
 		equal(ev.target, div, "target");
 		equal(ev.oldValue, null, "oldValue");
@@ -35,10 +34,10 @@ test("attributes event", function () {
 
 			equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
 
-			can.unbind.call(can.$(div), "attributes", attrHandler);
+			domEvents.removeEventListener.call(div, "attributes", attrHandler);
 			start();
 		};
-		domEvents.removeEventListener.call(div, "attributes", attrHandler);
+		domEvents.addEventListener.call(div, "attributes", attrHandler);
 		domAttr.remove(div, "foo");
 
 	}, 50);
