@@ -1,4 +1,9 @@
 var global = require("../../js/global/")();
-module.exports = function(){
-	return global.MutationObserver || global.WebKitMutationObserver || global.MozMutationObserver
+var setMutationObserver;
+module.exports = function(setMO){
+	if(setMO !== undefined) {
+		setMutationObserver = setMO;
+	}
+	return setMutationObserver !== undefined ? setMutationObserver :
+		global.MutationObserver || global.WebKitMutationObserver || global.MozMutationObserver;
 };
