@@ -1,4 +1,4 @@
-var isEmptyObject = require("../../js/isEmptyObject/");
+var isEmptyObject = require("../../js/is-empty-object/");
 var data = {};
 var expando = 'can'+new Date();
 var uuid = 0;

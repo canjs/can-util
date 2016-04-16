@@ -1,3 +1,3 @@
-require("./attr/attr_test");
-require("./dispatch/dispatch_test");
-require("./events/inserted/inserted_test");
+require("./attr/attr-test");
+require("./dispatch/dispatch-test");
+require("./events/inserted/inserted-test");

@@ -1,3 +1,3 @@
-var makeMutationEvent = require("../makeMutationEvent/");
+var makeMutationEvent = require("../make-mutation-event/");
 
 makeMutationEvent("inserted", "addedNodes");
