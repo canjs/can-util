@@ -1,4 +1,4 @@
 module.exports = function(){
-	typeof window !== "undefined" &&
+	return typeof window !== "undefined" &&
 		typeof document !== "undefined" && typeof SimpleDOM === "undefined";
 }

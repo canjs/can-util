@@ -8,7 +8,7 @@ module.exports = function(event, args, bubbles){
 	var isString = typeof event === "string";
 
 	// removed / inserted events should not bubble
-	ev.initEvent(isString ? event : event.type, bubbles === undefined ? true : bubbles);
+	ev.initEvent(isString ? event : event.type, bubbles === undefined ? true : bubbles, false);
 
 	if(!isString) {
 		assign(ev, event);

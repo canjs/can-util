@@ -1,8 +1,8 @@
-var cid = require('can-util/js/isArrayLike/');
+var isArrayLike = require('can-util/js/isArrayLike/');
 var QUnit = require('steal-qunit');
 
 QUnit.module("can-util/js/isArrayLike")
 
 QUnit.test("basics", function(){
-	ok(false);
+	ok(isArrayLike({0: 1, length: 1}));
 });
