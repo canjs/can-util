@@ -1,4 +1,5 @@
-var getDocument = require("../document/");
+var getDocument = require("../document/"),
+	childNodes = require("../child-nodes/");
 // fragment.js
 // ---------
 // _DOM Fragment support._
@@ -39,7 +40,7 @@ var fragmentRE = /^\s*<(\w+)[^>]*>/,
 		}
 		// IE8 barfs if you pass slice a `childNodes` object, so make a copy.
 		var tmp = {},
-			children = can.childNodes( container );
+			children = childNodes( container );
 		tmp.length = children.length;
 		for (var i = 0; i < children.length; i++) {
 			tmp[i] = children[i];
