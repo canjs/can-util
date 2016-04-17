@@ -1,3 +1,4 @@
+var getDocument = require("../document/");
 // fragment.js
 // ---------
 // _DOM Fragment support._
@@ -50,7 +51,7 @@ var buildFragment = function (html, doc) {
 		return html;
 	}
 	if(!doc) {
-		doc = document;
+		doc = getDocument();
 	} else if(doc.length) {
 		doc = doc[0];
 	}
