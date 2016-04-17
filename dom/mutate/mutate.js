@@ -2,11 +2,11 @@
 // Used to alert interested parties of when an element is inserted into the DOM.
 // Given a list of elements, check if the first is in the DOM, and if so triggers the `inserted` event on all elements and their descendants.
 
-var makeArray = require("../../js/makeArray/");
-var setImmediate = require("../../js/setImmediate/");
+var makeArray = require("../../js/make-array/");
+var setImmediate = require("../../js/set-immediate/");
 
-var getMutationObserver = require("../mutationObserver/");
-var childNodes = require("../childNodes/");
+var getMutationObserver = require("../mutation-observer/");
+var childNodes = require("../child-nodes/");
 var domContains = require("../contains/");
 var domDispatch = require("../dispatch/");
 

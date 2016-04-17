@@ -1,11 +1,11 @@
 // # can/util/attr.js
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
-var setImmediate = require("../../js/setImmediate/");
+var setImmediate = require("../../js/set-immediate/");
 var getDocument = require("../document/");
 var global = require("../../js/global/")();
-var isOfGlobalDocument = require("../isOfGlobalDocument/");
-var isArray = require("../../js/isArray/");
+var isOfGlobalDocument = require("../is-of-global-document/");
+var isArray = require("../../js/is-array/");
 var domData = require("../data/");
 var domDispatch = require("../dispatch/dispatch");
 

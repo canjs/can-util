@@ -1,7 +1,7 @@
 var events = require("../events");
-var isOfGlobalDocument = require("../../isOfGlobalDocument/");
+var isOfGlobalDocument = require("../../is-of-global-document/");
 var domData = require("../../data/");
-var getMutationObserver = require("../../mutationObserver/");
+var getMutationObserver = require("../../mutation-observer/");
 var assign = require("../../../js/assign/");
 var domDispatch = require("../../dispatch/");
 
