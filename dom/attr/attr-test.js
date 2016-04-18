@@ -71,9 +71,11 @@ test("Map special attributes", function () {
 
 	domAttr.set(div, "for", "my-for");
 	equal(div.htmlFor, "my-for", "Map for to htmlFor");
-
-	domAttr.set(div, "innertext", "my-inner-text");
-	equal(div.innerText, "my-inner-text", "Map innertext to innerText");
+	
+	if('innerText' in div) {
+		domAttr.set(div, "innertext", "my-inner-text");
+		equal(div.innerText, "my-inner-text", "Map innertext to innerText");
+	}
 
 	domAttr.set(div, "textcontent", "my-content");
 	equal(div.textContent, "my-content", "Map textcontent to textContent");
