@@ -17,11 +17,11 @@ test("basics", 2, function () {
 
 	var handler = function(ev){
 		ok(true, "called")
-		domEvents.removeDelegateListener.call(ul, "li","click", handler);
+		domEvents.removeDelegateListener.call(ul, "click", "li",handler);
 		var dE = domData.get.call(this, "delegateEvents");
 		equal(dE, undefined, "data removed");
-		domEvents.addDelegateListener.call(ul, "li","click", handler);
+		domEvents.addDelegateListener.call(ul, "click", "li",handler);
 	};
-	domEvents.addDelegateListener.call(ul, "li","click", handler);
+	domEvents.addDelegateListener.call(ul, "click", "li", handler);
 	domDispatch.call(ul.firstChild.firstChild,"click");
 });

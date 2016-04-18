@@ -60,7 +60,7 @@ var handleEvent = function(ev){
 	}
 }
 
-domEvents.addDelegateListener = function(selector, eventType, handler) {
+domEvents.addDelegateListener = function(eventType, selector, handler) {
 
 
 	var events = domData.get.call(this, dataName),
@@ -87,7 +87,7 @@ domEvents.addDelegateListener = function(selector, eventType, handler) {
 
 };
 
-domEvents.removeDelegateListener = function(selector, eventType, handler) {
+domEvents.removeDelegateListener = function(eventType, selector, handler) {
 	var events = domData.get.call(this, dataName);
 
 	if (events[eventType] && events[eventType][selector]) {

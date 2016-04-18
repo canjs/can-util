@@ -22,3 +22,4 @@ require('./is-web-worker/is-web-worker-test');
 require('./join-uris/join-uris-test');
 require('./last/last-test');
 require('./make-array/make-array-test');
+require('./string/string-test');

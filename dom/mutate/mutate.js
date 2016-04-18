@@ -100,11 +100,28 @@ module.exports = {
 			mutated(children,"inserted");
 		}
 	},
-	removeChild: function(){
-
+	removeChild: function(child){
+		if(getMutationObserver()) {
+			this.removeChild(child);
+		} else {
+			this.removeChild(child);
+			mutated([child],"removed");
+		}
 	},
-	replaceChild: function(){
-
+	replaceChild: function(newChild, oldChild){
+		if(getMutationObserver()) {
+			this.replaceChild(newChild, oldChild);
+		} else {
+			var children;
+			if (newChild.nodeType === 11) {
+				children = makeArray(childNodes(newChild));
+			} else {
+				children = [newChild];
+			}
+			this.replaceChild(newChild, oldChild);
+			mutated([oldChild],"removed");
+			mutated(children,"inserted");
+		}
 	},
 	// called with elements that might have been inserted
 	inserted: function(elements){
