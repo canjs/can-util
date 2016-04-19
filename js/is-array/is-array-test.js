@@ -1,8 +1,10 @@
+var QUnit = require('../../test/qunit');
+
 var isArray  = require('./is-array');
 
 QUnit.module('can-util/js/is-array');
 
-test("basics", function(){
+QUnit.test("basics", function(){
 	ok(isArray([]));
 	ok(!isArray({0: "a", length: 1}));
 });

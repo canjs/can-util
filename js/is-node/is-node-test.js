@@ -1,7 +1,8 @@
+var QUnit = require('../../test/qunit');
 var isNode = require('./is-node');
 
 QUnit.module("can-util/js/is-node");
 
 test("basics", function(){
-	equal(typeof isNode(), "boolean");
+	QUnit.equal(typeof isNode(), "boolean");
 });

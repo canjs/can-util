@@ -1,8 +1,9 @@
+var QUnit = require('../../test/qunit');
 var cid = require('./cid');
 
 QUnit.module("can-util/js/cid");
 
-test("assigns incremental ids", function(){
+QUnit.test("assigns incremental ids", function(){
 	var i;
 	var objects = [{}, {}, {}, {}, {}];
 	var ref = parseInt(cid({}), 10) + 1;
@@ -16,7 +17,7 @@ test("assigns incremental ids", function(){
 	}
 });
 
-test("assigns id based on name", function(){
+QUnit.test("assigns id based on name", function(){
 	var reference = {};
 	var named = {};
 	var id_num = parseInt(cid(reference), 10) + 1;

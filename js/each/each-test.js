@@ -1,3 +1,4 @@
+var QUnit = require('../../test/qunit');
 var each  = require('./each');
 
 QUnit.module('can-util/js/each');

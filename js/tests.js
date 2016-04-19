@@ -1,7 +1,3 @@
-if(typeof QUnit === 'undefined') {
-	require('steal-qunit');
-}
-
 require('./assign/assign-test');
 require('./cid/cid-test');
 require('./diff/diff-test');
