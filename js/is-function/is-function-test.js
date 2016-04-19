@@ -1,8 +1,7 @@
-var isFunction = require('can-util/js/is-function/');
-var QUnit = require('steal-qunit');
+var isFunction = require('./is-function');
 
 QUnit.module("can-util/js/is-function");
 
-QUnit.test("basics", function(){
+test("basics", function(){
 	ok(isFunction(function(){}));
 });

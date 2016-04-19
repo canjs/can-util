@@ -1,8 +1,7 @@
-var isPlainObject = require('can-util/js/is-plain-object/');
-var QUnit = require('steal-qunit');
+var isPlainObject = require('./is-plain-object');
 
 QUnit.module("can-util/js/is-plain-object");
 
-QUnit.test("basics", function(){
+test("basics", function(){
 	ok(isPlainObject({foo : "bar"}));
 });

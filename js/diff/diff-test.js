@@ -1,9 +1,8 @@
-var diff = require('can-util/js/diff/');
-var QUnit = require('steal-qunit');
+var diff = require('./diff');
 
 QUnit.module("can-util/js/diff");
 
-QUnit.test("basics", function(){
+test("basics", function(){
 
 	var patches = diff([], [1,2,3]);
 	deepEqual(patches, [{

@@ -1,5 +1,3 @@
-require('can-util/js/dev/');
-
-var QUnit = require('steal-qunit');
+require('./dev');
 
 QUnit.module("can-util/js/dev");

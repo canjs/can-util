@@ -1,5 +1,4 @@
-var isBrowserWindow = require('can-util/js/is-browser-window/');
-var QUnit = require('steal-qunit');
+var isBrowserWindow = require('./is-browser-window');
 
 QUnit.module("can-util/js/is-browser-window");
 

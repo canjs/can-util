@@ -1,8 +1,7 @@
-var last = require('can-util/js/last/');
-var QUnit = require('steal-qunit');
+var last = require('./last');
 
 QUnit.module("can-util/js/last");
 
-QUnit.test("basics", function(){
+test("basics", function(){
 	QUnit.equal(last(["a","b"]), "b");
 });

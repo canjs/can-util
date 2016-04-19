@@ -1,6 +1,6 @@
-var isArray = require('can-util/js/is-array/');
-var isFunction = require('can-util/js/is-function/');
-var isPlainObject = require('can-util/js/is-plain-object/');
+var isArray = require('../is-array/is-array');
+var isFunction = require('../is-function/is-function');
+var isPlainObject = require('../is-plain-object/is-plain-object');
 
 function extend() {
 	/*jshint maxdepth:6 */

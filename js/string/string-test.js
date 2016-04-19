@@ -1,5 +1,4 @@
-var string = require('can-util/js/string/');
-var QUnit = require('steal-qunit');
+var string = require('./string');
 
 QUnit.module("can-util/js/string");
 
@@ -13,6 +12,7 @@ test('string.sub', function () {
 	equal(string.sub('a{b}', foo, true), 'ac');
 	ok(!foo.b, 'b\'s value was removed');
 });
+
 test('string.sub with undefined values', function () {
 	var subbed = string.sub('test{exists} plus{noexists}', {
 		exists: 'test'
@@ -23,6 +23,7 @@ test('string.sub with undefined values', function () {
 	}, true);
 	deepEqual(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
 });
+
 test('string.sub with null values', function () {
 	var subbed = string.sub('test{exists} plus{noexists}', {
 		exists: 'test',
@@ -35,15 +36,18 @@ test('string.sub with null values', function () {
 	}, true);
 	deepEqual(subbed, null, 'Rendering with null values should return null even when remove param is true');
 });
+
 test('string.sub double', function () {
 	equal(string.sub('{b} {d}', [{
 		b: 'c',
 		d: 'e'
 	}]), 'c e');
 });
+
 test('String.underscore', function () {
 	equal(string.underscore('Foo.Bar.ZarDar'), 'foo.bar.zar_dar');
 });
+
 test('string.sub remove', function () {
 	var obj = {
 		a: 'a'
@@ -55,6 +59,7 @@ test('string.sub remove', function () {
 	equal(string.sub('{a}', obj, true), 'a');
 	deepEqual(obj, {});
 });
+
 test('string.getObject Single root', function () {
 	// ## Single root
 	var root, result;
@@ -106,6 +111,7 @@ test('string.getObject Single root', function () {
 		baz: {}
 	}, 'added \'baz: {}\' into root');
 });
+
 test('string.getObject Multiple root', function () {
 	// ## Multiple roots
 	var root1, root2, roots, result;
@@ -283,6 +289,7 @@ test('string.getObject Multiple root', function () {
 		b: 2
 	}, 'root is same');
 });
+
 test('string.getObject Deep objects', function () {
 	// ## Deep objects
 	var root, result;
@@ -352,6 +359,7 @@ test('string.getObject Deep objects', function () {
 		}
 	}, 'added \'world: {}\' into deep object');
 });
+
 test('string.esc', function () {
 	var text = string.esc(0);
 	equal(text, '0', '0 value properly rendered');
@@ -364,6 +372,7 @@ test('string.esc', function () {
 	text = string.esc('<div>&nbsp;</div>');
 	equal(text, '&lt;div&gt;&amp;nbsp;&lt;/div&gt;', 'HTML escaped properly');
 });
+
 test('string.camelize', function () {
 	var text = string.camelize(0);
 	equal(text, '0', '0 value properly rendered');
@@ -378,6 +387,7 @@ test('string.camelize', function () {
 	text = string.camelize('foo-bar');
 	equal(text, 'fooBar');
 });
+
 test('string.hyphenate', function () {
 	var text = string.hyphenate(0);
 	equal(text, '0', '0 value properly rendered');

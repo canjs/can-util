@@ -1,5 +1,5 @@
 /* jshint maxdepth:7*/
-var isArrayLike = require('can-util/js/is-array-like/');
+var isArrayLike = require('../is-array-like/is-array-like');
 
 function each(elements, callback, context) {
 	var i = 0,

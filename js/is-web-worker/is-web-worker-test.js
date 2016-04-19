@@ -1,8 +1,7 @@
-var isWebWorker = require('can-util/js/is-web-worker/');
-var QUnit = require('steal-qunit');
+var isWebWorker = require('./is-web-worker');
 
 QUnit.module("can-util/js/is-web-worker");
 
-QUnit.test("basics", function(){
+test("basics", function(){
 	equal(typeof isWebWorker() , "boolean");
 });
