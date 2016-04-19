@@ -5,5 +5,5 @@ module.exports = function(setDoc){
 	if(setDoc) {
 		setDocument = setDoc;
 	}
-	return setDocument || global().document
-}
+	return setDocument || global().document;
+};

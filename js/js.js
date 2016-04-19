@@ -23,4 +23,4 @@ module.exports = {
 	setImmediate: require('./set-immediate/'),
 	string: require('./string/'),
 	types: require('./types/')
-}
+};

@@ -7,8 +7,8 @@ QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/events/inserted");
 
-var MutationObserver = getMutationObserver();
-if(MutationObserver) {
+var _MutationObserver = getMutationObserver();
+if(_MutationObserver) {
 	asyncTest("basic insertion with mutation observer", function () {
 		var div = document.createElement("div");
 
@@ -28,7 +28,7 @@ asyncTest("basic insertion without mutation observer", function(){
 
 	domEvents.addEventListener.call(div,"inserted", function(){
 		ok(true, "called back");
-		getMutationObserver(MutationObserver);
+		getMutationObserver(_MutationObserver);
 		start();
 	});
 

@@ -16,7 +16,7 @@ test("basics", 2, function () {
 	var ul = frag.firstChild;
 
 	var handler = function(ev){
-		ok(true, "called")
+		ok(true, "called");
 		domEvents.removeDelegateListener.call(ul, "click", "li",handler);
 		var dE = domData.get.call(this, "delegateEvents");
 		equal(dE, undefined, "data removed");

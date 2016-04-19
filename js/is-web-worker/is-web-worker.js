@@ -1,4 +1,5 @@
+/* globals WorkerGlobalScope */
 module.exports = function(){
 	return typeof WorkerGlobalScope !== "undefined" &&
-	(self instanceof WorkerGlobalScope);
-}
+		(this instanceof WorkerGlobalScope);
+};

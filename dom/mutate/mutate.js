@@ -11,16 +11,6 @@ var domContains = require("../contains/");
 var domDispatch = require("../dispatch/");
 
 var mutatedElements;
-var mutated = function(elements, type) {
-	if(!getMutationObserver()) {
-		if(!mutatedElements) {
-			mutatedElements = [];
-			setImmediate(fireMutations);
-		}
-		mutatedElements.push([type, elements]);
-	}
-};
-
 var checks = {
 	inserted: function(root, elem){
 		return domContains.call(root, elem);
@@ -28,18 +18,6 @@ var checks = {
 	removed: function(root, elem){
 		return !domContains.call(root, elem);
 	}
-};
-
-
-var fireMutations = function(){
-	var mutations = mutatedElements;
-	mutatedElements = null;
-	var firstElement = mutations[0][1][0];
-	var doc = firstElement.ownerDocument || firstElement;
-	var root = root = doc.contains ? doc : doc.body;
-	mutations.forEach(function(mutation){
-		fireOn(mutation[1], root, checks[mutation[0]], mutation[0])
-	});
 };
 
 var fireOn = function(elems, root, check, event) {
@@ -65,7 +43,25 @@ var fireOn = function(elems, root, check, event) {
 		}
 	}
 };
-
+var fireMutations = function(){
+	var mutations = mutatedElements;
+	mutatedElements = null;
+	var firstElement = mutations[0][1][0];
+	var doc = firstElement.ownerDocument || firstElement;
+	var root = doc.contains ? doc : doc.body;
+	mutations.forEach(function(mutation){
+		fireOn(mutation[1], root, checks[mutation[0]], mutation[0]);
+	});
+};
+var mutated = function(elements, type) {
+	if(!getMutationObserver()) {
+		if(!mutatedElements) {
+			mutatedElements = [];
+			setImmediate(fireMutations);
+		}
+		mutatedElements.push([type, elements]);
+	}
+};
 
 module.exports = {
 	// ## can.appendChild

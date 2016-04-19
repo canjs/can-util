@@ -1,4 +1,5 @@
-var isFunction = require("../is-function/")
+var isFunction = require("../is-function/");
+
 module.exports = function(obj){
 	return !!obj && (
 		(window.Promise && (obj instanceof Promise)) ||

@@ -3,17 +3,16 @@
 // the mutate methods.
 
 var isEmptyObject = require("../../../js/is-empty-object/");
-var assign = require("../../../js/assign/");
 var each = require("../../../js/each/");
 
 var events = require("../events");
-var isOfGlobalDocument = require("../../is-of-global-document/");
 var domData = require("../../data/");
 var getMutationObserver = require("../../mutation-observer/");
 var domDispatch = require("../../dispatch/");
 var mutationDocument = require("../../mutation-observer/document/");
 var getDocument = require("../../document/");
 
+require("../../is-of-global-document/");
 
 module.exports = function(specialEventName, mutationNodesProperty){
 	var originalAdd = events.addEventListener,
@@ -35,11 +34,11 @@ module.exports = function(specialEventName, mutationNodesProperty){
 								if(specialEventData.nodeIdsRespondingToInsert[ domData.getCid.call(mutatedNode) ]) {
 									domDispatch.call(mutatedNode, specialEventName, [], false);
 								}
-							})
-						})
+							});
+						});
 					},
 					nodeIdsRespondingToInsert: {}
-				}
+				};
 				mutationDocument.add(specialEventData.handler);
 				domData.set.call(documentElement,specialEventName+"Data", specialEventData);
 			}

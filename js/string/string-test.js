@@ -1,7 +1,7 @@
 var string = require('can-util/js/string/');
 var QUnit = require('steal-qunit');
 
-QUnit.module("can-util/js/string")
+QUnit.module("can-util/js/string");
 
 test('string.sub', function () {
 	equal(string.sub('a{b}', {

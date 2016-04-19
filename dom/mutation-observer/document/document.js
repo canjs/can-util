@@ -17,7 +17,7 @@ module.exports = {
 				observer: observer,
 				handlers: []
 			};
-			domData.set.call(documentElement,"globalObserverData", globalObserverData);globalObserverData
+			domData.set.call(documentElement,"globalObserverData", globalObserverData);
 		}
 		globalObserverData.handlers.push(handler);
 	},
@@ -35,4 +35,4 @@ module.exports = {
 			}
 		}
 	}
-}
+};

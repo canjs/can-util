@@ -1,3 +1,5 @@
 module.exports = {
-	isMapLike: function(){return false}
+	isMapLike: function(){
+		return false;
+	}
 };

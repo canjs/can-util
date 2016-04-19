@@ -10,16 +10,16 @@ var dataName = "delegateEvents";
 var handleEvent = function(ev){
 	var events = domData.get.call(this, dataName);
 	var eventTypeEvents = events[ev.type];
+	// contains the element and the handlers to call back
+	var matches = [];
+
 	if(eventTypeEvents) {
 		var selectorDelegates = [];
 		// convert eventTypeEvents from an object to
 		// an array.
 		each(eventTypeEvents, function(delegates){
-			selectorDelegates.push(delegates)
+			selectorDelegates.push(delegates);
 		});
-
-		// contains the element and the handlers to call back
-		var matches = [];
 
 		// walk from the target to the delegate element
 		// checking each selector
@@ -32,7 +32,7 @@ var handleEvent = function(ev){
 						delegates: delegates
 					});
 				}
-			})
+			});
 			cur = cur.parentNode;
 		} while (cur && cur !== ev.currentTarget);
 
@@ -42,12 +42,12 @@ var handleEvent = function(ev){
 	var oldStopProp = ev.stopPropagation;
 	ev.stopPropagation = function() {
 		oldStopProp.apply(this, arguments);
-        e.cancelBubble = true;
-    };
+    this.cancelBubble = true;
+  };
 
 	for(var i = 0; i < matches.length; i++) {
-		var match = matches[i],
-			delegates = match.delegates;
+		var match = matches[i];
+		var delegates = match.delegates;
 
 		for(var d = 0, dLen = delegates.length; d < dLen; d++) {
 			if( delegates[d].handler.call(match.target, ev) === false) {
@@ -58,7 +58,7 @@ var handleEvent = function(ev){
             }
 		}
 	}
-}
+};
 
 domEvents.addDelegateListener = function(eventType, selector, handler) {
 
@@ -116,4 +116,4 @@ domEvents.removeDelegateListener = function(eventType, selector, handler) {
 			}
 		}
 	}
-}
+};

@@ -7,8 +7,8 @@ QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/events/removed");
 
-var MutationObserver = getMutationObserver();
-if(MutationObserver) {
+var _MutationObserver = getMutationObserver();
+if(_MutationObserver) {
 	asyncTest("basic insertion with mutation observer - removeChild", function () {
 		var div = document.createElement("div");
 
@@ -41,7 +41,7 @@ asyncTest("basic insertion without mutation observer - removeChild", function(){
 
 	domEvents.addEventListener.call(div,"removed", function(){
 		ok(true, "called back");
-		getMutationObserver(MutationObserver);
+		getMutationObserver(_MutationObserver);
 		start();
 	});
 
@@ -57,7 +57,7 @@ asyncTest("basic insertion without mutation observer - replaceChild", function()
 
 	domEvents.addEventListener.call(div,"removed", function(){
 		ok(true, "called back");
-		getMutationObserver(MutationObserver);
+		getMutationObserver(_MutationObserver);
 		start();
 	});
 

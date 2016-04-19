@@ -6,7 +6,7 @@ var getDocument = require("../document/");
 var global = require("../../js/global/")();
 var isOfGlobalDocument = require("../is-of-global-document/");
 var isArray = require("../../js/is-array/");
-var domData = require("../data/");
+var setData = require("../data/");
 var domDispatch = require("../dispatch/dispatch");
 
 require("../events/attributes/");

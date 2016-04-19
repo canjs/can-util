@@ -1,8 +1,8 @@
 var assign = require("../../js/assign/");
-var document = require("../document/");
+var _document = require("../document/");
 
 module.exports = function(event, args, bubbles){
-	var doc = document();
+	var doc = _document();
 
 	var ev = doc.createEvent('HTMLEvents');
 	var isString = typeof event === "string";

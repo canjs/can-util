@@ -1,7 +1,7 @@
 var diff = require('can-util/js/diff/');
 var QUnit = require('steal-qunit');
 
-QUnit.module("can-util/js/diff")
+QUnit.module("can-util/js/diff");
 
 QUnit.test("basics", function(){
 

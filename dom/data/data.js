@@ -23,7 +23,7 @@ module.exports = {
 		var id = this[expando];
 		delete data[id][prop];
 		if(isEmptyObject(data[id])) {
-			delete data[id]
+			delete data[id];
 		}
 	},
 	get: function(name){
@@ -32,4 +32,4 @@ module.exports = {
 		return name === undefined ? store || setData(this) : store && store[name];
 	},
 	set: setData
-}
+};

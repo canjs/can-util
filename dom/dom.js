@@ -13,4 +13,4 @@ module.exports = {
 	matches: require('./matches/'),
 	mutate: require('./mutate/'),
 	mutationObserver: require('./mutation-observer/')
-}
+};
