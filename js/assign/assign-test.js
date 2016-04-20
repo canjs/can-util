@@ -1,5 +1,5 @@
-var assign = require('can-util/js/assign/');
-var QUnit = require('steal-qunit');
+var assign = require('./assign');
+var QUnit = require('../../test/qunit');
 
 QUnit.module("can-util/js/assign");
 

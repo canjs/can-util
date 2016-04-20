@@ -1,5 +1,5 @@
-var last = require('can-util/js/last/');
-var QUnit = require('steal-qunit');
+var QUnit = require('../../test/qunit');
+var last = require('./last');
 
 QUnit.module("can-util/js/last");
 

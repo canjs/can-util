@@ -1,6 +1,6 @@
-var isArray  = require('can-util/js/is-array/');
+var QUnit = require('../../test/qunit');
 
-var QUnit = require('steal-qunit');
+var isArray  = require('./is-array');
 
 QUnit.module('can-util/js/is-array');
 

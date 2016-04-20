@@ -1,5 +1,5 @@
-var makeArray = require('can-util/js/make-array/');
-var QUnit = require('steal-qunit');
+var QUnit = require('../../test/qunit');
+var makeArray = require('./make-array');
 
 QUnit.module("can-util/js/make-array");
 

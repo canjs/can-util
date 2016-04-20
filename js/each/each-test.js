@@ -1,6 +1,5 @@
-var each  = require('can-util/js/each/');
-
-var QUnit = require('steal-qunit');
+var QUnit = require('../../test/qunit');
+var each  = require('./each');
 
 QUnit.module('can-util/js/each');
 

@@ -1,5 +1,5 @@
-var cid = require('can-util/js/cid/');
-var QUnit = require('steal-qunit');
+var QUnit = require('../../test/qunit');
+var cid = require('./cid');
 
 QUnit.module("can-util/js/cid");
 

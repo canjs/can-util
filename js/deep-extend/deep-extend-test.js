@@ -1,5 +1,5 @@
-var deepExtend = require('can-util/js/deep-extend/');
-var QUnit = require('steal-qunit');
+var QUnit = require('../../test/qunit');
+var deepExtend = require('./deep-extend');
 
 QUnit.module("can-util/js/deep-extend");
 

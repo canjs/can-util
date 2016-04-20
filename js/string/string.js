@@ -1,4 +1,5 @@
-var isArray = require("../is-array/");
+var isArray = require('../is-array/is-array');
+
 // ##string.js
 // _Miscellaneous string utility functions._
 // Several of the methods in this plugin use code adapated from Prototype
