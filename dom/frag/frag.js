@@ -1,8 +1,13 @@
-module.exports = function(item, doc){
-	var document = doc || can.document || can.global.document;
+var getDocument = require('../document/document');
+var fragment = require('../fragment/fragment');
+var each = require('../../js/each/each');
+var childNodes = require('../child-nodes/child-nodes');
+
+var makeFrag = function(item, doc){
+	var document = doc || getDocument();
 	var frag;
 	if(!item || typeof item === "string"){
-		frag = can.buildFragment(item == null ? "" : ""+item, document);
+		frag = fragment(item == null ? "" : ""+item, document);
 		// If we have an empty frag...
 		if (!frag.childNodes.length) {
 			frag.appendChild(document.createTextNode(''));
@@ -16,19 +21,21 @@ module.exports = function(item, doc){
 		return frag;
 	} else if(typeof item.length === "number") {
 		frag = document.createDocumentFragment();
-		can.each(item, function(item){
-			frag.appendChild( can.frag(item) );
+		each(item, function(item){
+			frag.appendChild( makeFrag(item) );
 		});
-		if (!can.childNodes(frag).length) {
+		if (!childNodes(frag).length) {
 			frag.appendChild(document.createTextNode(''));
 		}
 		return frag;
 	} else {
-		frag = can.buildFragment( ""+item, document);
+		frag = fragment( ""+item, document);
 		// If we have an empty frag...
-		if (!can.childNodes(frag).length) {
+		if (!childNodes(frag).length) {
 			frag.appendChild(document.createTextNode(''));
 		}
 		return frag;
 	}
 };
+
+module.exports = makeFrag;
