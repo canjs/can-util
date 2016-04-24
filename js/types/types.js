@@ -16,7 +16,7 @@ var types = {
 		return typeof obj === "function" && !types.isConstructor(obj);
 	},
 	isCompute: function(obj){
-		return obj && obj.isComputed
+		return obj && obj.isComputed;
 	}
 };
 module.exports = types;
