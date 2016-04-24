@@ -14,6 +14,9 @@ var types = {
 	},
 	isCallableForValue: function(obj){
 		return typeof obj === "function" && !types.isConstructor(obj);
+	},
+	isCompute: function(obj){
+		return obj && obj.isComputed
 	}
 };
 module.exports = types;
