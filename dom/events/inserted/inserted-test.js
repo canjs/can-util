@@ -33,6 +33,23 @@ if(_MutationObserver) {
 
 		div.appendChild(span);
 	});
+
+	asyncTest("parent then child inserted in callback - appendChild", function () {
+		expect(1);
+		var div = document.createElement("div");
+
+		var span = document.createElement("span");
+
+		domEvents.addEventListener.call(div,"inserted", function(){
+			div.appendChild(span);
+		});
+		domEvents.addEventListener.call(span,"inserted", function(){
+			ok(true, "called back");
+			start();
+		});
+
+		document.getElementById("qunit-fixture").appendChild(div);
+	});
 }
 
 asyncTest("basic insertion without mutation observer", function(){

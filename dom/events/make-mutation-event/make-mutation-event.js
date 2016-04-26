@@ -4,6 +4,7 @@
 
 var isEmptyObject = require("../../../js/is-empty-object/");
 var each = require("../../../js/each/");
+var makeArray = require("../../../js/make-array/make-array");
 
 var events = require("../events");
 var domData = require("../../data/");
@@ -47,7 +48,7 @@ module.exports = function(specialEventName, mutationNodesProperty){
 						var dispatched = {};
 						mutations.forEach(function(mutation){
 							each(mutation[mutationNodesProperty],function(mutatedNode){
-								var children = mutatedNode.getElementsByTagName && mutatedNode.getElementsByTagName("*");
+								var children = mutatedNode.getElementsByTagName && makeArray( mutatedNode.getElementsByTagName("*") );
 								var alreadyChecked = dispatchIfListening(mutatedNode, specialEventData, dispatched);
 								if(children && !alreadyChecked) {
 									for (var j = 0, child;
