@@ -1,7 +1,7 @@
 module.exports = {
 	assign: require('./assign/assign'),
 	cid: require('./cid/cid'),
-	deepExtend: require('./deep-extend/deep-extend'),
+	deepExtend: require('./deep-assign/deep-assign'),
 	dev: require('./dev/dev'),
 	diff: require('./diff/diff'),
 	each: require('./each/each'),

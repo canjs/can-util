@@ -1,7 +1,7 @@
 require('./assign/assign-test');
 require('./cid/cid-test');
 require('./diff/diff-test');
-require('./deep-extend/deep-extend-test');
+require('./deep-assign/deep-assign-test');
 require('./dev/dev-test');
 require('./diff/diff-test');
 
