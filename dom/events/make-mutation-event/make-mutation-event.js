@@ -17,10 +17,18 @@ require("../../is-of-global-document/");
 module.exports = function(specialEventName, mutationNodesProperty){
 	var originalAdd = events.addEventListener,
 		originalRemove = events.removeEventListener;
-	var dispatchIfListening = function(mutatedNode, specialEventData){
-		if(specialEventData.nodeIdsRespondingToInsert[ domData.getCid.call(mutatedNode) ]) {
-			domDispatch.call(mutatedNode, specialEventName, [], false);
+	var dispatchIfListening = function(mutatedNode, specialEventData, dispatched){
+		var id = domData.getCid.call(mutatedNode);
+		if(id !== undefined) {
+			if(dispatched[id]) {
+				return true;
+			}
+			dispatched[id] = true;
+			if(specialEventData.nodeIdsRespondingToInsert[ id ]) {
+				domDispatch.call(mutatedNode, specialEventName, [], false);
+			}
 		}
+
 	};
 
 	events.addEventListener = function(eventName){
@@ -34,14 +42,17 @@ module.exports = function(specialEventName, mutationNodesProperty){
 			if(!specialEventData) {
 				specialEventData = {
 					handler: function(mutations){
+						// keeps track of elements that have already been checked
+						// so we don't double check (a parent and then a child added to the parent)
+						var dispatched = {};
 						mutations.forEach(function(mutation){
 							each(mutation[mutationNodesProperty],function(mutatedNode){
 								var children = mutatedNode.getElementsByTagName && mutatedNode.getElementsByTagName("*");
-								dispatchIfListening(mutatedNode, specialEventData);
-								if(children) {
+								var alreadyChecked = dispatchIfListening(mutatedNode, specialEventData, dispatched);
+								if(children && !alreadyChecked) {
 									for (var j = 0, child;
 										(child = children[j]) !== undefined; j++) {
-										dispatchIfListening(child, specialEventData);
+										dispatchIfListening(child, specialEventData, dispatched);
 									}
 								}
 							});
