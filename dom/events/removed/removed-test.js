@@ -9,7 +9,7 @@ QUnit.module("can-util/dom/events/removed");
 
 var _MutationObserver = getMutationObserver();
 if(_MutationObserver) {
-	asyncTest("basic insertion with mutation observer - removeChild", function () {
+	asyncTest("basic removal with mutation observer - removeChild", function () {
 		var div = document.createElement("div");
 
 		domEvents.addEventListener.call(div,"removed", function(){
@@ -21,7 +21,7 @@ if(_MutationObserver) {
 		document.getElementById("qunit-fixture").removeChild(div);
 	});
 
-	asyncTest("basic insertion with mutation observer - replaceChild", function () {
+	asyncTest("basic removal with mutation observer - replaceChild", function () {
 		var div = document.createElement("div");
 		var div2 = document.createElement("div");
 
@@ -31,6 +31,20 @@ if(_MutationObserver) {
 		});
 		document.getElementById("qunit-fixture").appendChild(div);
 		document.getElementById("qunit-fixture").replaceChild(div2,div);
+	});
+
+	asyncTest("basic removal with mutation observer - removeChild", function () {
+		var div = document.createElement("div");
+		var span = document.createElement("span");
+		div.appendChild(span);
+
+		domEvents.addEventListener.call(span,"removed", function(){
+			ok(true, "called back");
+			start();
+		});
+
+		document.getElementById("qunit-fixture").appendChild(div);
+		document.getElementById("qunit-fixture").removeChild(div);
 	});
 }
 

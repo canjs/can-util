@@ -17,6 +17,11 @@ require("../../is-of-global-document/");
 module.exports = function(specialEventName, mutationNodesProperty){
 	var originalAdd = events.addEventListener,
 		originalRemove = events.removeEventListener;
+	var dispatchIfListening = function(mutatedNode, specialEventData){
+		if(specialEventData.nodeIdsRespondingToInsert[ domData.getCid.call(mutatedNode) ]) {
+			domDispatch.call(mutatedNode, specialEventName, [], false);
+		}
+	};
 
 	events.addEventListener = function(eventName){
 		// on an inserted event
@@ -31,8 +36,13 @@ module.exports = function(specialEventName, mutationNodesProperty){
 					handler: function(mutations){
 						mutations.forEach(function(mutation){
 							each(mutation[mutationNodesProperty],function(mutatedNode){
-								if(specialEventData.nodeIdsRespondingToInsert[ domData.getCid.call(mutatedNode) ]) {
-									domDispatch.call(mutatedNode, specialEventName, [], false);
+								var children = mutatedNode.getElementsByTagName && mutatedNode.getElementsByTagName("*");
+								dispatchIfListening(mutatedNode, specialEventData);
+								if(children) {
+									for (var j = 0, child;
+										(child = children[j]) !== undefined; j++) {
+										dispatchIfListening(child, specialEventData);
+									}
 								}
 							});
 						});
