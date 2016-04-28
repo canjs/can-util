@@ -24,3 +24,4 @@ require('./join-uris/join-uris-test');
 require('./last/last-test');
 require('./make-array/make-array-test');
 require('./string/string-test');
+require('./types/types-test');
