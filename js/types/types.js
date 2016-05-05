@@ -27,6 +27,7 @@ var types = {
 	},
 	isCompute: function(obj){
 		return obj && obj.isComputed;
-	}
+	},
+	DefaultMap: null
 };
 module.exports = types;
