@@ -23,5 +23,6 @@ require('./is-web-worker/is-web-worker-test');
 require('./join-uris/join-uris-test');
 require('./last/last-test');
 require('./make-array/make-array-test');
+require('./set-not-enumerable/set-not-enumerable-test');
 require('./string/string-test');
 require('./types/types-test');
