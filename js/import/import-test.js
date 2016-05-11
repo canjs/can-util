@@ -4,7 +4,7 @@ var load = require('./import');
 QUnit.module('can-util/js/import');
 
 QUnit.asyncTest('basic can-import works', function() {
-	load('js/import/testmodule').then(function(data) {
+	load('can-util/js/import/testmodule').then(function(data) {
 		QUnit.equal(data, 'Hello world');
 		start();
 	});
