@@ -1,11 +1,11 @@
-var extend = require('../deep-extend/deep-extend');
+var assign = require('../assign/assign');
 
 module.exports = exports = function(oldObject, newObject){
 	var oldObjectClone,
 		patches = [];
 
 	// clone oldObject so properties can be deleted
-	oldObjectClone = extend({}, oldObject);
+	oldObjectClone = assign({}, oldObject);
 
 	for (var newProp in newObject) {
 		// look for added properties
