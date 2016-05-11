@@ -6,6 +6,7 @@ require('./deep-extend/deep-extend-test');
 require('./dev/dev-test');
 require('./diff/diff-test');
 require('./diff-array/diff-array-test');
+require('./diff-object/diff-object-test');
 
 // TODO - Depends on can.Map, can.List
 // require('./each/each-test');
