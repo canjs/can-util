@@ -1,6 +1,6 @@
 {
   "name": "can-util",
-  "version": "3.0.0-pre.15",
+  "version": "3.0.0-pre.17",
   "description": "Common utilities for CanJS projects",
   "homepage": "http://canjs.com",
   "author": {
@@ -16,7 +16,7 @@
     "test": "npm run jshint && npm run mocha && npm run testee",
     "jshint": "jshint dom/. js/. *.js --config",
     "mocha": "mocha --reporter dot --ui mocha-qunit-ui js/tests",
-    "release:prerelease": "npm version prerelease && npm publish",
+    "release:pre": "npm version prerelease && npm publish",
     "release:patch": "npm version patch && npm publish",
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
