@@ -1,13 +1,15 @@
 var QUnit = require('../../test/qunit');
 var getBaseUrl = require('./base-url');
-var isBrowserWindow = require('../is-browser-window/is-browser-window');
+var getGlobal = require("../global/global");
 
 QUnit.module("can-util/js/base-url");
 
 test("basics", function(){
-	if(isBrowserWindow()) {
-		ok(getBaseUrl() === window.location.href.substr(0, window.location.href.lastIndexOf("/")),getBaseUrl()   );
-	} else {
+	var global = getGlobal();
+
+	if(global.location) {
+		ok(getBaseUrl() === global.location.href.substr(0, global.location.href.lastIndexOf("/")),getBaseUrl()   );
+	} else if(typeof process !== 'undefined') {
 		ok(getBaseUrl() === process.cwd(), getBaseUrl());
 	}
 });

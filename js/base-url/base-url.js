@@ -10,7 +10,7 @@ module.exports = function(setUrl){
 	}
 	var global = getGlobal();
 	if(global.location) {
-		var href=  global.location.href;
+		var href = global.location.href;
 		var lastSlash = href.lastIndexOf("/");
 		return lastSlash !== -1 ? href.substr(0, lastSlash) : href;
 	} else if(typeof process !== "undefined") {
