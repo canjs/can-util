@@ -54,7 +54,7 @@ var fireMutations = function(){
 	});
 };
 var mutated = function(elements, type) {
-	if(!getMutationObserver()) {
+	if(!getMutationObserver() && elements.length) {
 		if(!mutatedElements) {
 			mutatedElements = [];
 			setImmediate(fireMutations);
