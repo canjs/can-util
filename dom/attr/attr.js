@@ -8,6 +8,8 @@ var isOfGlobalDocument = require("../is-of-global-document/");
 var isArray = require("../../js/is-array/");
 var setData = require("../data/");
 var domDispatch = require("../dispatch/dispatch");
+var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
+
 
 require("../events/attributes/");
 
@@ -19,11 +21,6 @@ var formElements = {"input": true, "textarea": true, "select": true},
 		return (attrName in el) || (getDocument() && formElements[el.nodeName.toLowerCase()]);
 	},
 	attr = {
-		// This property lets us know if the browser supports mutation observers.
-		// If they are supported then that will be setup in can/util/util and those native events will be used to inform observers of attribute changes.
-		// Otherwise this module handles triggering an `attributes` event on the element.
-		MutationObserver: global.MutationObserver || global.WebKitMutationObserver || global.MozMutationObserver,
-
 		/**
 		 * @property {Object.<String,(String|Boolean|function)>} can.view.attr.map
 		 * @parent can.view.elements
@@ -122,7 +119,7 @@ var formElements = {"input": true, "textarea": true, "select": true},
 		// ## attr.set
 		// Set the value an attribute on an element.
 		set: function (el, attrName, val) {
-			var usingMutationObserver = isOfGlobalDocument(el) && attr.MutationObserver;
+			var usingMutationObserver = isOfGlobalDocument(el) && MUTATION_OBSERVER();
 			attrName = attrName.toLowerCase();
 			var oldValue;
 			// In order to later trigger an event we need to compare the new value to the old value,
@@ -206,7 +203,7 @@ var formElements = {"input": true, "textarea": true, "select": true},
 		// ## attr.trigger
 		// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 		trigger: function (el, attrName, oldValue) {
-			if (setData.get(el, "canHasAttributesBindings")) {
+			if (setData.get.call(el, "canHasAttributesBindings")) {
 				attrName = attrName.toLowerCase();
 				return setImmediate(function () {
 					domDispatch.call(el, {
@@ -239,7 +236,7 @@ var formElements = {"input": true, "textarea": true, "select": true},
 		remove: function (el, attrName) {
 			attrName = attrName.toLowerCase();
 			var oldValue;
-			if (!attr.MutationObserver) {
+			if (!MUTATION_OBSERVER()) {
 				oldValue = attr.get(el, attrName);
 			}
 
@@ -254,7 +251,7 @@ var formElements = {"input": true, "textarea": true, "select": true},
 			} else {
 				el.removeAttribute(attrName);
 			}
-			if (!attr.MutationObserver && oldValue != null) {
+			if (!MUTATION_OBSERVER() && oldValue != null) {
 				attr.trigger(el, attrName, oldValue);
 			}
 

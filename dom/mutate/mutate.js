@@ -4,11 +4,13 @@
 
 var makeArray = require("../../js/make-array/");
 var setImmediate = require("../../js/set-immediate/");
+var CID = require("../../js/cid/cid");
 
 var getMutationObserver = require("../mutation-observer/");
 var childNodes = require("../child-nodes/");
 var domContains = require("../contains/");
 var domDispatch = require("../dispatch/");
+
 
 var mutatedElements;
 var checks = {
@@ -20,7 +22,7 @@ var checks = {
 	}
 };
 
-var fireOn = function(elems, root, check, event) {
+var fireOn = function(elems, root, check, event, dispatched) {
 	if (!elems.length) {
 		return;
 	}
@@ -31,35 +33,54 @@ var fireOn = function(elems, root, check, event) {
 	// If it is in the document it sets the `inDocument` flag to true. This means that we only check
 	// for the first element and either exit the function or start triggering "inserted" for child elements.
 	for (var i = 0, elem; (elem = elems[i]) !== undefined; i++) {
-
+		var cid = CID(elem);
 		// If we've found an element in the document then we can now trigger **"inserted"** for `elem` and all of its children. We are using `getElementsByTagName("*")` so that we grab all of the descendant nodes.
-		if (elem.getElementsByTagName && check(root, elem) ) {
+		if (elem.getElementsByTagName && check(root, elem) && !dispatched[cid]) {
+			// mark as being dispatched
+			dispatched[cid] = true;
 			children = makeArray(elem.getElementsByTagName("*"));
 			domDispatch.call(elem, event, [], false);
+
 			for (var j = 0, child;
 				(child = children[j]) !== undefined; j++) {
-				domDispatch.call(child, event, [], false);
+				// fire the event only if this hasn't already been fired on.
+				var cid = CID(child);
+				if(!dispatched[cid]) {
+					domDispatch.call(child, event, [], false);
+					dispatched[cid] = true;
+				}
 			}
 		}
 	}
 };
+//
 var fireMutations = function(){
 	var mutations = mutatedElements;
 	mutatedElements = null;
+
 	var firstElement = mutations[0][1][0];
 	var doc = firstElement.ownerDocument || firstElement;
 	var root = doc.contains ? doc : doc.body;
+	var dispatched = {inserted: {}, removed: {}};
 	mutations.forEach(function(mutation){
-		fireOn(mutation[1], root, checks[mutation[0]], mutation[0]);
+		fireOn(mutation[1], root, checks[mutation[0]], mutation[0], dispatched[mutation[0]]);
 	});
 };
 var mutated = function(elements, type) {
 	if(!getMutationObserver() && elements.length) {
-		if(!mutatedElements) {
-			mutatedElements = [];
-			setImmediate(fireMutations);
+		// make sure this element is in the page (mutated called before something is removed)
+		var firstElement = elements[0];
+		var doc = firstElement.ownerDocument || firstElement;
+		var root = doc.contains ? doc : doc.body;
+		if( checks.inserted(root, firstElement) ) {
+
+			// if it is, schedule a mutation fire
+			if(!mutatedElements) {
+				mutatedElements = [];
+				setImmediate(fireMutations);
+			}
+			mutatedElements.push([type, elements]);
 		}
-		mutatedElements.push([type, elements]);
 	}
 };
 
@@ -100,8 +121,8 @@ module.exports = {
 		if(getMutationObserver()) {
 			this.removeChild(child);
 		} else {
-			this.removeChild(child);
 			mutated([child],"removed");
+			this.removeChild(child);
 		}
 	},
 	replaceChild: function(newChild, oldChild){
@@ -114,8 +135,8 @@ module.exports = {
 			} else {
 				children = [newChild];
 			}
-			this.replaceChild(newChild, oldChild);
 			mutated([oldChild],"removed");
+			this.replaceChild(newChild, oldChild);
 			mutated(children,"inserted");
 		}
 	},

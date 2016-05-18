@@ -1,6 +1,6 @@
 var domAttr = require('can-util/dom/attr/');
 var domEvents = require('can-util/dom/events/');
-
+var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
 
 QUnit = require('steal-qunit');
 
@@ -44,6 +44,49 @@ test("attributes event", function () {
 
 });
 
+test("attr events without MUTATION_OBSERVER", 9, function(){
+	var MO = MUTATION_OBSERVER();
+	MUTATION_OBSERVER(null);
+
+	var div = document.createElement("div");
+
+	var attrHandler1 = function(ev) {
+		equal(ev.attributeName, "foo", "attribute name is correct");
+		equal(ev.target, div, "target");
+		equal(ev.oldValue, null, "oldValue");
+
+		equal(div.getAttribute(ev.attributeName), "bar");
+		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
+	};
+	domEvents.addEventListener.call(div, "attributes", attrHandler1);
+
+	domAttr.set(div, "foo", "bar");
+
+	stop();
+
+	setTimeout(function () {
+		var attrHandler = function(ev) {
+			ok(true, "removed event handler should be called");
+
+			equal(ev.attributeName, "foo", "attribute name is correct");
+			equal(ev.target, div, "target");
+			equal(ev.oldValue, "bar", "oldValue should be 'bar'");
+
+			equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
+
+			domEvents.removeEventListener.call(div, "attributes", attrHandler);
+			MUTATION_OBSERVER(MO);
+			start();
+		};
+		domEvents.addEventListener.call(div, "attributes", attrHandler);
+		domAttr.remove(div, "foo");
+
+	}, 50);
+
+});
+
+
+
 test("attr.set CHECKED attribute works", function(){
 
 	var input = document.createElement("input");
@@ -71,7 +114,7 @@ test("Map special attributes", function () {
 
 	domAttr.set(div, "for", "my-for");
 	equal(div.htmlFor, "my-for", "Map for to htmlFor");
-	
+
 	if('innerText' in div) {
 		domAttr.set(div, "innertext", "my-inner-text");
 		equal(div.innerText, "my-inner-text", "Map innertext to innerText");
