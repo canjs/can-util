@@ -5,8 +5,6 @@ var domMutate = require("can-util/dom/mutate/");
 
 QUnit = require('steal-qunit');
 
-runTest("can-util/dom/events/inserted - MutationObserver", MUTATION_OBSERVER());
-runTest("can-util/dom/events/inserted - no MutationObserver", null);
 function runTest(name, MUT_OBS) {
 	var oldMutObs;
 	QUnit.module(name, {
@@ -61,6 +59,7 @@ function runTest(name, MUT_OBS) {
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});
 
-
-
 }
+
+runTest("can-util/dom/events/inserted - MutationObserver", MUTATION_OBSERVER());
+runTest("can-util/dom/events/inserted - no MutationObserver", null);

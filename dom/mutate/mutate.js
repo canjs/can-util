@@ -26,14 +26,14 @@ var fireOn = function(elems, root, check, event, dispatched) {
 	if (!elems.length) {
 		return;
 	}
-	var children;
+	var children, cid;
 
 	// Go through `elems` and trigger the `inserted` event.
 	// If the first element is not in the document (a Document Fragment) it will exit the function.
 	// If it is in the document it sets the `inDocument` flag to true. This means that we only check
 	// for the first element and either exit the function or start triggering "inserted" for child elements.
 	for (var i = 0, elem; (elem = elems[i]) !== undefined; i++) {
-		var cid = CID(elem);
+		cid = CID(elem);
 		// If we've found an element in the document then we can now trigger **"inserted"** for `elem` and all of its children. We are using `getElementsByTagName("*")` so that we grab all of the descendant nodes.
 		if (elem.getElementsByTagName && check(root, elem) && !dispatched[cid]) {
 			// mark as being dispatched
@@ -44,7 +44,7 @@ var fireOn = function(elems, root, check, event, dispatched) {
 			for (var j = 0, child;
 				(child = children[j]) !== undefined; j++) {
 				// fire the event only if this hasn't already been fired on.
-				var cid = CID(child);
+				cid = CID(child);
 				if(!dispatched[cid]) {
 					domDispatch.call(child, event, [], false);
 					dispatched[cid] = true;
