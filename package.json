@@ -24,7 +24,7 @@
     "document": "documentjs",
     "develop": "done-serve --static --develop --port 8080"
   },
-  "main": "dist/cjs/can-util",
+  "main": "can-util",
   "browser": {
     "transform": [
       "cssify"
@@ -36,24 +36,19 @@
     ]
   },
   "keywords": [
-    "Can",
-    "JS"
+    "canjs",
+    "canjs-plugin",
+    "donejs"
   ],
   "system": {
-    "main": "can-util",
     "configDependencies": [
       "live-reload"
     ],
-    "npmIgnore": [
-      "documentjs",
-      "testee",
-      "generator-donejs",
-      "donejs-cli",
-      "steal-tools"
-    ],
     "npmAlgorithm": "flat"
   },
-  "dependencies": {},
+  "dependencies": {
+    "can-util": "^3.0.0-pre.21"
+  },
   "devDependencies": {
     "cssify": "^0.6.0",
     "documentjs": "^0.4.2",
@@ -63,9 +58,13 @@
     "jshint": "^2.9.1",
     "mocha": "^2.4.5",
     "mocha-qunit-ui": "^0.1.2",
-    "steal": "^0.15.0",
+    "steal": "^0.16.0",
     "steal-qunit": "^0.1.1",
-    "steal-tools": "^0.15.0",
+    "steal-tools": "^0.16.0",
     "testee": "^0.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/canjs/can-util.git"
   }
 }
