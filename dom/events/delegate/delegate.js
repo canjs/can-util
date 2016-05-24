@@ -1,8 +1,8 @@
 var domEvents = require("../events");
-var domData = require("../../data/");
-var domMatches = require("../../matches/");
-var each = require("../../../js/each/");
-var isEmptyObject = require("../../../js/is-empty-object/");
+var domData = require("../../data/data");
+var domMatches = require("../../matches/matches");
+var each = require("../../../js/each/each");
+var isEmptyObject = require("../../../js/is-empty-object/is-empty-object");
 
 var dataName = "delegateEvents";
 
