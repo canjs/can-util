@@ -46,9 +46,6 @@
     ],
     "npmAlgorithm": "flat"
   },
-  "dependencies": {
-    "can-util": "^3.0.0-pre.21"
-  },
   "devDependencies": {
     "cssify": "^0.6.0",
     "documentjs": "^0.4.2",

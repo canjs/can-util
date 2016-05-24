@@ -1,5 +1,5 @@
 var mutate = require('./mutate');
-var MUTATION_OBSERVER = require("can-util/dom/mutation-observer/mutation-observer");
+var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 
 QUnit = require('steal-qunit');
 
