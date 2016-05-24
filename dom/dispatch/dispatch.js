@@ -1,5 +1,5 @@
-var assign = require("../../js/assign/");
-var _document = require("../document/");
+var assign = require("../../js/assign/assign");
+var _document = require("../document/document");
 
 module.exports = function(event, args, bubbles){
 	var doc = _document();

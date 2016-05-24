@@ -1,5 +1,5 @@
-var getDocument = require("../document/"),
-	childNodes = require("../child-nodes/");
+var getDocument = require("../document/document"),
+	childNodes = require("../child-nodes/child-nodes");
 // fragment.js
 // ---------
 // _DOM Fragment support._
