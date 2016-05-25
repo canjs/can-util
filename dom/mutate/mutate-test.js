@@ -1,6 +1,6 @@
 var mutate = require('./mutate');
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
-var canNamespace = require("../../namespace");
+var DOCUMENT = require("../document/document");
 
 QUnit = require('steal-qunit');
 
@@ -36,12 +36,9 @@ test("inserting empty frag", function () {
 test("inserting into a different document fires inserted", function(){
 	var enableMO = disableMO();
 
-	var doc = document.createElement("html");
-	doc.body = document.createElement("body");
-	doc.appendChild(doc.body);
-
-	var oldDoc = canNamespace.document;
-	canNamespace.document = doc;
+	var doc = document.implementation.createHTMLDocument('Demo');
+	var oldDoc = DOCUMENT();
+	DOCUMENT(doc);
 
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
@@ -52,7 +49,7 @@ test("inserting into a different document fires inserted", function(){
 	stop();
 	setTimeout(function(){
 		enableMO();
-		canNamespace.document = oldDoc;
+		DOCUMENT(oldDoc);
 		start();
 	}, 10);
 });
