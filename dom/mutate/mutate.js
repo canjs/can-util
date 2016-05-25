@@ -10,6 +10,7 @@ var getMutationObserver = require("../mutation-observer/mutation-observer");
 var childNodes = require("../child-nodes/child-nodes");
 var domContains = require("../contains/contains");
 var domDispatch = require("../dispatch/dispatch");
+var canNamespace = require("../../namespace");
 
 
 var mutatedElements;
@@ -59,7 +60,7 @@ var fireMutations = function(){
 	mutatedElements = null;
 
 	var firstElement = mutations[0][1][0];
-	var doc = firstElement.ownerDocument || firstElement;
+	var doc = canNamespace.document || firstElement.ownerDocument || firstElement;
 	var root = doc.contains ? doc : doc.body;
 	var dispatched = {inserted: {}, removed: {}};
 	mutations.forEach(function(mutation){
@@ -70,7 +71,7 @@ var mutated = function(elements, type) {
 	if(!getMutationObserver() && elements.length) {
 		// make sure this element is in the page (mutated called before something is removed)
 		var firstElement = elements[0];
-		var doc = firstElement.ownerDocument || firstElement;
+		var doc = canNamespace.document || firstElement.ownerDocument || firstElement;
 		var root = doc.contains ? doc : doc.body;
 		if( checks.inserted(root, firstElement) ) {
 
