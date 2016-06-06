@@ -4,5 +4,6 @@ var matchesMethod = function(element) {
 };
 
 module.exports = function(){
-	return matchesMethod(this).apply(this, arguments);
+	var method = matchesMethod(this);
+	return method ? method.apply(this, arguments) : false;
 };
