@@ -11,3 +11,11 @@ QUnit.test("basics", function(){
 QUnit.test("string", function(){
 	ok(isArrayLike("yes"));
 });
+
+QUnit.test("Object with a .length property", function(){
+	var obj = {
+		length: 0
+	};
+
+	ok(isArrayLike(obj));
+});

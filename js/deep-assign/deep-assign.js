@@ -2,21 +2,12 @@ var isArray = require('../is-array/is-array');
 var isFunction = require('../is-function/is-function');
 var isPlainObject = require('../is-plain-object/is-plain-object');
 
-function extend() {
+function deepAssign() {
 	/*jshint maxdepth:6 */
 	var options, name, src, copy, copyIsArray, clone,
 		target = arguments[0] || {},
 		i = 1,
-		length = arguments.length,
-		deep = false;
-
-	// Handle a deep copy situation
-	if (typeof target === "boolean") {
-		deep = target;
-		target = arguments[1] || {};
-		// skip the boolean and the target
-		i = 2;
-	}
+		length = arguments.length;
 
 	// Handle case when target is a string or something (possible in deep copy)
 	if (typeof target !== "object" && !isFunction(target)) {
@@ -43,7 +34,7 @@ function extend() {
 				}
 
 				// Recurse if we're merging plain objects or arrays
-				if (deep && copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+				if (copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
 					if (copyIsArray) {
 						copyIsArray = false;
 						clone = src && isArray(src) ? src : [];
@@ -53,7 +44,7 @@ function extend() {
 					}
 
 					// Never move original objects, clone them
-					target[name] = extend(deep, clone, copy);
+					target[name] = deepAssign(clone, copy);
 
 					// Don't bring in undefined values
 				} else if (copy !== undefined) {
@@ -67,4 +58,4 @@ function extend() {
 	return target;
 }
 
-module.exports = extend;
+module.exports = deepAssign;

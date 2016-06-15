@@ -47,8 +47,8 @@
     "npmAlgorithm": "flat"
   },
   "devDependencies": {
+    "bit-docs": "0.0.5",
     "cssify": "^1.0.2",
-    "documentjs": "^0.4.2",
     "done-serve": "^0.2.4",
     "donejs-cli": "^0.9.5",
     "generator-donejs": "^0.9.0",
@@ -63,5 +63,18 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/canjs/can-util.git"
+  },
+  "bit-docs": {
+    "dependencies": {
+      "bit-docs-glob-finder": "^0.0.5",
+      "bit-docs-dev": "^0.0.3",
+      "bit-docs-js": "^0.0.3",
+      "bit-docs-generate-readme": "^0.0.2"
+    },
+    "glob": {
+      "pattern": "**\/*.{js,md}",
+      "ignore": "node_modules\/**\/*"
+    },
+    "parent": "can-util"
   }
 }

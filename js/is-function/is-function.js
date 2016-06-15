@@ -1,3 +1,19 @@
+/**
+ * @function can-util/js/is-function isFunction
+ * @description Determines if an object is a Function.
+ * @signature `isFunction(value)`
+ *
+ * ```js
+ * var isFunction = require("can-util/js/is-function/is-function");
+ *
+ * console.log(isFunction(function(){})); // -> true
+ *
+ * console.log(isFunction({})); // -> false
+ * ```
+ *
+ * @return {Boolean} True if the provided argument is a function.
+ */
+
 var isFunction = (function() {
 	if (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function') {
 		return function(value) {

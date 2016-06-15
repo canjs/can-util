@@ -1,3 +1,8 @@
+/**
+ * @module {{}} can-util/dom can-util/dom
+ * @description A collection of modules that operate on DOM.
+ */
+
 module.exports = {
 	attr: require('./attr/attr'),
 	childNodes: require('./child-nodes/child-nodes'),

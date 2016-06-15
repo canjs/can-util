@@ -1,5 +1,6 @@
 /* jshint maxdepth:7*/
 var isArrayLike = require('../is-array-like/is-array-like');
+var has = Object.prototype.hasOwnProperty;
 
 function each(elements, callback, context) {
 	var i = 0,
@@ -18,7 +19,9 @@ function each(elements, callback, context) {
 		}
 		 else if (typeof elements === "object") {
 			for (key in elements) {
-				if (Object.prototype.hasOwnProperty.call(elements, key) && callback.call(context || elements[key], elements[key], key, elements) === false) {
+				if (has.call(elements, key) &&
+						callback.call(context || elements[key],
+													elements[key], key, elements) === false) {
 					break;
 				}
 			}
