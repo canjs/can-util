@@ -15,7 +15,10 @@ QUnit.test("objects with prototypes", function(){
 });
 
 QUnit.test("new Object", function(){
-	var obj = new Object();
+	var obj;
+	/* jshint ignore:start */
+	obj = new Object();
+	/* jshint ignore:end */
 
 	QUnit.equal(isPlainObject(obj), true, "using new Object gives you a plain object");
 });
