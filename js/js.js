@@ -1,12 +1,17 @@
+/**
+ * @module {{}} can-util/js can-util/js
+ * @description Utilities for manipulating JavaScript data structures.
+ */
+
 module.exports = {
 	assign: require('./assign/assign'),
 	cid: require('./cid/cid'),
-	deepExtend: require('./deep-extend/deep-extend'),
+	deepAssign: require('./deep-assign/deep-assign'),
 	dev: require('./dev/dev'),
 	diff: require('./diff/diff'),
 	each: require('./each/each'),
 	global: require('./global/global'),
-	import: require('./import/import'),
+	"import": require('./import/import'),
 	isArray: require('./is-array/is-array'),
 	isArrayLike: require('./is-array-like/is-array-like'),
 	isBrowserWindow: require('./is-browser-window/is-browser-window'),

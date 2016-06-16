@@ -1,4 +1,4 @@
-var extend = require('./js/deep-extend/');
+var deepAssign = require('./js/deep-assign/');
 var namespace = require('./namespace');
 
-module.exports = extend(namespace, require('./dom/'), require('./js/'));
+module.exports = deepAssign(namespace, require('./dom/'), require('./js/'));
