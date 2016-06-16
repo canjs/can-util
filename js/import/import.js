@@ -2,8 +2,7 @@ var isFunction = require('../is-function/is-function');
 var global = require("../global/global")();
 
 /**
- * @function can-util/js/import import
- * @description Dynamically import a module.
+ * @module {function} can-util/js/import/import import
  * @signature `importModule(moduleName, parentName)`
  *
  * ```js

@@ -1,6 +1,5 @@
 /**
- * @function can-util/js/is-function isFunction
- * @description Determines if an object is a Function.
+ * @module {function} can-util/js/is-function/is-function isFunction
  * @signature `isFunction(value)`
  *
  * ```js

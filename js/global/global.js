@@ -1,6 +1,5 @@
 /**
- * @function can-util/js/global GLOBAL
- * @description Get the global object for the JavaScript environment.
+ * @module {function} can-util/js/global/global GLOBAL
  * @signature `GLOBAL()`
  *
  * Returns the global that this environment provides. It will be one of:

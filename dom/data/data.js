@@ -12,11 +12,11 @@ var setData = function(name, value) {
 };
 
 /**
- * @module {{}} can-util/dom/data domData
+ * @module {{}} can-util/dom/data/data domData
  * @description Allows associating data as a key/value pair for a particular
  * DOM Node.
  *
- * ```
+ * ```js
  * var domData = require("can-util/dom/data/data");
  * ```
  */
@@ -36,7 +36,7 @@ module.exports = {
 		}
 	},
 	/**
-	 * @function can-util/dom/data.get domData.get
+	 * @function can-util/dom/data/data.get domData.get
 	 * @signature `domData.get.call(el, key)`
 	 *
 	 * Get data that was stored in a DOM Node using the specified `key`.
@@ -53,7 +53,7 @@ module.exports = {
 		return key === undefined ? store || setData(this) : store && store[key];
 	},
 	/**
-	 * @function can-util/dom/data.set domData.set
+	 * @function can-util/dom/data/data.set domData.set
 	 * @signature `domData.set.call(el, key, value)`
 	 *
 	 * Set data to be associated with a DOM Node using the specified `key`. If data already exists for this key, it will be overwritten.

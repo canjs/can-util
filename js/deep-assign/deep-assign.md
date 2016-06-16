@@ -1,8 +1,7 @@
-@function can-util/js/deep-assign deepAssign
-@description Assign properties from a source object to a target object, deeply copying properties that are objects or arrays.
+@module {function} can-util/js/deep-assign/deep-assign deepAssign
 @signature `deepAssign(target, [ ... sources ])`
 
-Deeply assign properties to an object.
+Assign properties from a source object to a target object, deeply copying properties that are objects or arrays.
 
 ```js
 var deepAssign = require("can-util/js/deep-assign/deep-assign");

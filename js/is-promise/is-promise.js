@@ -1,7 +1,8 @@
 /**
- * @function can-util/js/is-promise isPromise
- * @description Determines if an object is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+ * @module {function} can-util/js/is-promise/is-promise isPromise
  * @signature `isPromise(obj)`
+ *
+ * Determines if an object is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
  *
  * ```js
  * var isPromise = require("can-util/js/is-promise/is-promise");

@@ -1,5 +1,4 @@
-@function can-util/js/is-array-like isArrayLike
-@description Determines if an object is array like.
+@module {function} can-util/js/is-array-like/is-array-like isArrayLike
 @signature `isArrayLike(obj)`
 
 Determines if an object is "array like", meaning it can be looped over. Any object with a `.length` property is array like.

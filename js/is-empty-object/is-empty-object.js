@@ -1,8 +1,7 @@
 /* jshint unused: false */
 
 /**
- * @function can-util/js/is-empty-object isEmptyObject
- * @description Determines if an object is an object with no properties.
+ * @module {function} can-util/js/is-empty-object/is-empty-object isEmptyObject
  * @signature `isEmptyObject(obj)`
  *
  * Used to determine if an object is an empty object (an object with no properties) such as `{}`.
