@@ -87,13 +87,14 @@ var mutated = function(elements, type) {
 
 /**
  * @module {{}} can-util/dom/mutate/mutate can-util/dom/mutate/mutate
+ * @parent can-util/dom
  * @description Mutate an element by appending, inserting, and removing DOM nodes. Use this so that on the server "inserted" will be fired.
  *
  * ```js
  * var mutate = require("can-util/dom/mutate/mutate");
  *
  * var el = document.createElement("div");
- * 
+ *
  * el.addEventListener("inserted", function(){
  *   console.log("Inserted was fired!");
  * });

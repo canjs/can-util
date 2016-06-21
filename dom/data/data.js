@@ -12,7 +12,8 @@ var setData = function(name, value) {
 };
 
 /**
- * @module {{}} can-util/dom/data/data domData
+ * @module {{}} can-util/dom/data/data
+ * @parent can-util/dom
  * @description Allows associating data as a key/value pair for a particular
  * DOM Node.
  *

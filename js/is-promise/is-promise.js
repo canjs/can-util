@@ -1,5 +1,6 @@
 /**
- * @module {function} can-util/js/is-promise/is-promise isPromise
+ * @module {function} can-util/js/is-promise/is-promise
+ * @parent can-util/js
  * @signature `isPromise(obj)`
  *
  * Determines if an object is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).

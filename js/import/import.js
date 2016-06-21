@@ -3,6 +3,7 @@ var global = require("../global/global")();
 
 /**
  * @module {function} can-util/js/import/import import
+ * @parent can-util/js
  * @signature `importModule(moduleName, parentName)`
  *
  * ```js

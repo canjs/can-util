@@ -71,21 +71,5 @@ var buildFragment = function (html, doc) {
 // that if only a single text node is returned, returns a fragment with
 // a text node that is set to the content.
 
-//TODO: remove this - no longer support ie8
-// (function(){
-// 	var text = "<-\n>",
-// 		frag = can.buildFragment(text, document);
-// 	if(text !== frag.firstChild.nodeValue) {
-// 		var oldBuildFragment = can.buildFragment;
-// 		can.buildFragment = function(html, nodes){
-// 			var res = oldBuildFragment(html, nodes);
-// 			if(res.childNodes.length === 1 && res.childNodes[0].nodeType === 3) {
-// 				res.childNodes[0].nodeValue = html;
-// 			}
-// 			return res;
-// 		};
-//
-// 	}
-// })();
 
 module.exports = buildFragment;

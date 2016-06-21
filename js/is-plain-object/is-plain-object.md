@@ -1,4 +1,5 @@
-@module {function} can-util/js/is-plain-object/is-plain-object isPlainObject
+@module {function} can-util/js/is-plain-object/is-plain-object
+@parent can-util/js
 @signature `isPlainObject(obj)`
 
 Attempts to determine if an object is a plain object like those you would create using the curly braces syntax: `{}`. The following are not plain objects:

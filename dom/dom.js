@@ -1,5 +1,6 @@
 /**
  * @module {{}} can-util/dom can-util/dom
+ * @parent can-util
  * @description A collection of modules that operate on DOM.
  */
 

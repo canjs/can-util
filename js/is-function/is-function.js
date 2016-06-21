@@ -1,5 +1,7 @@
 /**
- * @module {function} can-util/js/is-function/is-function isFunction
+ * @module {function} can-util/js/is-function/is-function
+ * @parent can-util/js
+ *
  * @signature `isFunction(value)`
  *
  * ```js
@@ -10,7 +12,7 @@
  * console.log(isFunction({})); // -> false
  * ```
  *
- * @return {Boolean} True if the provided argument is a function.
+ *   @return {Boolean} True if the provided argument is a function.
  */
 
 var isFunction = (function() {

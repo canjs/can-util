@@ -1,5 +1,6 @@
 /**
- * @module {function} can-util/js/global/global GLOBAL
+ * @module {function} can-util/js/global/global
+ * @parent can-util/js
  * @signature `GLOBAL()`
  *
  * Returns the global that this environment provides. It will be one of:
@@ -12,7 +13,7 @@
  * var GLOBAL = require("can-util/js/global/global");
  *
  * var g = GLOBAL();
- * 
+ *
  * // In a browser
  * console.log(g === window); // -> true
  * ```
@@ -29,7 +30,7 @@ module.exports = function(){
 		// Node.js
 		typeof process === "object" &&
 		{}.toString.call(process) === "[object process]" ? global :
-		
+
 		// Browser window
 		window;
 };

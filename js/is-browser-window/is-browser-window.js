@@ -1,5 +1,6 @@
 /**
- * @module {function} can-util/js/is-browser-window/is-browser-window isBrowserWindow
+ * @module {function} can-util/js/is-browser-window/is-browser-window
+ * @parent can-util/js
  * @signature `isBrowserWindow()`
  *
  * Returns `true` if the code is running within a Browser window. Use this function if you need special code paths for when running in a Browser window, a Web Worker, or another environment (such as Node.js).
