@@ -1,6 +1,6 @@
 {
   "name": "can-util",
-  "version": "3.0.0-pre.27",
+  "version": "3.0.0-pre.28",
   "description": "Common utilities for CanJS projects",
   "homepage": "http://canjs.com",
   "author": {
@@ -72,12 +72,12 @@
       "bit-docs-generate-readme": "^0.0.8"
     },
     "glob": {
-      "pattern": "**\/*.{js,md}",
-      "ignore": "node_modules\/**\/*"
+      "pattern": "**/*.{js,md}",
+      "ignore": "node_modules/**/*"
     },
-		"readme": {
-			"apis": "./doc/apis.json"
-		},
+    "readme": {
+      "apis": "./doc/apis.json"
+    },
     "parent": "can-util"
   }
 }
