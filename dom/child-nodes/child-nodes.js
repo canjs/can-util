@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/dom/child-nodes/child-nodes
+ * @module {function} can-util/dom/child-nodes/child-nodes childNodes
  * @parent can-util/dom
  * @signature `childNodes(node)`
  *

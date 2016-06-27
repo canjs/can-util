@@ -8,8 +8,49 @@ var has = function(className) {
 	}
 };
 
+/**
+ * @module {{}} can-util/dom/class-name/class-name className
+ * @parent can-util/dom
+ * @description Allows querying and manipulation of classes on HTML elements
+ *
+ * ```js
+ * var className = require("can-util/dom/class-name/class-name");
+ *
+ * var fooDiv = document.createElement("div");
+ * className.add(fooDiv, "foo");
+ * fooDiv.outerHTML; //-> '<div class="foo"></div>'
+ * ```
+ */
 module.exports = {
+	/**
+	 * @function can-util/dom/class-name/class-name.has className.has
+	 * @signature `className.has.call(el, cls)`
+	 *
+	 * Determine wheter a DOM node has a given class name.
+	 *
+	 * ```js
+	 * var isContainer = className.has.call(el, "container");
+	 * ```
+	 *
+	 * @param {String} className A string representing a single class name token
+	 *
+	 * @return {Boolean} true if the element's class attribute contains the token, false otherwise.
+	 */
 	has: has,
+	/**
+	 * @function can-util/dom/class-name/class-name.add className.add
+	 * @signature `className.add.call(el, cls)`
+	 *
+	 * Add a class name to a DOM node if it is not already there.
+	 *
+	 * ```js
+	 * className.add.call(el, "container");
+	 * ```
+	 *
+	 * @param {String} className A string representing a single class name token
+	 *
+	 * @return {void}
+	 */
 	add: function(className) {
 		if (this.classList) {
 			this.classList.add(className);
@@ -18,6 +59,20 @@ module.exports = {
 			this.className += " " + className;
 		}
 	},
+	/**
+	 * @function can-util/dom/class-name/class-name.remove className.remove
+	 * @signature `className.remove.call(el, cls)`
+	 *
+	 * Remove a class name from a DOM node if it exists on the node
+	 *
+	 * ```js
+	 * className.remove.call(el, "container");
+	 * ```
+	 *
+	 * @param {String} className A string representing a single class name token
+	 *
+	 * @return {void}
+	 */
 	remove: function(className) {
 		if (this.classList) {
 			this.classList.remove(className);

@@ -1,5 +1,5 @@
 /**
- * @module {{}} can-util/dom/events/events
+ * @module {{}} can-util/dom/events/events events
  * @parent can-util/dom
  * @description Allows you to listen to a domEvent and special domEvents.
  *

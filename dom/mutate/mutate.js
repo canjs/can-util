@@ -86,7 +86,7 @@ var mutated = function(elements, type) {
 };
 
 /**
- * @module {{}} can-util/dom/mutate/mutate can-util/dom/mutate/mutate
+ * @module {{}} can-util/dom/mutate/mutate mutate
  * @parent can-util/dom
  * @description Mutate an element by appending, inserting, and removing DOM nodes. Use this so that on the server "inserted" will be fired.
  *

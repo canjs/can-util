@@ -1,5 +1,5 @@
 /**
- * @module {{}} can-util/js can-util/js
+ * @module {{}} can-util/js js
  * @parent can-util
  * @description Utilities for manipulating JavaScript data structures.
  */
