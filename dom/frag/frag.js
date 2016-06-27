@@ -9,7 +9,7 @@ var childNodes = require('../child-nodes/child-nodes');
 
 Convert a String, HTMLElement, documentFragment, or contentArray into a documentFragment.
 
-@signature `frag: function(<String|HTMLElement|documentFragment|contentArray>) -> documentFragment`
+@signature `frag: function(String|HTMLElement|documentFragment|contentArray) -> documentFragment`
 
 @param {String|HTMLElement|documentFragment|contentArray} item
 
