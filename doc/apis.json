@@ -2,6 +2,7 @@
 	{"can-util/dom": [
 		"can-util/dom/ajax/ajax",
 		"can-util/dom/child-nodes/child-nodes",
+		"can-util/dom/class-name/class-name",
 		{"can-util/dom/data/data": [
 			"can-util/dom/data/data.get",
 			"can-util/dom/data/data.set"
@@ -13,7 +14,7 @@
 			"can-util/dom/mutate/mutate.insertBefore",
 			"can-util/dom/mutate/mutate.removeChild",
 			"can-util/dom/mutate/mutate.replaceChild"
-		]},
+		]}
 	]},
 	{"can-util/js": [
 		"can-util/js/assign/assign",
