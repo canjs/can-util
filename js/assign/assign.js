@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/js/assign/assign
+ * @module {function} can-util/js/assign/assign assign
  * @parent can-util/js
  * @signature `assign(target, source)`
  *

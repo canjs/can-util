@@ -8,6 +8,27 @@ var domDispatch = require("../../dispatch/dispatch");
 var originalAdd = events.addEventListener,
 	originalRemove = events.removeEventListener;
 
+/**
+ * @module {events} can-util/dom/events/attributes/attributes attributes
+ * @parent can-util/dom/events
+ *
+ * Adds a listenable "attributes" event to DOM nodes, which fires when
+ * the node's attributes change.
+ *
+ * ```js
+ * var events = require("can-util/dom/events/events");
+ * require("can-util/dom/events/attributes/attributes");
+ * var el = document.createElement("div");
+ *
+ * function attributesHandler() {
+ * 	console.log("attributes event fired");
+ * }
+ * 
+ * events.addEventListener.call(el, "attributes", attributesHandler, false);
+ *
+ * events.removeEventListener.call(el, "attributes", attributesHandler);
+ * ```
+ */
 events.addEventListener = function(eventName){
 	if(eventName === "attributes") {
 		var MutationObserver = getMutationObserver();

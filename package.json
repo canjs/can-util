@@ -73,7 +73,7 @@
     },
     "glob": {
       "pattern": "**/*.{js,md}",
-      "ignore": "node_modules/**/*"
+      "ignore": ["node_modules/**/*","**/*{-,_,}{test,qunit}{s,}.js"]
     },
     "readme": {
       "apis": "./doc/apis.json"

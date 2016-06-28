@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/js/is-string/is-string
+ * @module {function} can-util/js/is-string/is-string isString
  * @parent can-util/js
  * @description Determines if the provided argument is a string.
  * @signature `isString(obj)`

@@ -24,7 +24,8 @@ var has = function(className) {
 module.exports = {
 	/**
 	 * @function can-util/dom/class-name/class-name.has className.has
-	 * @signature `className.has.call(el, cls)`
+	 * @parent can-util/dom/class-name/class-name
+   * @signature `className.has.call(el, cls)`
 	 *
 	 * Determine wheter a DOM node has a given class name.
 	 *
@@ -39,6 +40,7 @@ module.exports = {
 	has: has,
 	/**
 	 * @function can-util/dom/class-name/class-name.add className.add
+	 * @parent can-util/dom/class-name/class-name
 	 * @signature `className.add.call(el, cls)`
 	 *
 	 * Add a class name to a DOM node if it is not already there.
@@ -61,6 +63,7 @@ module.exports = {
 	},
 	/**
 	 * @function can-util/dom/class-name/class-name.remove className.remove
+	 * @parent can-util/dom/class-name/class-name
 	 * @signature `className.remove.call(el, cls)`
 	 *
 	 * Remove a class name from a DOM node if it exists on the node

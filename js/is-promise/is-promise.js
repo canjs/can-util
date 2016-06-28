@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/js/is-promise/is-promise
+ * @module {function} can-util/js/is-promise/is-promise isPromise
  * @parent can-util/js
  * @signature `isPromise(obj)`
  *

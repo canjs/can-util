@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/js/is-browser-window/is-browser-window
+ * @module {function} can-util/js/is-browser-window/is-browser-window isBrowserWindow
  * @parent can-util/js
  * @signature `isBrowserWindow()`
  *

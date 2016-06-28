@@ -1,8 +1,23 @@
 var each = require('../each/each');
 
-// ## deparam.js
-// `can.deparam`
-// _Takes a string of name value pairs and returns a Object literal that represents those params._
+/**
+ * @module {function} can-util/js/deparam/deparam deparam
+ * @parent can-util/js
+ * @signature `deparam(params)`
+ *
+ * @param {String} params a form-urlencoded string of key-value pairs
+ * @return {Object} The params formatted into an object
+ * 
+ * Takes a string of name value pairs and returns a Object literal that represents those params.
+ *
+ * ```js
+ * var deparam = require("can-util/js/deparam/deparam");
+ * 
+ * console.log(JSON.stringify(deparam("?foo=bar&number=1234"))); // -> '{"foo" : "bar", "number": 1234}'
+ * console.log(JSON.stringify(deparam("#foo[]=bar&foo[]=baz"))); // -> '{"foo" : ["bar", "baz"]}'
+ * console.log(JSON.stringify(deparam("foo=bar%20%26%20baz"))); // -> '{"foo" : "bar & baz"}'
+ * ```
+ */
 var digitTest = /^\d+$/,
 	keyBreaker = /([^\[\]]+)|(\[\])/g,
 	paramTest = /([^?#]*)(#.*)?$/,

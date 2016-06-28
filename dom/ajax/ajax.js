@@ -1,7 +1,7 @@
 var assign = require("../../js/assign/assign");
 
 /**
-@function can-util/dom/ajax/ajax ajax
+@module {function} can-util/dom/ajax/ajax ajax
 @parent can-util/dom
 @signature `ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.

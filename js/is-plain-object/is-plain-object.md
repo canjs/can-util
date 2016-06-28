@@ -1,4 +1,4 @@
-@module {function} can-util/js/is-plain-object/is-plain-object
+@module {function} can-util/js/is-plain-object/is-plain-object isPlainObject
 @parent can-util/js
 @signature `isPlainObject(obj)`
 
