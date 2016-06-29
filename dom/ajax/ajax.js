@@ -9,15 +9,15 @@ The list of configuration options is the same as for [jQuery.ajax](http://api.jq
 @return {Promise} A Promise that resolves to the data.
 
 @body
-`can.ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
+`ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
 similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax]. The example below
 makes use of [can-util/dom/frag/frag].
 
-        can.ajax({
+        ajax({
                 url: 'http://canjs.com/docs/can.ajax.html',
                 success: function(document) {
                         var frag = can.frag(document);
-                        return frag.querySelector(".heading h1").innerText; //-> can.ajax
+                        return frag.querySelector(".heading h1").innerText; //-> ajax
                 }
         });
 

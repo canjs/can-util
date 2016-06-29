@@ -17,7 +17,7 @@ require("../../is-of-global-document/");
 
 /**
  * @module {Function} can-util/dom/events/make-mutation-event/make-mutation-event makeMutationEvent
- * @parent can-util/dom/events
+ * @parent can-util/dom/events/events
  *
  * @signature `makeMutationEvent(specialEventNae, mutationNodesProperty)`
  *

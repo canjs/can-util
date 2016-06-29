@@ -10,7 +10,7 @@ var originalAdd = events.addEventListener,
 
 /**
  * @module {events} can-util/dom/events/attributes/attributes attributes
- * @parent can-util/dom/events
+ * @parent can-util/dom/events/events
  *
  * Adds a listenable "attributes" event to DOM nodes, which fires when
  * the node's attributes change.

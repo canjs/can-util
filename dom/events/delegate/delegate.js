@@ -8,7 +8,7 @@ var dataName = "delegateEvents";
 
 /**
  * @module {events} can-util/dom/events/delegate/delegate delegateEvents
- * @parent can-util/dom/events
+ * @parent can-util/dom/events/events
  *
  * Add delegate listeners to DOM events.  Delegated listeners use a selector on an 
  * ancestor element to determine when to fire the event for an item.  This can help 
@@ -17,14 +17,14 @@ var dataName = "delegateEvents";
  *
  * ```js
  * var events = require("can-util/dom/events/events");
- * require("can-util/dom/events/delegate-events/delegate-events");
+ * require("can-util/dom/events/delegate/delegate");
  * var el = document.createElement("div");
  * var sub = document.createElement("div");
  * sub.className = "foo"
  * el.appendChild(sub);
  *
  * function delegateEventsHandler() {
- * 	console.log("delegate-events event fired");
+ * 	console.log("delegate event fired");
  * }
  * 
  * events.addDelegateListener.call(el, "click", ".foo", delegateEventsHandler, false);
@@ -86,7 +86,9 @@ var handleEvent = function(ev){
 };
 
 /**
- * @function can-util/dom/events/delegate-events/delegate-events.addDelegateListener events.addDelegateListener
+ * @function can-util/dom/events/delegate/delegate.addDelegateListener events.addDelegateListener
+ * @parent can-util/dom/events/delegate/delegate
+ * @signature `events.addDelegateListener(eventType, selector, handler)`
  * @param {String} eventType The type of the event to virtually bind to delegates
  * @param {String} selector  A CSS selector that matches all intended delegates
  * @param {function(event)} handler   The function to call when the event is dispatched
@@ -124,12 +126,14 @@ domEvents.addDelegateListener = function(eventType, selector, handler) {
 };
 
 /**
- * @function can-util/dom/events/delegate-events/delegate-events.removeDelegateListener events.removeDelegateListener
+ * @function can-util/dom/events/delegate/delegate.removeDelegateListener events.removeDelegateListener
+ * @parent can-util/dom/events/delegate/delegate
+ * @signature `events.removeDelegateListener(eventType, selector, handler)`
  * @param {String} eventType The type of the event to unbind
  * @param {String} selector  A CSS selector that matches a delegate selector added for this event type
  * @param {function(event)} handler   The function bound as handler when the listener was added
  *
- * Remove a delegated event added by in [can-util/dom/delegate-events/delegate-events.addDelegateListener addDelegateListener] 
+ * Remove a delegated event added by in [can-util/dom/delegate/delegate.addDelegateListener addDelegateListener] 
  */
 domEvents.removeDelegateListener = function(eventType, selector, handler) {
 	var events = domData.get.call(this, dataName);

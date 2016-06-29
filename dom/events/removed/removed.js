@@ -2,7 +2,7 @@ var makeMutationEvent = require("../make-mutation-event/make-mutation-event");
 
 /**
  * @module {events} can-util/dom/events/removed/removed removed
- * @parent can-util/dom/events
+ * @parent can-util/dom/events/events
  *  
  * This event fires when descendant elements of the bound element are detached
  * or destroyed.

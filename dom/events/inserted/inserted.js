@@ -2,7 +2,7 @@ var makeMutationEvent = require("../make-mutation-event/make-mutation-event");
 
 /**
  * @module {events} can-util/dom/events/inserted/inserted inserted
- * @parent can-util/dom/events
+ * @parent can-util/dom/events/events
  *  
  * This event fires when nodes are added as descendants of the attached element
  *

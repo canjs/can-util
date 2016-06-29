@@ -106,7 +106,7 @@ module.exports = {
 	/**
 	 * @function can-util/dom/mutate/mutate.appendChild appendChild
 	 * @signature `mutate.appendChild.call(el, child)`
-	 * Used to append a node to an element and trigger the "inserted" event on all of the newly inserted children. Since `can.inserted` takes an array we convert the child to an array, or in the case of a DocumentFragment we first convert the childNodes to an array and call inserted on those.
+	 * Used to append a node to an element and trigger the "inserted" event on all of the newly inserted children. Since `mutated` takes an array we convert the child to an array, or in the case of a DocumentFragment we first convert the childNodes to an array and call inserted on those.
 	 */
 	appendChild: function(child) {
 		if(getMutationObserver()) {

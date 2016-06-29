@@ -25,9 +25,9 @@ ContentArrays can be used to combine multiple HTMLElements into a single documen
     var p = document.createElement("p");
     p.innerHTML = "Welcome to <b>CanJS</b>";
     var contentArray = ["<h1>Hi There</h1>", p];
-    var frag = can.frag( contentArray )
+    var fragment = frag( contentArray )
 
-`frag` will be a documentFragment with the following elements:
+`fragment` will be a documentFragment with the following elements:
 
     <h1>Hi There</h1>
     <p>Welcome to <b>CanJS</b></p>
