@@ -25,7 +25,7 @@ module.exports = {
 	isWebWorker: require('./is-web-worker/is-web-worker'),
 	joinURIs: require('./join-uris/join-uris'),
 	last: require('./last/last'),
-	makeArra: require('./make-array/make-array'),
+	makeArray: require('./make-array/make-array'),
 	setImmediate: require('./set-immediate/set-immediate'),
 	string: require('./string/string'),
 	types: require('./types/types')
