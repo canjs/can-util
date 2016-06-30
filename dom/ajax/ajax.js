@@ -85,7 +85,7 @@ module.exports = function (o) {
 			if( xhr.status === 200 ) {
 				deferred.resolve( JSON.parse( xhr.responseText ) );
 			} else {
-				deferred.reject( JSON.parse( xhr.responseText ) );
+				deferred.reject( [xhr, xhr.statusText, JSON.parse( xhr.responseText )] );
 			}
 		}
 		else if (o.progress) {
