@@ -5,6 +5,7 @@
  */
 
 module.exports = {
+	ajax: require('./ajax/ajax'),
 	attr: require('./attr/attr'),
 	childNodes: require('./child-nodes/child-nodes'),
 	className: require('./class-name/class-name'),
