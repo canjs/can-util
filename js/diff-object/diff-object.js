@@ -1,5 +1,31 @@
 var assign = require('../assign/assign');
 
+/**
+ * @module {function} can-util/js/diff-object/diff-object diffObject
+ * @parent can-util/js
+ * @signature `diffObject(oldObject, newObject)`
+ *
+ * @param {Object} oldObject the object to diff from
+ * @param {Object} newObject the object to diff to
+ * @return {Array} an array of object-patch objects
+ *
+ * Find the differences between two objects, based on properties and values
+ * 
+ * The object-patch object format has the following keys:
+ * - **property**: the property key on the new object
+ * - **type**:     the type of operation on this property: add, remove, or set
+ * - **value**:    the new value (if type is "add" or "set")
+ *
+ * ```js
+ * var diffObject = require("can-util/js/diff-object/diff-object");
+ *
+ * console.log(diffObject({a: 1, b: 2}, {b: 3, c: 4})); // ->
+ *   [{property: "a", type: "remove"},
+ *    {property: "b", type: "set": value: 3},
+ *    {property: "c", type: "add", "value": 4}]
+ * ```
+ */
+
 module.exports = exports = function(oldObject, newObject){
 	var oldObjectClone,
 		patches = [];

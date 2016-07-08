@@ -1,5 +1,25 @@
 var getGlobal = require("../global/global");
 
+/**
+ * @module {function} can-util/js/base-url/base-url baseUrl
+ * @parent can-util/js
+ * @signature `baseUrl(optionalBaseUrlToSet)`
+ *
+ * Get and/or set the "base" (containing path) of the document.
+ *
+ * ```js
+ * var baseUrl = require("can-util/js/base-url/base-url");
+ *
+ * console.log(baseUrl());           // -> "http://localhost:8080"
+ * console.log(baseUrl(baseUrl() + "/foo/bar")); // -> "http://localhost:8080/foo/bar"
+ * console.log(baseUrl());           // -> "http://localhost:8080/foo/bar"
+ * ```
+ *
+ * @param {String} setUrl An optional base url to override reading the base URL from the known path.
+ *
+ * @return {String} Returns the set or computed base URL
+ */
+
 var setBaseUrl;
 module.exports = function(setUrl){
 	if(setUrl !== undefined) {

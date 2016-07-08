@@ -12,7 +12,7 @@ var setData = function(name, value) {
 };
 
 /**
- * @module {{}} can-util/dom/data/data
+ * @module {{}} can-util/dom/data/data data
  * @parent can-util/dom
  * @description Allows associating data as a key/value pair for a particular
  * DOM Node.
@@ -22,13 +22,51 @@ var setData = function(name, value) {
  * ```
  */
 module.exports = {
+	/**
+	 * @function can-util/dom/data/data.getCid domData.getCid
+	 * @signature `domData.getCid.call(el)`
+	 * @return {Number} The value of the element's unique CID
+	 * 
+	 * Return the previously set unique identifier for the dom node.
+	 */
 	getCid: function(){
 		return this[expando];
 	},
+	/**
+	 * @function can-util/dom/data/data.cid domData.cid
+	 * @signature `domData.cid.call(el)`
+	 * @return {Number} The value of the element's unique CID
+	 * 
+	 * Set a unique identifier for the dom node, using the 
+	 * [can-util/dom/data/data.expando expando] property.
+	 *
+	 * @body
+	 * 
+	 * If a unique cid value has not yet been set for this element, set it 
+	 * using the [can-util/dom/data/data.expando expando] property.  Return the
+	 * unique cid whether or not it is newly set
+	 */	
 	cid: function(){
 		return this[expando] || (this[expando] = ++uuid);
 	},
+	/**
+	 * @property can-util/dom/data/data.expando domData.expando
+	 * @type {String}
+	 * 
+	 * The key in which elements' cids are stored
+	 */
 	expando: expando,
+	/**
+	 * @function can-util/dom/data/data.clean domData.clean
+	 * @param  {String} prop the property to remove from the element's data
+	 * @signature `domData.clean.call(el, key)`
+	 * 
+	 * Remove data from an element previously added by [can-util/dom/data/data.set set]
+	 *
+	 * ```js
+	 * domData.clean.call(el, "metadata");
+	 * ```
+	 */
 	clean: function(prop) {
 		var id = this[expando];
 		delete data[id][prop];
@@ -57,6 +95,9 @@ module.exports = {
 	 * @function can-util/dom/data/data.set domData.set
 	 * @signature `domData.set.call(el, key, value)`
 	 *
+	 * @param {String} name the key to store the value under
+	 * @param {*} value     the value to store under the key
+	 * 
 	 * Set data to be associated with a DOM Node using the specified `key`. If data already exists for this key, it will be overwritten.
 	 *
 	 * ```js

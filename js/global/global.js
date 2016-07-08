@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/js/global/global
+ * @module {function} can-util/js/global/global global
  * @parent can-util/js
  * @signature `GLOBAL()`
  *

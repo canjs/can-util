@@ -1,8 +1,11 @@
 /**
- * @module {function} can-util/js/is-function/is-function
+ * @module {function} can-util/js/is-function/is-function isFunction
  * @parent can-util/js
  *
  * @signature `isFunction(value)`
+ *
+ * @param {*} value the item to test for being a function
+ * @return {Boolean} True if the provided argument is a function.
  *
  * ```js
  * var isFunction = require("can-util/js/is-function/is-function");
@@ -12,9 +15,7 @@
  * console.log(isFunction({})); // -> false
  * ```
  *
- *   @return {Boolean} True if the provided argument is a function.
  */
-
 var isFunction = (function() {
 	if (typeof document !== 'undefined' && typeof document.getElementsByTagName('body') === 'function') {
 		return function(value) {

@@ -1,4 +1,4 @@
-@module {function} can-util/js/join-uris/join-uris
+@module {function} can-util/js/join-uris/join-uris joinURIs
 @parent can-util/js
 @description Join together a URI path to a base.
 @signature `joinURIs(base, href)`

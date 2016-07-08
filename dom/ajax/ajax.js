@@ -1,5 +1,28 @@
 var assign = require("../../js/assign/assign");
 
+/**
+@module {function} can-util/dom/ajax/ajax ajax
+@parent can-util/dom
+@signature `ajax(settings)`
+@param {Object} settings Configuration options for the AJAX request.
+The list of configuration options is the same as for [jQuery.ajax](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
+@return {Promise} A Promise that resolves to the data.
+
+@body
+`ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
+similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax]. The example below
+makes use of [can-util/dom/frag/frag].
+
+        ajax({
+                url: 'http://canjs.com/docs/can.ajax.html',
+                success: function(document) {
+                        var frag = can.frag(document);
+                        return frag.querySelector(".heading h1").innerText; //-> ajax
+                }
+        });
+
+ */
+
 // from https://gist.github.com/mythz/1334560
 var xhrs = [
 		function () { return new XMLHttpRequest(); },

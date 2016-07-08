@@ -2,6 +2,30 @@ var slice = [].slice;
 // a b c
 // a b c d
 // [[2,0, d]]
+/**
+ * @module {function} can-util/js/diff/diff diff
+ * @parent can-util/js
+ * @signature `diff(oldList, newList)`
+ * 
+ * @param  {ArrayLike} oldList the array to diff from
+ * @param  {ArrayLike} newList the array to diff to
+ * @return {Array}     a list of Patch objects representing the differences
+ *
+ * Returns the difference between two ArrayLike objects (that have nonnegative
+ * integer keys and the `length` property) as an array of patch objects.
+ * 
+ * A patch object returned by this function has the following properties:
+ * - **index**:  the index of newList where the patch begins
+ * - **deleteCount**: the number of items deleted from that index in newList
+ * - **insert**: an Array of items newly inserted at that index in newList
+ *
+ * ```js
+ * var diff = require("can-util/js/diff/diff");
+ *
+ * console.log(diff([1], [1, 2])); // -> [{index: 1, deleteCount: 0, insert: [2]}]
+ * console.log(diff([1, 2], [1])); // -> [{index: 1, deleteCount: 1, insert: []}]
+ * ```
+ */
 module.exports = exports = function(oldList, newList){
 	var oldIndex = 0,
 		newIndex =  0,

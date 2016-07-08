@@ -22,8 +22,8 @@ var formElements = {"input": true, "textarea": true, "select": true},
 	},
 	attr = {
 		/**
-		 * @property {Object.<String,(String|Boolean|function)>} can.view.attr.map
-		 * @parent can.view.elements
+		 * @property {Object.<String,(String|Boolean|function)>} can/util/dom/attr/attr.map map
+		 * @parent can-util/dom/attr
 		 * @hide
 		 *
 		 *

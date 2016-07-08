@@ -5,7 +5,7 @@ module.exports = {
 	/**
 	 * Adds a warning message to the console.
 	 * ```
-	 * can.dev.warn("something evil");
+	 * dev.warn("something evil");
 	 * ```
 	 * @param {String} out the message
 	 */
@@ -25,7 +25,7 @@ module.exports = {
 	/**
 	 * Adds a message to the console.
 	 * ```
-	 * can.dev.log("hi");
+	 * dev.log("hi");
 	 * ```
 	 * @param {String} out the message
 	 */

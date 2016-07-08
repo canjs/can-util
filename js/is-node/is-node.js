@@ -1,5 +1,5 @@
 /**
- * @module {function} can-util/js/is-node/is-node
+ * @module {function} can-util/js/is-node/is-node isNode
  * @parent can-util/js
  * @description Determines if your code is running in [Node.js](https://nodejs.org).
  * @signature `isNode()`

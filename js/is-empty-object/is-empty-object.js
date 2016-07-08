@@ -1,7 +1,7 @@
 /* jshint unused: false */
 
 /**
- * @module {function} can-util/js/is-empty-object/is-empty-object
+ * @module {function} can-util/js/is-empty-object/is-empty-object isEmptyObject
  * @parent can-util/js
  * @signature `isEmptyObject(obj)`
  *
