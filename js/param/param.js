@@ -13,7 +13,26 @@ function buildParam(prefix, obj, add) {
 		add(prefix, obj);
 	}
 }
-
+/**
+ * @module {function} can-util/js/param/param
+ * @parent can-util/js
+ *
+ * Serialize an object into a query string.
+ *
+ * @signature `param(params)`
+ *
+ *   Serializes an object or array into a query string useful for making Ajax requests or the
+ *   browser. `param` handles nested objects and arrays.  It uses `encodeURIComponent` to
+ *   escape values and keys.
+ *
+ *   ```js
+ *   param({a: "b", c: "d"}) //-> "a=b&c=d"
+ *   param({a: ["X","Y"]})   //-> "a[]=X&a[]=Y"
+ *   ```
+ *
+ *   @param  {Object} params [description]
+ *   @return {String}        [description]
+ */
 module.exports = function param(object) {
 	var pairs = [],
 		add = function (key, value) {
