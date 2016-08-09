@@ -47,7 +47,7 @@
     "npmAlgorithm": "flat"
   },
   "devDependencies": {
-    "bit-docs": "0.0.6",
+    "bit-docs": "0.0.7",
     "cssify": "^1.0.2",
     "done-serve": "^0.2.4",
     "donejs-cli": "^0.9.5",
