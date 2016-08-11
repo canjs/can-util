@@ -63,6 +63,7 @@
 			"can-util/js/string/string.hyphenate",
 			"can-util/js/string/string.underscore",
 			"can-util/js/string/string.sub"
-		]}
+		]},
+		"can-util/js/string-to-any/string-to-any"
 	]}
 ]
