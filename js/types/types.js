@@ -116,6 +116,28 @@ var types = {
 	 *   The default list type to create if a list is needed. If both [can-list] and [can-define/list/list]
 	 *   are imported, the default type will be [can-define/list/list].
 	 */
-	DefaultList: null
+	DefaultList: null,
+	/**
+	 * @function can-util/js/types/types.wrapElement wrapElement
+	 * @signature `types.wrapElement(element)`
+	 *   Wraps an element into an object useful by DOM libraries ala jQuery.
+	 *
+	 *   @param {Node} element Any object inheriting from the [Node interface](https://developer.mozilla.org/en-US/docs/Web/API/Node).
+	 *   @return {{}} A wrapped object.
+	 */
+	wrapElement: function(element){
+		return element;
+	},
+	/**
+	 * @function can-util/js/types/types.unwrapElement unwrapElement
+	 * @signature `types.unwrapElement(object)`
+	 *   Unwraps an object that contains an element within.
+	 *
+	 *   @param {{}} object Any object that can be unwrapped into a Node.
+	 *   @return {Node} A Node.
+	 */
+	unwrapElement: function(element){
+		return element;
+	}
 };
 module.exports = types;
