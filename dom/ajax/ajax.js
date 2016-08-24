@@ -124,7 +124,9 @@ module.exports = function (o) {
 
 	if (isPost) {
 		var isJson = o.dataType.indexOf("json") >= 0;
-		data = isJson ? JSON.stringify(o.data) : $._formData(o.data);
+		data = isJson ? 
+			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
+			$._formData(o.data);
 		xhr.setRequestHeader("Content-Type", isJson ? "application/json" : "application/x-www-form-urlencoded");
 	}
 	// X-Requested-With header
