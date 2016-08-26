@@ -9,7 +9,7 @@ require('./diff-array/diff-array-test');
 require('./diff-object/diff-object-test');
 
 // TODO - Depends on can.Map, can.List
-// require('./each/each-test');
+require('./each/each-test');
 
 require('./global/global-test');
 require('./import/import-test');
