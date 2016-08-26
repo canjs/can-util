@@ -1,6 +1,8 @@
 /* jshint maxdepth:7*/
 var isArrayLike = require('../is-array-like/is-array-like');
 var has = Object.prototype.hasOwnProperty;
+var isIterable = require("../is-iterable/is-iterable");
+var types = require("../types/types");
 
 function each(elements, callback, context) {
 	var i = 0,
@@ -15,6 +17,17 @@ function each(elements, callback, context) {
 				if (callback.call(context || item, item, i, elements) === false) {
 					break;
 				}
+			}
+		}
+		// Works in anything that implements Symbol.iterator
+		else if(isIterable(elements)) {
+			var iter = elements[types.iterator]();
+			var res, value;
+
+			while(!(res = iter.next()).done) {
+				value = res.value;
+				callback.call(context || elements, Array.isArray(value) ?
+											value[1] : value, value[0]);
 			}
 		}
 		 else if (typeof elements === "object") {

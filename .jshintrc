@@ -22,6 +22,7 @@
 		"stop": true,
 		"global": true,
 		"Promise": true,
+		"Symbol": true,
 		"ActiveXObject": true
 	},
 	"strict": false,
