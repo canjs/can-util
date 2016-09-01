@@ -47,7 +47,7 @@ var formElements = {"input": true, "textarea": true, "select": true},
 				val = val || '';
 
 				if(el.namespaceURI === 'http://www.w3.org/2000/svg') {
-					el.setAttribute('class', val);
+					el.setAttribute('class', '' + val);
 				}
 				else {
 					el.className = val;
