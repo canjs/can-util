@@ -7,6 +7,7 @@ QUnit.module("can-util/dom/matches");
 QUnit.test("basics", function(){
 	var a = document.createElement("a");
 	a.id = "foo";
+	document.body.appendChild(a);
 
 	QUnit.ok(matches.call(a, "#foo"), "matches selector");
 });
