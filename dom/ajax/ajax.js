@@ -79,6 +79,10 @@ module.exports = function (o) {
 		deferred.reject = reject;
 	});
 
+	promise.abort = function () {
+		xhr.abort();
+	};
+
 	o = assign({ userAgent: "XMLHttpRequest", lang: "en", type: "GET", data: null, dataType: "application/x-www-form-urlencoded" }, o);
 	if (o.timeout) {
 		timer = setTimeout(function () {
