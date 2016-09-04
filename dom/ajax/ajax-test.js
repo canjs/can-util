@@ -19,8 +19,8 @@ QUnit.asyncTest("abort", function () {
 		type: "get",
 		url: __dirname+"/test-result.json"
 	});
-	promise.catch(function(reason) {
-		QUnit.equal(reason.readyState, 0, 'aborts the promise');
+	promise.catch(function(xhr) {
+		QUnit.equal(xhr.readyState, 0, "aborts the promise");
 		start();
 	});
 	promise.abort();
