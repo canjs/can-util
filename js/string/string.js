@@ -88,7 +88,6 @@ var string = {
 	 */
 	getObject: function (name, roots) {
 		canDev.warn('string.getObject is deprecated, please use get instead.');
-		
 		roots = isArray(roots) ? roots : [roots || window];
 
 		var result, l = roots.length;
