@@ -13,3 +13,15 @@ QUnit.asyncTest("basic get request", function () {
 		start();
 	});
 });
+
+QUnit.asyncTest("abort", function () {
+	var promise = ajax({
+		type: "get",
+		url: __dirname+"/test-result.json"
+	});
+	promise.catch(function(xhr) {
+		QUnit.equal(xhr.readyState, 0, "aborts the promise");
+		start();
+	});
+	promise.abort();
+});

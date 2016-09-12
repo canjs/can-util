@@ -6,7 +6,8 @@ var assign = require("../../js/assign/assign");
 @signature `ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
 The list of configuration options is the same as for [jQuery.ajax](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {Promise} A Promise that resolves to the data.
+@return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method. 
+ Invoking abort on the Promise instance indirectly rejects it.
 
 @body
 `ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
@@ -78,6 +79,10 @@ module.exports = function (o) {
 		deferred.resolve = resolve;
 		deferred.reject = reject;
 	});
+
+	promise.abort = function () {
+		xhr.abort();
+	};
 
 	o = assign({ userAgent: "XMLHttpRequest", lang: "en", type: "GET", data: null, dataType: "application/x-www-form-urlencoded" }, o);
 	if (o.timeout) {
