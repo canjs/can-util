@@ -89,6 +89,32 @@ var isSVG = function(el){
 					return val;
 				}
 			},
+			selected: {
+				addEventListener: function(eventName, handler, aEL){
+					var option = this;
+					var select = this.parentNode;
+					var lastVal = option.selected;
+					var localHandler = function(changeEvent){
+						var curVal = option.selected;
+						if(curVal !== lastVal) {
+							lastVal = curVal;
+
+							domDispatch.call(option, eventName);
+						}
+					};
+					domEvents.addEventListener.call(select, "change", localHandler);
+					aEL.call(option, eventName, handler);
+
+					return function(rEL){
+						domEvents.removeEventListener.call(select, "change", localHandler);
+						rEL.call(option, eventName, handler);
+					};
+				},
+				test: function(){
+					return this.nodeName === "OPTION" && this.parentNode &&
+						this.parentNode.nodeName === "SELECT";
+				}
+			},
 			src: {
 				set: function (val) {
 					if (val == null || val === "") {
@@ -293,7 +319,8 @@ domEvents.addEventListener = function(eventName, handler){
 	var special = attr.special[eventName];
 
 	if(special && special.addEventListener) {
-		var teardown = special.addEventListener.call(this, eventName, handler);
+		var teardown = special.addEventListener.call(this, eventName, handler,
+																								oldAddEventListener);
 		var teardowns = setData.get.call(this, "attrTeardowns");
 		if(!teardowns) {
 			setData.set.call(this, "attrTeardowns", teardowns = {});
@@ -322,7 +349,7 @@ domEvents.removeEventListener = function(eventName, handler){
 			var eventTeardowns = teardowns[eventName];
 			for(var i = 0, len = eventTeardowns.length; i < len; i++) {
 				if(eventTeardowns[i].handler === handler) {
-					eventTeardowns[i].teardown();
+					eventTeardowns[i].teardown(oldRemoveEventListener);
 					eventTeardowns.splice(i, 1);
 					break;
 				}
