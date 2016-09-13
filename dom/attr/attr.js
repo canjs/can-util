@@ -5,98 +5,134 @@ var setImmediate = require("../../js/set-immediate/set-immediate");
 var getDocument = require("../document/document");
 var global = require("../../js/global/global")();
 var isOfGlobalDocument = require("../is-of-global-document/is-of-global-document");
-var isArray = require("../../js/is-array/is-array");
 var setData = require("../data/data");
+var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 
-
 require("../events/attributes/attributes");
-
 
 // Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
 // the triggering of `attributes` event async.
-var formElements = {"input": true, "textarea": true, "select": true},
-	hasProperty = function(el,attrName){
-		return (attrName in el) || (getDocument() && formElements[el.nodeName.toLowerCase()]);
+var isSVG = function(el){
+		return el.namespaceURI === "http://www.w3.org/2000/svg";
+	},
+	truthy = function() { return true; },
+	getSpecialTest = function(special){
+		return (special && special.test) || truthy;
+	},
+	propProp = function(prop){
+		return {
+			get: function(){
+				return this[prop];
+			},
+			set: function(value){
+				if(this[prop] !== value) {
+					this[prop] = value;
+				}
+				return value;
+			}
+		};
+	},
+	booleanProp = function(prop){
+		return {
+			isBoolean: true,
+			set: function(value){
+				this[prop] = !!value;
+			},
+			remove: function(){
+				this[prop] = false;
+			}
+		};
 	},
 	attr = {
-		/**
-		 * @property {Object.<String,(String|Boolean|function)>} can/util/dom/attr/attr.map map
-		 * @parent can-util/dom/attr
-		 * @hide
-		 *
-		 *
-		 * A mapping of
-		 * special attributes to their JS property. For example:
-		 *
-		 *     "class" : "className"
-		 *
-		 * means get or set `element.className`. And:
-		 *
-		 *      "checked" : true
-		 *
-		 * means set `element.checked = true`.
-		 *
-		 *
-		 * If the attribute name is not found, it's assumed to use
-		 * `element.getAttribute` and `element.setAttribute`.
-		 */
-		map: {
-			"class": function(el, val) {
-				val = val || '';
+		special: {
+			"class": {
+				get: function(){
+					if(isSVG(this)) {
+						return this.getAttribute("class");
+					}
+					return this.className;
+				},
+				set: function(val){
+					val = val || "";
 
-				if(el.namespaceURI === 'http://www.w3.org/2000/svg') {
-					el.setAttribute('class', '' + val);
-				}
-				else {
-					el.className = val;
-				}
-
-				return val;
-			},
-			"value": "value",
-			"innertext": "innerText",
-			"innerhtml": "innerHTML",
-			"textcontent": "textContent",
-			"for": "htmlFor",
-			"checked": true,
-			"disabled": true,
-			"readonly": function (el, val) {
-				el.readOnly = true;
-				return val;
-			},
-			"required": true,
-			// For the `src` attribute we are using a setter function to prevent values such as an empty string or null from being set.
-			// An `img` tag attempts to fetch the `src` when it is set, so we need to prevent that from happening by removing the attribute instead.
-			src: function (el, val) {
-				if (val == null || val === "") {
-					el.removeAttribute("src");
-					return null;
-				} else {
-					el.setAttribute("src", val);
+					if(isSVG(this)) {
+						this.setAttribute("class", "" + val);
+					} else {
+						this.className = val;
+					}
 					return val;
 				}
 			},
-			style: (function () {
-				var el = global.document && getDocument().createElement('div');
-				if ( el && el.style && ("cssText" in el.style) ) {
-					return function (el, val) {
-						return el.style.cssText = (val || "");
-					};
-				} else {
-					return function (el, val) {
-						return el.setAttribute("style", val);
-					};
+			innertext: propProp("innerText"),
+			innerhtml: propProp("innerHTML"),
+			textcontent: propProp("textContent"),
+			"for": propProp("htmlFor"),
+			checked: {
+				set: function(){
+					this.checked = true;
+					if(this.type === "radio") {
+						this.defaultChecked = true;
+					}
+					return true;
 				}
-			})()
+			},
+			disabled: booleanProp("disabled"),
+			required: booleanProp("required"),
+			readonly: {
+				get: function(){
+					return this.readOnly;
+				},
+				set: function(val){
+					this.readOnly = true;
+					return val;
+				}
+			},
+			src: {
+				set: function (val) {
+					if (val == null || val === "") {
+						this.removeAttribute("src");
+						return null;
+					} else {
+						this.setAttribute("src", val);
+						return val;
+					}
+				}
+			},
+			style: {
+				set: (function () {
+					var el = global.document && getDocument().createElement('div');
+					if ( el && el.style && ("cssText" in el.style) ) {
+						return function (el, val) {
+							return el.style.cssText = (val || "");
+						};
+					} else {
+						return function (el, val) {
+							return el.setAttribute("style", val);
+						};
+					}
+				})()
+			},
+			value: {
+				set: function(value){
+					var nodeName = this.nodeName.toLowerCase();
+					if(this.value !== value || nodeName === "option") {
+						this.value = value;
+					}
+					if(attr.defaultValue[nodeName]) {
+						this.defaultValue = value;
+					}
+					return value;
+				}
+			}
 		},
 		// These are elements whos default value we should set.
-		defaultValue: ["input", "textarea"],
+		defaultValue: {input: true, textarea: true},
 		setAttrOrProp: function(el, attrName, val){
 			attrName = attrName.toLowerCase();
-			var prop = attr.map[attrName];
-			if(prop === true && !val) {
+			var special = attr.special[attrName];
+			if(special && special.isBoolean && !val) {
 				this.remove(el, attrName);
 			} else {
 				this.set(el, attrName, val);
@@ -128,41 +164,21 @@ var formElements = {"input": true, "textarea": true, "select": true},
 				oldValue = attr.get(el, attrName);
 			}
 
-			var prop = attr.map[attrName],
-				newValue;
+			var newValue;
+			var special = attr.special[attrName];
+			var setter = special && special.set;
+			var test = getSpecialTest(special);
 
-			// Using the property of `attr.map`, go through and check if the property is a function, and if so call it.
-			// Then check if the property is `true`, and if so set the value to `true`, also making sure
-			// to set `defaultChecked` to `true` for elements of `attr.defaultValue`. We always set the value to true
-			// because for these boolean properties, setting them to false would be the same as removing the attribute.
-			//
-			// For all other attributes use `setAttribute` to set the new value.
-			if (typeof prop === "function") {
-				newValue = prop(el, val);
-			} else if (prop === true && hasProperty(el, attrName)) {
-				newValue = el[attrName] = true;
-
-				if (attrName === "checked" && el.type === "radio") {
-					if (isArray((el.nodeName+"").toLowerCase(), attr.defaultValue) >= 0) {
-						el.defaultChecked = true;
-					}
-				}
-
-			} else if (typeof prop === "string" && hasProperty(el, prop)) {
-				newValue = val;
-				// https://github.com/canjs/canjs/issues/356
-				// But still needs to be set for <option>fields
-				if (el[prop] !== val || el.nodeName.toUpperCase() === 'OPTION') {
-					el[prop] = val;
-				}
-				if (prop === "value" && attr.defaultValue.indexOf((el.nodeName+"").toLowerCase()) >= 0) {
-					el.defaultValue = val;
-				}
+			// First check if this is a special attribute with a setter.
+			// Then run the special's test function to make sure we should 
+			// call its setter, and if so use the setter.
+			// Otherwise fallback to setAttribute.
+			if(typeof setter === "function" && test.call(el)) {
+				newValue = setter.call(el, val);
 			} else {
 				attr.setAttribute(el, attrName, val);
 			}
 
-			// Now that the value has been set, for browsers without MutationObservers, check to see that value has changed and if so trigger the "attributes" event on the element.
 			if (!usingMutationObserver && newValue !== oldValue) {
 				attr.trigger(el, attrName, oldValue);
 			}
@@ -217,21 +233,22 @@ var formElements = {"input": true, "textarea": true, "select": true},
 			}
 		},
 		// ## attr.get
-		// Gets the value of an attribute. First checks to see if the property is a string on `attr.map` and if so returns the value from the element's property. Otherwise uses `getAttribute` to retrieve the value.
+		// Gets the value of an attribute. First checks if the property is an `attr.special` and if so calls the special getter. Otherwise uses `getAttribute` to retrieve the value.
 		get: function (el, attrName) {
 			attrName = attrName.toLowerCase();
-			var prop = attr.map[attrName];
-			if(typeof prop === "string" && hasProperty(el, prop) ) {
-				return el[prop];
-			} else if(prop === true && hasProperty(el, attrName) ) {
-				return el[attrName];
-			}
 
-			return el.getAttribute(attrName);
+			var special = attr.special[attrName];
+			var getter = special && special.get;
+			var test = getSpecialTest(special);
+
+			if(typeof getter === "function" && test(el)) {
+				return getter.call(el);
+			} else {
+				return el.getAttribute(attrName);
+			}
 		},
 		// ## attr.remove
-		// Removes an attribute from an element. Works by using the `attr.map` to see if the attribute is a special type of property. If the property is a function then the fuction is called with `undefined` as the value. If the property is `true` then the attribute is set to false. If the property is a string then the attribute is set to an empty string. Otherwise `removeAttribute` is used.
-		//
+		// Removes an attribute from an element. First checks attr.special to see if the attribute is special and has a setter. If so calls the setter with `undefined`. Otherwise `removeAttribute` is used.
 		// If the attribute previously had a value and the browser doesn't support MutationObservers we then trigger an "attributes" event.
 		remove: function (el, attrName) {
 			attrName = attrName.toLowerCase();
@@ -240,21 +257,19 @@ var formElements = {"input": true, "textarea": true, "select": true},
 				oldValue = attr.get(el, attrName);
 			}
 
-			var setter = attr.map[attrName];
-			if (typeof setter === "function") {
-				setter(el, undefined);
-			}
-			if (setter === true && hasProperty(el, attrName) ) {
-				el[attrName] = false;
-			} else if (typeof setter === "string" && hasProperty(el, setter) ) {
-				el[setter] = "";
+			var special = attr.special[attrName];
+			var setter = special && special.setter;
+			var test = getSpecialTest(special);
+
+			if(typeof setter === "function" && test(el)) {
+				setter.call(el, undefined);
 			} else {
 				el.removeAttribute(attrName);
 			}
+
 			if (!MUTATION_OBSERVER() && oldValue != null) {
 				attr.trigger(el, attrName, oldValue);
 			}
-
 		},
 		// ## attr.has
 		// Checks if an element contains an attribute.
@@ -272,5 +287,53 @@ var formElements = {"input": true, "textarea": true, "select": true},
 			}
 		})()
 	};
+
+var oldAddEventListener = domEvents.addEventListener;
+domEvents.addEventListener = function(eventName, handler){
+	var special = attr.special[eventName];
+
+	if(special && special.addEventListener) {
+		var teardown = special.addEventListener.call(this, eventName, handler);
+		var teardowns = setData.get.call(this, "attrTeardowns");
+		if(!teardowns) {
+			setData.set.call(this, "attrTeardowns", teardowns = {});
+		}
+        
+		if(!teardowns[eventName]) {
+			teardowns[eventName] = [];
+		}
+            
+		teardowns[eventName].push({
+			teardown: teardown,
+			handler: handler
+		});
+		return;
+	}
+
+	return oldAddEventListener.apply(this, arguments);
+};
+
+var oldRemoveEventListener = domEvents.removeEventListener;
+domEvents.removeEventListener = function(eventName, handler){
+	var special = attr.special[eventName];
+	if(special && special.addEventListener) {
+		var teardowns = setData.get.call(this, "attrTeardowns");
+		if(teardowns && teardowns[eventName]) {
+			var eventTeardowns = teardowns[eventName];
+			for(var i = 0, len = eventTeardowns.length; i < len; i++) {
+				if(eventTeardowns[i].handler === handler) {
+					eventTeardowns[i].teardown();
+					eventTeardowns.splice(i, 1);
+					break;
+				}
+			}
+			if(eventTeardowns.length === 0) {
+				delete teardowns[eventName];
+			}
+		}
+		return;
+	}
+	return oldRemoveEventListener.apply(this, arguments);
+};
 
 module.exports = exports = attr;
