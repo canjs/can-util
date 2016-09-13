@@ -1,6 +1,7 @@
-var domAttr = require('can-util/dom/attr/');
-var domEvents = require('can-util/dom/events/');
+var domAttr = require('can-util/dom/attr/attr');
+var domEvents = require('can-util/dom/events/events');
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
+
 
 QUnit = require('steal-qunit');
 
@@ -151,4 +152,41 @@ test('set class attribute via className or setAttribute for svg (#2015)', functi
 
 	domAttr.set(svg, 'class', obj);
 	equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
+});
+
+test("attr.special addEventListener allows custom binding", function(){
+	var trigger;
+	domAttr.special.foo = {
+		addEventListener: function(eventName, handler){
+			trigger = function(){
+				handler();
+			};
+
+			return function(){
+				trigger = function(){};
+			};
+		},
+		set: function(val){
+			this.foo = val;
+			// Trigger an event
+			trigger();
+		}
+	};
+
+	var div = document.createElement("div");
+
+	var times = 0;
+	var handler = function(){
+		times++;
+		equal(times, 1, "addEventListener called");
+	};
+	domEvents.addEventListener.call(div, "foo", handler);
+
+	domAttr.set(div, "foo", "bar");
+
+	domEvents.removeEventListener.call(div, "foo", handler);
+
+	// Shouldn't happen again.
+	domAttr.set(div, "foo", "baz");
+	delete domAttr.special.foo;
 });
