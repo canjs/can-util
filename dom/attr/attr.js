@@ -46,12 +46,6 @@ var isSVG = function(el){
 			}
 		};
 	},
-	defaultAddEventListener = function(eventName, handler, aEL){
-		aEL.call(this, eventName, handler);
-		return function(rEL){
-			rEL.call(this, eventName, handler);
-		};
-	},
 	attr = {
 		special: {
 			checked: {
@@ -95,14 +89,23 @@ var isSVG = function(el){
 					if(cur !== val) {
 						if(val) {
 							this.focus();
+							domDispatch.call(this, "focus");
 						} else {
 							this.blur();
+							domDispatch.call(this, "blur");
 						}
-						domDispatch.call(this, "focused");
+						//
 					}
 					return !!val;
 				},
-				addEventListener: defaultAddEventListener,
+				addEventListener: function(eventName, handler, aEL){
+					aEL.call(this, "focus", handler);
+					aEL.call(this, "blur", handler);
+					return function(rEL){
+						rEL.call(this, "focus", handler);
+						rEL.call(this, "blur", handler);
+					};
+				},
 				test: function(){
 					return this.nodeName === "INPUT";
 				}

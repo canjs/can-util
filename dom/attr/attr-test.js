@@ -223,7 +223,7 @@ test('get, set, and addEventListener on focused', function(){
 		focusedCount++;
 	});
 
-	equal( domAttr.get(input,"focused"), false, "get not focused" );
+	equal( domAttr.get(input, "focused"), false, "get not focused" );
 
 	domAttr.set(input, "focused", true);
 	equal(focusedCount, 1, "focused event");
