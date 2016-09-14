@@ -205,6 +205,9 @@ test("'selected' is bindable on an <option>", function(){
 
 	option2.selected = true;
 	canEvent.trigger.call(select, "change");
+
+	equal(domAttr.get(option1, "selected"), false, "option1 is not selected");
+	equal(domAttr.get(option2, "selected"), true, "option2 is selected");
 });
 
 test('get, set, and addEventListener on focused', function(){

@@ -109,6 +109,12 @@ var isSVG = function(el){
 				}
 			},
 			selected: {
+				get: function(){
+					return this.selected;
+				},
+				set: function(val){
+					return this.selected = !!val;
+				},
 				addEventListener: function(eventName, handler, aEL){
 					var option = this;
 					var select = this.parentNode;
