@@ -206,3 +206,26 @@ test("'selected' is bindable on an <option>", function(){
 	option2.selected = true;
 	canEvent.trigger.call(select, "change");
 });
+
+test('get, set, and addEventListener on focused', function(){
+	var input = document.createElement("input");
+	var ta = document.getElementById("qunit-fixture");
+
+	ta.appendChild(input);
+
+	var focusedCount = 0;
+	// fired on blur and focus events
+	domEvents.addEventListener.call(input, "focused", function(){
+		focusedCount++;
+	});
+
+	equal( domAttr.get(input,"focused"), false, "get not focused" );
+
+	domAttr.set(input, "focused", true);
+	equal(focusedCount, 1, "focused event");
+	equal( domAttr.get(input,"focused"), true, "get focused" );
+
+	domAttr.set(input, "focused", false);
+	equal(focusedCount, 2, "focused event");
+	equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
+});

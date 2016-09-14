@@ -47,6 +47,15 @@ var isSVG = function(el){
 	},
 	attr = {
 		special: {
+			checked: {
+				set: function(){
+					this.checked = true;
+					if(this.type === "radio") {
+						this.defaultChecked = true;
+					}
+					return true;
+				}
+			},
 			"class": {
 				get: function(){
 					if(isSVG(this)) {
@@ -65,20 +74,30 @@ var isSVG = function(el){
 					return val;
 				}
 			},
-			innertext: propProp("innerText"),
-			innerhtml: propProp("innerHTML"),
-			textcontent: propProp("textContent"),
-			"for": propProp("htmlFor"),
-			checked: {
-				set: function(){
-					this.checked = true;
-					if(this.type === "radio") {
-						this.defaultChecked = true;
+			disabled: booleanProp("disabled"),
+			focused: {
+				get: function(){
+					return this === document.activeElement;
+				},
+				set: function(val){
+					var cur = attr.get(this, "focused");
+					if(cur !== val) {
+						if(val) {
+							this.focus();
+						} else {
+							this.blur();
+						}
+						domDispatch.call(this, "focused");
 					}
-					return true;
+					return !!val;
+				},
+				test: function(){
+					return this.nodeName === "INPUT";
 				}
 			},
-			disabled: booleanProp("disabled"),
+			"for": propProp("htmlFor"),
+			innertext: propProp("innerText"),
+			innerhtml: propProp("innerHTML"),
 			required: booleanProp("required"),
 			readonly: {
 				get: function(){
@@ -140,6 +159,7 @@ var isSVG = function(el){
 					}
 				})()
 			},
+			textcontent: propProp("textContent"),
 			value: {
 				set: function(value){
 					var nodeName = this.nodeName.toLowerCase();
@@ -267,7 +287,7 @@ var isSVG = function(el){
 			var getter = special && special.get;
 			var test = getSpecialTest(special);
 
-			if(typeof getter === "function" && test(el)) {
+			if(typeof getter === "function" && test.call(el)) {
 				return getter.call(el);
 			} else {
 				return el.getAttribute(attrName);
@@ -287,7 +307,7 @@ var isSVG = function(el){
 			var setter = special && special.setter;
 			var test = getSpecialTest(special);
 
-			if(typeof setter === "function" && test(el)) {
+			if(typeof setter === "function" && test.call(el)) {
 				setter.call(el, undefined);
 			} else {
 				el.removeAttribute(attrName);
