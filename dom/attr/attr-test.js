@@ -229,3 +229,47 @@ test('get, set, and addEventListener on focused', function(){
 	equal(focusedCount, 2, "focused event");
 	equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
 });
+
+test("get, set, and addEventListener on values", function(){
+	var select = document.createElement("select");
+	select.multiple = true;
+	var option1 = document.createElement("option");
+	option1.value = "one";
+	var option2 = document.createElement("option");
+	option2.value = "two";
+
+	select.appendChild(option1);
+	select.appendChild(option2);
+
+	var valuesCount = 0;
+	domEvents.addEventListener.call(select, "values", function(){
+		valuesCount++;
+	});
+
+	deepEqual(domAttr.get(select, "values"), [], "None selected to start");
+
+	option1.selected = true;
+	canEvent.trigger.call(select, "change");
+
+	equal(valuesCount, 1, "values event");
+	deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
+
+	option2.selected = true;
+	canEvent.trigger.call(select, "change");
+
+	equal(valuesCount, 2, "values event");
+	deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
+
+	option1.selected = option2.selected = false;
+	canEvent.trigger.call(select, "change");
+
+	equal(valuesCount, 3, "values event");
+	deepEqual(domAttr.get(select, "values"), [], "none selected");
+
+	domAttr.set(select, "values", ["two"]);
+	
+	equal(option1.selected, false, "option1 not selected");
+	equal(option2.selected, true, "option2 selected");
+	deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
+
+});

@@ -171,6 +171,43 @@ var isSVG = function(el){
 					}
 					return value;
 				}
+			},
+			values: {
+				get: function(){
+					var values = [];
+					var child = this.firstChild;
+					while(child) {
+						if(child.nodeName === "OPTION" && child.selected) {
+							values.push(child.value);
+						}
+						child = child.nextSibling;
+					}
+					return values;
+				},
+				set: function(values){
+					values = values || [];
+					var child = this.firstChild;
+					while(child) {
+						if(child.nodeName === "OPTION") {
+							child.selected = values.indexOf(child.value) !== -1;
+						}
+						child = child.nextSibling;
+					}
+					return values;
+				},
+				addEventListener: function(eventName, handler, aEL){
+					var localHandler = function(){
+						domDispatch.call(this, "values");
+					};
+
+					domEvents.addEventListener.call(this, "change", localHandler);
+					aEL.call(this, eventName, handler);
+
+					return function(rEL){
+						domEvents.removeEventListener.call(this, "change", localHandler);
+						rEL.call(this, eventName, handler);
+					};
+				}
 			}
 		},
 		// These are elements whos default value we should set.
@@ -369,7 +406,7 @@ domEvents.removeEventListener = function(eventName, handler){
 			var eventTeardowns = teardowns[eventName];
 			for(var i = 0, len = eventTeardowns.length; i < len; i++) {
 				if(eventTeardowns[i].handler === handler) {
-					eventTeardowns[i].teardown(oldRemoveEventListener);
+					eventTeardowns[i].teardown.call(this, oldRemoveEventListener);
 					eventTeardowns.splice(i, 1);
 					break;
 				}
