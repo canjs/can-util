@@ -276,3 +276,21 @@ test("get, set, and addEventListener on values", function(){
 	deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
 
 });
+
+test("get, set, and addEventListener on innerHTML", function(){
+	var div = document.createElement("div");
+	div.appendChild(document.createElement("span"));
+
+	var count = 0;
+	domEvents.addEventListener.call(div, "innerHTML", function(){
+		count++;
+	});
+
+	equal(domAttr.get(div, "innerHTML"), "<span></span>", "got innerhtml");
+
+	domAttr.set(div, "innerHTML", "<p>hello</p>");
+	canEvent.trigger.call(div, "change");
+	equal(count, 1, "innerHTML event");
+
+	equal(domAttr.get(div, "innerHTML"), "<p>hello</p>", "got innerhtml");
+});

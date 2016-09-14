@@ -9,6 +9,7 @@ var setData = require("../data/data");
 var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
+var each = require("../../js/each/each");
 
 require("../events/attributes/attributes");
 
@@ -21,18 +22,18 @@ var isSVG = function(el){
 	getSpecialTest = function(special){
 		return (special && special.test) || truthy;
 	},
-	propProp = function(prop){
-		return {
-			get: function(){
-				return this[prop];
-			},
-			set: function(value){
-				if(this[prop] !== value) {
-					this[prop] = value;
-				}
-				return value;
-			}
+	propProp = function(prop, obj){
+		obj = obj || {};
+		obj.get = function(){
+			return this[prop];
 		};
+		obj.set = function(value){
+			if(this[prop] !== value) {
+				this[prop] = value;
+			}
+			return value;
+		};
+		return obj;
 	},
 	booleanProp = function(prop){
 		return {
@@ -98,6 +99,25 @@ var isSVG = function(el){
 			"for": propProp("htmlFor"),
 			innertext: propProp("innerText"),
 			innerhtml: propProp("innerHTML"),
+			innerHTML: propProp("innerHTML", {
+				addEventListener: function(eventName, handler, aEL){
+					var handlers = [];
+					var el = this;
+					each(["change", "blur"], function(eventName){
+						var localHandler = function(){
+							handler.apply(this, arguments);
+						};
+						domEvents.addEventListener.call(el, eventName, localHandler);
+						handlers.push([eventName, localHandler]);
+					});
+
+					return function(rEL){
+						each(handlers, function(info){
+							rEL.call(el, info[0], info[1]);
+						});
+					};
+				}
+			}),
 			required: booleanProp("required"),
 			readonly: {
 				get: function(){
