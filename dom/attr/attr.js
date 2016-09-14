@@ -53,7 +53,7 @@ var isSVG = function(el){
 					return this.checked;
 				},
 				set: function(val){
-					var notFalse = val !== false;
+					var notFalse = !!val || val === undefined || val === "";
 					this.checked = notFalse;
 					if(notFalse && this.type === "radio") {
 						this.defaultChecked = true;
