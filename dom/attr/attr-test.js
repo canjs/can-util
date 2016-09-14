@@ -1,3 +1,4 @@
+var canEvent = require("can-event");
 var domAttr = require('can-util/dom/attr/attr');
 var domEvents = require('can-util/dom/events/events');
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
@@ -189,4 +190,19 @@ test("attr.special addEventListener allows custom binding", function(){
 	// Shouldn't happen again.
 	domAttr.set(div, "foo", "baz");
 	delete domAttr.special.foo;
+});
+
+test("'selected' is bindable on an <option>", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	var option2 = document.createElement("option");
+	select.appendChild(option1);
+	select.appendChild(option2);
+
+	domEvents.addEventListener.call(option2, "selected", function(){
+		ok(true, "selected was called on the option");
+	});
+
+	option2.selected = true;
+	canEvent.trigger.call(select, "change");
 });
