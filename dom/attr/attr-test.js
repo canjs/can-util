@@ -294,3 +294,26 @@ test("get, set, and addEventListener on innerHTML", function(){
 
 	equal(domAttr.get(div, "innerHTML"), "<p>hello</p>", "got innerhtml");
 });
+
+test("get, set on 'value'", function(){
+	var input = document.createElement("input");
+	input.value = "foo";
+
+	equal(domAttr.get(input, "value"), "foo", "got the value");
+
+	domAttr.set(input, "value", "bar");
+	equal(domAttr.get(input, "value"), "bar", "got the value");
+
+	input.value = "";
+	equal(domAttr.get(input, "value"), "", "value is an empty string");
+});
+
+test("gets the checkedness of a checkbox", function(){
+	var input = document.createElement("input");
+	input.type = "checkbox";
+
+	equal(domAttr.get(input, "checked"), false, "not checked");
+
+	domAttr.set(input, "checked", true);
+	equal(domAttr.get(input, "checked"), true, "now it is true");
+});

@@ -49,6 +49,9 @@ var isSVG = function(el){
 	attr = {
 		special: {
 			checked: {
+				get: function(){
+					return this.checked;
+				},
 				set: function(){
 					this.checked = true;
 					if(this.type === "radio") {
@@ -187,6 +190,9 @@ var isSVG = function(el){
 			},
 			textcontent: propProp("textContent"),
 			value: {
+				get: function(){
+					return this.value;
+				},
 				set: function(value){
 					var nodeName = this.nodeName.toLowerCase();
 					if(this.value !== value || nodeName === "option") {
