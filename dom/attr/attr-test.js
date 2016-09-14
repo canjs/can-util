@@ -218,6 +218,7 @@ test('get, set, and addEventListener on focused', function(){
 
 	var focusedCount = 0;
 	// fired on blur and focus events
+	ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
 	domEvents.addEventListener.call(input, "focused", function(){
 		focusedCount++;
 	});

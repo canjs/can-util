@@ -46,6 +46,12 @@ var isSVG = function(el){
 			}
 		};
 	},
+	defaultAddEventListener = function(eventName, handler, aEL){
+		aEL.call(this, eventName, handler);
+		return function(rEL){
+			rEL.call(this, eventName, handler);
+		};
+	},
 	attr = {
 		special: {
 			checked: {
@@ -96,6 +102,7 @@ var isSVG = function(el){
 					}
 					return !!val;
 				},
+				addEventListener: defaultAddEventListener,
 				test: function(){
 					return this.nodeName === "INPUT";
 				}
