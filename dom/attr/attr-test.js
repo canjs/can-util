@@ -319,4 +319,13 @@ test("get/sets the checkedness of a checkbox", function(){
 
 	domAttr.set(input, "checked", false);
 	equal(domAttr.get(input, "checked"), false, "now it is false");
+
+	domAttr.set(input, "checked");
+	equal(domAttr.get(input, "checked"), true, "now it is true");
+
+	domAttr.set(input, "checked", 0);
+	equal(domAttr.get(input, "checked"), false, "now it is false");
+
+	domAttr.set(input, "checked", "");
+	equal(domAttr.get(input, "checked"), true, "now it is true");
 });
