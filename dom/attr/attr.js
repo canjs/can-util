@@ -39,7 +39,7 @@ var isSVG = function(el){
 		return {
 			isBoolean: true,
 			set: function(value){
-				this[prop] = !!value;
+				this[prop] = value !== false;
 			},
 			remove: function(){
 				this[prop] = false;
@@ -52,12 +52,13 @@ var isSVG = function(el){
 				get: function(){
 					return this.checked;
 				},
-				set: function(){
-					this.checked = true;
-					if(this.type === "radio") {
+				set: function(val){
+					var notFalse = val !== false;
+					this.checked = notFalse;
+					if(notFalse && this.type === "radio") {
 						this.defaultChecked = true;
 					}
-					return true;
+					return val;
 				}
 			},
 			"class": {

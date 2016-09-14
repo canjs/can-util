@@ -308,7 +308,7 @@ test("get, set on 'value'", function(){
 	equal(domAttr.get(input, "value"), "", "value is an empty string");
 });
 
-test("gets the checkedness of a checkbox", function(){
+test("get/sets the checkedness of a checkbox", function(){
 	var input = document.createElement("input");
 	input.type = "checkbox";
 
@@ -316,4 +316,7 @@ test("gets the checkedness of a checkbox", function(){
 
 	domAttr.set(input, "checked", true);
 	equal(domAttr.get(input, "checked"), true, "now it is true");
+
+	domAttr.set(input, "checked", false);
+	equal(domAttr.get(input, "checked"), false, "now it is false");
 });
