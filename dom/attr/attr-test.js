@@ -379,6 +379,31 @@ test("Setting a select's value updates child's selectedness", function(){
 	equal(option2.selected, true, "now it is selected");
 });
 
+test("Removing an option causes the select's value to be re-evaluated", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = "one";
+	
+	var option2 = document.createElement("option");
+	option2.value = "two";
+
+	select.appendChild(option1);
+	select.appendChild(option2);
+
+	domAttr.set(select, "value", "one");
+	equal(option1.selected, true, "selected");
+	equal(domAttr.get(select, "value"), "one", "got the value");
+
+	domEvents.addEventListener.call(select, "change", function(){
+		equal(domAttr.get(select, "value"), undefined, "no value now");
+		start();
+	});
+
+	select.removeChild(option1);
+
+	stop();
+});
+
 test("Multiselect values is updated on any children added/removed", function(){
 	var select = document.createElement("select");
 	select.multiple = true;

@@ -46,9 +46,8 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 		};
 	},
 	setupMO = function(el, callback){
-		var hasSetupMO = setData.get.call(el, "attrMOSetup");
-		if(!hasSetupMO) {
-			setData.set.call(el, "attrMOSetup", true);
+		var attrMO = setData.get.call(el, "attrMO");
+		if(!attrMO) {
 			var onMutation = function(){
 				callback.call(el);
 			};
@@ -59,7 +58,9 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					childList: true,
 					subtree: true
 				});
+				setData.set.call(el, "attrMO", observer);
 			} else {
+				setData.set.call(el, "attrMO", true);
 				setData.set.call(el, "canBindingCallback", {onMutation: onMutation});
 			}
 		}
@@ -221,7 +222,15 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			textcontent: propProp("textContent"),
 			value: {
 				get: function(){
-					return this.value;
+					var value = this.value;
+					if(this.nodeName === "SELECT") {
+						if(("selectedIndex" in this) && this.selectedIndex === -1) {
+							value = undefined;
+						}
+
+						setData.set.call(this, "attrValueLastVal", value);
+					}
+					return value;
 				},
 				set: function(value){
 					var nodeName = this.nodeName.toLowerCase();
@@ -230,6 +239,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					}
 					if(attr.defaultValue[nodeName]) {
 						this.defaultValue = value;
+					}
+					if(nodeName === "select") {
+						setData.set.call(this, "attrValueLastVal", value);
+						setupMO(this, function(){
+							var value = setData.get.call(this, "attrValueLastVal");
+							attr.set(this, "value", value);
+							domDispatch.call(this, "change");
+						});
 					}
 					return value;
 				},
