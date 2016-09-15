@@ -3,7 +3,7 @@
  * @parent can-util/js
  * @signature `isPromise(obj)`
  *
- * Determines if an object is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+ * Determines if object is a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
  *
  * ```js
  * var isPromise = require("can-util/js/is-promise/is-promise");
@@ -19,7 +19,6 @@
  * @param {Object} obj An object to be tested.
  * @return {Boolean} True if the object is a Promise.
  */
-module.exports = function(obj){
-	// https://github.com/then/is-promise/blob/master/index.js
-	return !!obj && (typeof obj === 'object' || typeof obj === 'function') && typeof obj.then === 'function';
+module.exports = function(obj) {
+	return (obj instanceof Promise || (Object.prototype.toString.call(obj) === '[object Promise]'));
 };
