@@ -13,7 +13,7 @@
     "version": "git commit -am \"Update dist for release\" && git checkout -b release && git add -f dist/",
     "postversion": "git push --tags && git checkout master && git branch -D release && git push",
     "testee": "testee test/test.html --browsers firefox",
-    "test": "npm run jshint && npm run mocha & npm run testee",
+    "test": "npm run jshint && npm run mocha && npm run testee",
     "jshint": "jshint dom/. js/. *.js --config",
     "mocha": "mocha --reporter dot --ui mocha-qunit-ui js/tests",
     "release:pre": "npm version prerelease && npm publish",

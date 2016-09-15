@@ -4,7 +4,7 @@
  * @signature `isPromiseLike(obj)`
  *
  * Determines if an object is "Then-able".
- * Also see `isPromise(obj) which checks for a standard [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
+ * Also see `isPromise(obj)` which checks for a standard [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
  *
  * ```js
  * var isPromiseLike = require("can-util/js/is-promise-like/is-promise-like");
