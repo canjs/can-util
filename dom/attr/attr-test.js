@@ -435,3 +435,23 @@ test("Multiselect values is updated on any children added/removed", function(){
 
 	stop();
 });
+
+test("Setting a value that will be appended later", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = "one";
+	
+	domAttr.set(select, "value", "two");
+
+	var option2 = document.createElement("option");
+	option2.value = "two";
+
+	domEvents.addEventListener.call(select, "change", function(){
+		equal(domAttr.get(select, "value"), "two", "option2 is selected");
+		start();
+	});
+
+	select.appendChild(option2);
+
+	stop();
+});
