@@ -337,3 +337,18 @@ test("get/sets the checkedness of a checkbox", function(){
 	domAttr.set(input, "checked", "");
 	equal(domAttr.get(input, "checked"), true, "now it is true");
 });
+
+test("For inputs checked is set as an attribute", function(){
+	var input = document.createElement("input");
+	input.type = "checkbox";
+
+	domAttr.set(input, "checked", "");
+	equal(input.checked, true, "checked is true");
+	equal(input.getAttribute("checked"), undefined, "no checked attr");
+
+	var customEl = document.createElement("custom-element");
+
+	domAttr.set(customEl, "checked", "");
+	ok(customEl.hasAttribute("checked"), "has checked attr");
+	equal(customEl.getAttribute("checked"), "", "attr is an empty string");
+});
