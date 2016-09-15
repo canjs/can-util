@@ -360,3 +360,53 @@ test("attr.special.value, fallback to the attribute", function(){
 
 	equal(domAttr.get(customEl, "value"), "foo", "value is foo");
 });
+
+test("Setting a select's value updates child's selectedness", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = "one";
+	option1.selected = true;
+	var option2 = document.createElement("option");
+	option2.value = "two";
+
+	select.appendChild(option1);
+	select.appendChild(option2);
+
+	equal(domAttr.get(select, "value"), "one", "initial value");
+	
+	domAttr.set(select, "value", "two");
+	equal(option1.selected, false, "not selected");
+	equal(option2.selected, true, "now it is selected");
+});
+
+test("Multiselect values is updated on any children added/removed", function(){
+	var select = document.createElement("select");
+	select.multiple = true;
+
+	var option1 = document.createElement("option");
+	option1.value = "one";
+
+	var option2 = document.createElement("option");
+	option2.value = "two";
+
+	var option3 = document.createElement("option");
+	option3.value = "three";
+	option3.selected = true;
+
+	select.appendChild(option1);
+	select.appendChild(option2);
+	select.appendChild(option3);
+
+	domAttr.set(select, "values", ["one", "three"]);
+	deepEqual(domAttr.get(select, "values"), ["one", "three"], "initial value is right");
+
+	domEvents.addEventListener.call(select, "values", function(){
+		deepEqual(domAttr.get(select, "values"), ["three"], "new val is right");
+
+		start();
+	});
+
+	select.removeChild(option1);
+
+	stop();
+});
