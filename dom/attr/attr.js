@@ -89,12 +89,9 @@ var isSVG = function(el){
 					if(cur !== val) {
 						if(val) {
 							this.focus();
-							domDispatch.call(this, "focus");
 						} else {
 							this.blur();
-							domDispatch.call(this, "blur");
 						}
-						//
 					}
 					return !!val;
 				},
