@@ -1,6 +1,7 @@
 var canEvent = require("can-event");
 var domAttr = require('can-util/dom/attr/attr');
 var domEvents = require('can-util/dom/events/events');
+var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
 
 
@@ -218,17 +219,24 @@ test('get, set, and addEventListener on focused', function(){
 
 	var focusedCount = 0;
 	// fired on blur and focus events
+	ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
 	domEvents.addEventListener.call(input, "focused", function(){
 		focusedCount++;
 	});
 
-	equal( domAttr.get(input,"focused"), false, "get not focused" );
+	equal( domAttr.get(input, "focused"), false, "get not focused" );
 
 	domAttr.set(input, "focused", true);
+	if(!document.hasFocus()) {
+		domDispatch.call(input, "focus");
+	}
 	equal(focusedCount, 1, "focused event");
 	equal( domAttr.get(input,"focused"), true, "get focused" );
 
 	domAttr.set(input, "focused", false);
+	if(!document.hasFocus()) {
+		domDispatch.call(input, "blur");
+	}
 	equal(focusedCount, 2, "focused event");
 	equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
 });

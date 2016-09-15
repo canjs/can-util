@@ -92,9 +92,16 @@ var isSVG = function(el){
 						} else {
 							this.blur();
 						}
-						domDispatch.call(this, "focused");
 					}
 					return !!val;
+				},
+				addEventListener: function(eventName, handler, aEL){
+					aEL.call(this, "focus", handler);
+					aEL.call(this, "blur", handler);
+					return function(rEL){
+						rEL.call(this, "focus", handler);
+						rEL.call(this, "blur", handler);
+					};
 				},
 				test: function(){
 					return this.nodeName === "INPUT";
