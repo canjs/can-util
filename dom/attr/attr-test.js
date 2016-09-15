@@ -351,4 +351,12 @@ test("For inputs checked is set as an attribute", function(){
 	domAttr.set(customEl, "checked", "");
 	ok(customEl.hasAttribute("checked"), "has checked attr");
 	equal(customEl.getAttribute("checked"), "", "attr is an empty string");
+	equal(domAttr.get(customEl, "checked"), "", "attr from get");
+});
+
+test("attr.special.value, fallback to the attribute", function(){
+	var customEl = document.createElement("custom-element");
+	customEl.setAttribute("value", "foo");
+
+	equal(domAttr.get(customEl, "value"), "foo", "value is foo");
 });

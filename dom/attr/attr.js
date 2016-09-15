@@ -13,7 +13,8 @@ var each = require("../../js/each/each");
 
 require("../events/attributes/attributes");
 
-var isSVG = function(el){
+var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
+	isSVG = function(el){
 		return el.namespaceURI === "http://www.w3.org/2000/svg";
 	},
 	truthy = function() { return true; },
@@ -51,17 +52,16 @@ var isSVG = function(el){
 					return this.checked;
 				},
 				set: function(val){
-					if(this.nodeName === "INPUT") {
-						var notFalse = !!val || val === undefined || val === "";
-						this.checked = notFalse;
-						if(notFalse && this.type === "radio") {
-							this.defaultChecked = true;
-						}
-					} else {
-						this.setAttribute("checked", val);
+					var notFalse = !!val || val === undefined || val === "";
+					this.checked = notFalse;
+					if(notFalse && this.type === "radio") {
+						this.defaultChecked = true;
 					}
 
 					return val;
+				},
+				test: function(){
+					return this.nodeName === "INPUT";
 				}
 			},
 			"class": {
@@ -213,6 +213,9 @@ var isSVG = function(el){
 						this.defaultValue = value;
 					}
 					return value;
+				},
+				test: function(){
+					return formElements[this.nodeName];
 				}
 			},
 			values: {
@@ -384,7 +387,7 @@ var isSVG = function(el){
 			}
 
 			var special = attr.special[attrName];
-			var setter = special && special.setter;
+			var setter = special && special.set;
 			var test = getSpecialTest(special);
 
 			if(typeof setter === "function" && test.call(el)) {
