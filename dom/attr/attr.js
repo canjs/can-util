@@ -13,8 +13,6 @@ var each = require("../../js/each/each");
 
 require("../events/attributes/attributes");
 
-// Acts as a polyfill for setImmediate which only works in IE 10+. Needed to make
-// the triggering of `attributes` event async.
 var isSVG = function(el){
 		return el.namespaceURI === "http://www.w3.org/2000/svg";
 	},
@@ -53,11 +51,16 @@ var isSVG = function(el){
 					return this.checked;
 				},
 				set: function(val){
-					var notFalse = !!val || val === undefined || val === "";
-					this.checked = notFalse;
-					if(notFalse && this.type === "radio") {
-						this.defaultChecked = true;
+					if(this.nodeName === "INPUT") {
+						var notFalse = !!val || val === undefined || val === "";
+						this.checked = notFalse;
+						if(notFalse && this.type === "radio") {
+							this.defaultChecked = true;
+						}
+					} else {
+						this.setAttribute("checked", val);
 					}
+
 					return val;
 				}
 			},
