@@ -45,6 +45,25 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			}
 		};
 	},
+	setupMO = function(el, callback){
+		var hasSetupMO = setData.get.call(el, "attrMOSetup");
+		if(!hasSetupMO) {
+			setData.set.call(el, "attrMOSetup", true);
+			var onMutation = function(){
+				callback.call(el);
+			};
+			var MO = MUTATION_OBSERVER();
+			if(MO) {
+				var observer = new MO(onMutation);
+				observer.observe(el, {
+					childList: true,
+					subtree: true
+				});
+			} else {
+				setData.set.call(el, "canBindingCallback", {onMutation: onMutation});
+			}
+		}
+	},
 	attr = {
 		special: {
 			checked: {
@@ -228,6 +247,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						}
 						child = child.nextSibling;
 					}
+					setData.set.call(this, "valuesLastVal", values);
 					return values;
 				},
 				set: function(values){
@@ -239,6 +259,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						}
 						child = child.nextSibling;
 					}
+
+					setData.set.call(this, "valuesLastVal", values);
+					setupMO(this, function(){
+						var lastVal = setData.get.call(this, "valuesLastVal");
+						attr.set(this, "values", lastVal);
+						domDispatch.call(this, "values");
+					});
+
 					return values;
 				},
 				addEventListener: function(eventName, handler, aEL){
