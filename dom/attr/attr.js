@@ -360,6 +360,9 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				attr.trigger(el, attrName, oldValue);
 			}
 		},
+		setSelectValue: function(el, value){
+			attr.set(el, "value", value);
+		},
 		setAttribute: (function(){
 			var doc = getDocument();
 			if(doc && document.createAttribute) {
