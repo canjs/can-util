@@ -65,6 +65,24 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			}
 		}
 	},
+	setChildOptions = function(el, value){
+		if(value != null) {
+			var child = el.firstChild,
+				hasSelected = false;
+			while(child) {
+				if(child.nodeName === "OPTION") {
+					if(value === child.value) {
+						hasSelected = child.selected = true;
+						break;
+					}
+				}
+				child = child.nextSibling;
+			}
+			if(!hasSelected) {
+				el.selectedIndex = -1;
+			}
+		}
+	},
 	attr = {
 		special: {
 			checked: {
@@ -227,8 +245,6 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						if(("selectedIndex" in this) && this.selectedIndex === -1) {
 							value = undefined;
 						}
-
-						setData.set.call(this, "attrValueLastVal", value);
 					}
 					return value;
 				},
@@ -242,6 +258,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					}
 					if(nodeName === "select") {
 						setData.set.call(this, "attrValueLastVal", value);
+						setChildOptions(this, value);
 						setupMO(this, function(){
 							var value = setData.get.call(this, "attrValueLastVal");
 							attr.set(this, "value", value);
@@ -312,20 +329,6 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				this.set(el, attrName, val);
 			}
 		},
-		setSelectValue: function(el, val) {
-			// jshint eqeqeq: false
-			if(val != null) {
-				var options = el.getElementsByTagName('option');
-				for(var i  = 0; i < options.length; i++) {
-					if(val == options[i].value) {
-						options[i].selected = true;
-						return;
-					}
-				}
-			}
-
-			el.selectedIndex = -1;
-		},
 		// ## attr.set
 		// Set the value an attribute on an element.
 		set: function (el, attrName, val) {
@@ -356,6 +359,9 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			if (!usingMutationObserver && newValue !== oldValue) {
 				attr.trigger(el, attrName, oldValue);
 			}
+		},
+		setSelectValue: function(el, value){
+			attr.set(el, "value", value);
 		},
 		setAttribute: (function(){
 			var doc = getDocument();
