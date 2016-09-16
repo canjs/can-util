@@ -29,6 +29,7 @@ node_modules
 
 docs/
 dist/
+.idea/
 
 doc/GREADME.md
 doc/docMap.json
