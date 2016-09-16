@@ -16,3 +16,8 @@ attr.special.foo = {
 	}
 };
 ```
+
+CanJS comes with a couple of special properties that can be used in bindings:
+
+* [can-util/dom/attr/attr.special.values]
+* [can-util/dom/attr/attr.special.focused]
