@@ -265,7 +265,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					}
 					if(nodeName === "select") {
 						setData.set.call(this, "attrValueLastVal", value);
-						setChildOptions(this, value);
+						setChildOptions(this, this.value);
 						setupMO(this, function(){
 							var value = setData.get.call(this, "attrValueLastVal");
 							attr.set(this, "value", value);
