@@ -487,3 +487,20 @@ test("Setting a non-string value on a select correctly selects the child", funct
 	domAttr.set(select, "value", 2);
 	equal(option2.selected, true, "second one is selected");
 });
+
+test("Setting null doesn't select the default value on a select", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = '';
+	var option2 = document.createElement("option");
+	option2.value = "two";
+
+	select.appendChild(option1);
+	select.appendChild(option2);
+
+	// This is really stupid
+	domAttr.set(select, "value", null);
+	equal(option1.selected, false, "option1 not selected");
+	equal(option2.selected, false, "option2 not selected");
+	equal(select.selectedIndex, -1, "no selected index, wha-wha");
+});
