@@ -473,3 +473,17 @@ test("Boolean attrs that don't support a prop sets the attribute", function(){
 
 	equal(domAttr.get(div, "disabled"), "", "empty string");
 });
+
+test("Setting a non-string value on a select correctly selects the child", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = "1";
+	var option2 = document.createElement("option");
+	option2.value = "2";
+
+	select.appendChild(option1);
+	select.appendChild(option2);
+
+	domAttr.set(select, "value", 2);
+	equal(option2.selected, true, "second one is selected");
+});
