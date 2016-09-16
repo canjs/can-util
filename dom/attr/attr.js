@@ -38,7 +38,11 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 		return {
 			isBoolean: true,
 			set: function(value){
-				this[prop] = value !== false;
+				if(prop in this) {
+					this[prop] = value !== false;
+				} else {
+					this.setAttribute(prop, "");
+				}
 			},
 			remove: function(){
 				this[prop] = false;
@@ -97,6 +101,9 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					}
 
 					return val;
+				},
+				remove: function(){
+					this.checked = false;
 				},
 				test: function(){
 					return this.nodeName === "INPUT";
@@ -227,12 +234,12 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				set: (function () {
 					var el = global.document && getDocument().createElement('div');
 					if ( el && el.style && ("cssText" in el.style) ) {
-						return function (el, val) {
-							return el.style.cssText = (val || "");
+						return function (val) {
+							return this.style.cssText = (val || "");
 						};
 					} else {
-						return function (el, val) {
-							return el.setAttribute("style", val);
+						return function (val) {
+							return this.setAttribute("style", val);
 						};
 					}
 				})()
@@ -439,9 +446,12 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 
 			var special = attr.special[attrName];
 			var setter = special && special.set;
+			var remover = special && special.remove;
 			var test = getSpecialTest(special);
 
-			if(typeof setter === "function" && test.call(el)) {
+			if(typeof remover === "function" && test.call(el)) {
+				remover.call(el);
+			} else if(typeof setter === "function" && test.call(el)) {
 				setter.call(el, undefined);
 			} else {
 				el.removeAttribute(attrName);
