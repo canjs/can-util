@@ -455,3 +455,21 @@ test("Setting a value that will be appended later", function(){
 
 	stop();
 });
+
+test("Calling remove on checked sets it to false", function(){
+	var input = document.createElement("input");
+	input.type = "checkbox";
+
+	domAttr.set(input, "checked");
+	equal(input.checked, true, "it is checked");
+
+	domAttr.remove(input, "checked");
+	equal(input.checked, false, "not checked");
+});
+
+test("Boolean attrs that don't support a prop sets the attribute", function(){
+	var div = document.createElement("div");
+	domAttr.set(div, "disabled");
+
+	equal(domAttr.get(div, "disabled"), "", "empty string");
+});
