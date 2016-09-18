@@ -14,6 +14,14 @@ var each = require("../../js/each/each");
 require("../events/attributes/attributes");
 
 var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
+	// Used to convert values to strings.
+	toString = function(value){
+		if(value == null) {
+			return "";
+		} else {
+			return ""+value;
+		}
+	},
 	isSVG = function(el){
 		return el.namespaceURI === "http://www.w3.org/2000/svg";
 	},
@@ -257,6 +265,10 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				},
 				set: function(value){
 					var nodeName = this.nodeName.toLowerCase();
+					if(nodeName === "input") {
+						// Do some input types support non string values?
+						value = toString(value);
+					}
 					if(this.value !== value || nodeName === "option") {
 						this.value = value;
 					}
@@ -355,7 +367,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			var test = getSpecialTest(special);
 
 			// First check if this is a special attribute with a setter.
-			// Then run the special's test function to make sure we should 
+			// Then run the special's test function to make sure we should
 			// call its setter, and if so use the setter.
 			// Otherwise fallback to setAttribute.
 			if(typeof setter === "function" && test.call(el)) {
@@ -490,11 +502,11 @@ domEvents.addEventListener = function(eventName, handler){
 		if(!teardowns) {
 			setData.set.call(this, "attrTeardowns", teardowns = {});
 		}
-        
+
 		if(!teardowns[eventName]) {
 			teardowns[eventName] = [];
 		}
-            
+
 		teardowns[eventName].push({
 			teardown: teardown,
 			handler: handler

@@ -278,7 +278,7 @@ test("get, set, and addEventListener on values", function(){
 	deepEqual(domAttr.get(select, "values"), [], "none selected");
 
 	domAttr.set(select, "values", ["two"]);
-	
+
 	equal(option1.selected, false, "option1 not selected");
 	equal(option2.selected, true, "option2 selected");
 	deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
@@ -373,7 +373,7 @@ test("Setting a select's value updates child's selectedness", function(){
 	select.appendChild(option2);
 
 	equal(domAttr.get(select, "value"), "one", "initial value");
-	
+
 	domAttr.set(select, "value", "two");
 	equal(option1.selected, false, "not selected");
 	equal(option2.selected, true, "now it is selected");
@@ -383,7 +383,7 @@ test("Removing an option causes the select's value to be re-evaluated", function
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = "one";
-	
+
 	var option2 = document.createElement("option");
 	option2.value = "two";
 
@@ -440,7 +440,7 @@ test("Setting a value that will be appended later", function(){
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = "one";
-	
+
 	domAttr.set(select, "value", "two");
 
 	var option2 = document.createElement("option");
@@ -503,4 +503,13 @@ test("Setting null doesn't select the default value on a select", function(){
 	equal(option1.selected, false, "option1 not selected");
 	equal(option2.selected, false, "option2 not selected");
 	equal(select.selectedIndex, -1, "no selected index, wha-wha");
+});
+
+test("setting .value on an input to undefined or null makes value empty (#83)", function(){
+	var input = document.createElement("input");
+	input.value = "something";
+	domAttr.set(input, "value", null);
+	QUnit.equal(input.value, "", "null");
+	domAttr.set(input, "value", undefined);
+	QUnit.equal(input.value, "", "undefined");
 });
