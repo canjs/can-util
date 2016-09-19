@@ -31,6 +31,14 @@ var isPromise = require('../is-promise/is-promise');
 
 var types = {
 	/**
+	 * @function can-util/js/types/types.afterEvents afterEvents
+	 * @signature `types.afterEvents(fn)`
+	 *   A function to be run after the end of the current event batch.
+	 */
+	afterEvents: function(fn){
+		fn();
+	},
+	/**
 	 * @function can-util/js/types/types.isMapLike isMapLike
 	 * @signature `types.isMapLike(obj)`
 	 *   Returns true if `obj` is an observable key-value pair type object.

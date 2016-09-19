@@ -3,6 +3,7 @@ var domAttr = require('can-util/dom/attr/attr');
 var domEvents = require('can-util/dom/events/events');
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
+var types = require("../../js/types/types");
 
 
 QUnit = require('steal-qunit');
@@ -512,4 +513,27 @@ test("setting .value on an input to undefined or null makes value empty (#83)", 
 	QUnit.equal(input.value, "", "null");
 	domAttr.set(input, "value", undefined);
 	QUnit.equal(input.value, "", "undefined");
+});
+
+test("attr.special.focused calls after previous events", function(){
+	var oldAfter = types.afterEvents;
+	types.afterEvents = function(fn){
+		setTimeout(fn, 5);
+	};
+
+	var input = document.createElement("input");
+	input.type = "text";
+	var ta = document.getElementById("qunit-fixture");
+	ta.appendChild(input);
+
+	stop();
+
+	domAttr.set(input, "focused", true);
+	setTimeout(function(){
+		equal(domAttr.get(input, "focused"), true, "it is now focused");
+		types.afterEvents = oldAfter;
+		start();
+	}, 10);
+
+	equal(domAttr.get(input, "focused"), false, "not focused yet");
 });
