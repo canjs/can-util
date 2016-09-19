@@ -10,6 +10,7 @@ var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var each = require("../../js/each/each");
+var types = require("../../js/types/types");
 
 require("../events/attributes/attributes");
 
@@ -143,11 +144,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				set: function(val){
 					var cur = attr.get(this, "focused");
 					if(cur !== val) {
-						if(val) {
-							this.focus();
-						} else {
-							this.blur();
-						}
+						var element = this;
+						types.afterEvents(function(){
+							if(val) {
+								element.focus();
+							} else {
+								element.blur();
+							}
+						});
 					}
 					return !!val;
 				},
