@@ -15,7 +15,9 @@ QUnit.test("basics", function() {
 		document.body.appendChild(iFrame);
 		var NativePromise = iFrame.contentWindow.Promise;
 		document.body.removeChild(iFrame);
-
-		QUnit.ok(isPromise(new NativePromise(function(){})), "Native Promise is a Promise");
+		
+		if(NativePromise) {
+			QUnit.ok(isPromise(new NativePromise(function(){})), "Native Promise is a Promise");
+		}
 	}
 });
