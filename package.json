@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "bit-docs": "0.0.7",
-    "can-event": "^3.0.0-pre.10",
+    "can-event": "^3.0.0-pre.13",
     "cssify": "^1.0.2",
     "done-serve": "^0.2.4",
     "donejs-cli": "^0.9.5",

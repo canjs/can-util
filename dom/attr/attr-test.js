@@ -516,9 +516,11 @@ test("setting .value on an input to undefined or null makes value empty (#83)", 
 });
 
 test("attr.special.focused calls after previous events", function(){
-	var oldAfter = types.afterEvents;
-	types.afterEvents = function(fn){
-		setTimeout(fn, 5);
+	var oldQueue = types.queueTask;
+	types.queueTask = function(task){
+		setTimeout(function(){
+			task[0].apply(task[1], task[2]);
+		}, 5);
 	};
 
 	var input = document.createElement("input");
@@ -531,7 +533,7 @@ test("attr.special.focused calls after previous events", function(){
 	domAttr.set(input, "focused", true);
 	setTimeout(function(){
 		equal(domAttr.get(input, "focused"), true, "it is now focused");
-		types.afterEvents = oldAfter;
+		types.queueTask = oldQueue;
 		start();
 	}, 10);
 

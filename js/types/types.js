@@ -31,14 +31,6 @@ var isPromise = require('../is-promise/is-promise');
 
 var types = {
 	/**
-	 * @function can-util/js/types/types.afterEvents afterEvents
-	 * @signature `types.afterEvents(fn)`
-	 *   A function to be run after the end of the current event batch.
-	 */
-	afterEvents: function(fn){
-		fn();
-	},
-	/**
 	 * @function can-util/js/types/types.isMapLike isMapLike
 	 * @signature `types.isMapLike(obj)`
 	 *   Returns true if `obj` is an observable key-value pair type object.
@@ -140,6 +132,16 @@ var types = {
 	 *   @param {Node} element Any object inheriting from the [Node interface](https://developer.mozilla.org/en-US/docs/Web/API/Node).
 	 *   @return {{}} A wrapped object.
 	 */
+	/**
+	 * @function can-util/js/types/types.queueTask queueTask
+	 * @signature `types.queueTask(task)`
+	 *   Run code that will be queued at the end of the current batch.
+	 *   @param {Array} task
+	 */
+	queueTask: function(task){
+		var args = task[2] || [];
+		task[0].apply(task[1], args);
+	},
 	wrapElement: function(element){
 		return element;
 	},

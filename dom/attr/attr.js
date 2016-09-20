@@ -145,13 +145,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					var cur = attr.get(this, "focused");
 					if(cur !== val) {
 						var element = this;
-						types.afterEvents(function(){
+						types.queueTask([function(){
 							if(val) {
 								element.focus();
 							} else {
 								element.blur();
 							}
-						});
+						}, this, []]);
 					}
 					return !!val;
 				},
