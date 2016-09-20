@@ -15,6 +15,8 @@ test("basics", 2, function () {
 
 	var ul = frag.firstChild;
 
+	document.getElementById('qunit-fixture').appendChild(ul);
+
 	var handler = function(ev){
 		ok(true, "called");
 		domEvents.removeDelegateListener.call(ul, "click", "li",handler);
