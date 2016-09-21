@@ -131,6 +131,11 @@ test("Map special attributes", function () {
 	domAttr.set(div, "readonly");
 	equal(div.readOnly, true, "Map readonly to readOnly");
 
+	domAttr.set(div, "readonly", false);
+	equal(div.readOnly, false, "not readonly");
+	domAttr.set(div, "readonly", "");
+	equal(div.readOnly, true, "readonly again");
+
 	document.getElementById("qunit-fixture").removeChild(div);
 });
 

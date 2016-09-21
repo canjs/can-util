@@ -195,7 +195,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return this.readOnly;
 				},
 				set: function(val){
-					this.readOnly = true;
+					if(val || val == null || typeof val === "string") {
+						val = true;
+					} else {
+						val = false;
+					}
+
+					this.readOnly = val;
 					return val;
 				}
 			},
