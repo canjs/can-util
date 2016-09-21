@@ -1,6 +1,7 @@
 var canEvent = require("can-event");
-var domAttr = require('can-util/dom/attr/attr');
-var domEvents = require('can-util/dom/events/events');
+var domAttr = require('../attr/attr');
+var domEvents = require('../events/events');
+var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
 var types = require("../../js/types/types");
@@ -415,29 +416,34 @@ test("Setting a select's value updates child's selectedness", function(){
 });
 
 test("Removing an option causes the select's value to be re-evaluated", function(){
-	var select = document.createElement("select");
-	var option1 = document.createElement("option");
-	option1.value = "one";
 
-	var option2 = document.createElement("option");
-	option2.value = "two";
+		var select = document.createElement("select");
+		var option1 = document.createElement("option");
+		option1.value = "one";
 
-	select.appendChild(option1);
-	select.appendChild(option2);
+		var option2 = document.createElement("option");
+		option2.value = "two";
 
-	domAttr.set(select, "value", "one");
-	equal(option1.selected, true, "selected");
-	equal(domAttr.get(select, "value"), "one", "got the value");
+		select.appendChild(option1);
+		select.appendChild(option2);
 
-	domEvents.addEventListener.call(select, "change", function(){
-		equal(domAttr.get(select, "value"), undefined, "no value now");
-		start();
+		domAttr.set(select, "value", "one");
+		equal(option1.selected, true, "selected");
+		equal(domAttr.get(select, "value"), "one", "got the value");
+
+		domEvents.addEventListener.call(select, "change", function(){
+			equal(domAttr.get(select, "value"), undefined, "no value now");
+			start();
+		});
+
+		stop();
+
+		select.removeChild(option1);
+		if(!MUTATION_OBSERVER()) {
+			var data = domData.get.call(select, "canBindingCallback");
+			data.onMutation();
+		}
 	});
-
-	select.removeChild(option1);
-
-	stop();
-});
 
 test("Multiselect values is updated on any children added/removed", function(){
 	var select = document.createElement("select");
@@ -466,9 +472,13 @@ test("Multiselect values is updated on any children added/removed", function(){
 		start();
 	});
 
-	select.removeChild(option1);
-
 	stop();
+
+	select.removeChild(option1);
+	if(!MUTATION_OBSERVER()) {
+		var data = domData.get.call(select, "canBindingCallback");
+		data.onMutation();
+	}
 });
 
 test("Setting a value that will be appended later", function(){
@@ -486,9 +496,14 @@ test("Setting a value that will be appended later", function(){
 		start();
 	});
 
-	select.appendChild(option2);
-
 	stop();
+
+	select.appendChild(option2);
+	if(!MUTATION_OBSERVER()) {
+		var data = domData.get.call(select, "canBindingCallback");
+		data.onMutation();
+	}
+
 });
 
 test("Calling remove on checked sets it to false", function(){
