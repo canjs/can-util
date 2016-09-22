@@ -1,4 +1,5 @@
 var ajax = require('can-util/dom/ajax/ajax');
+var namespace = require("can-util/namespace");
 
 QUnit = require('steal-qunit');
 
@@ -26,8 +27,12 @@ QUnit.asyncTest("abort", function () {
 		} else {
 			QUnit.equal(xhr.readyState, 0, "aborts the promise");
 		}
-		
+
 		start();
 	});
 	promise.abort();
+});
+
+QUnit.test("added to namespace (#99)", function(){
+	QUnit.equal(namespace.ajax, ajax);
 });

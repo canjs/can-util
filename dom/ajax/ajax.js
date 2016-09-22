@@ -1,4 +1,5 @@
 var assign = require("../../js/assign/assign");
+var namespace = require("../../namespace");
 
 /**
 @module {function} can-util/dom/ajax/ajax ajax
@@ -6,7 +7,7 @@ var assign = require("../../js/assign/assign");
 @signature `ajax(settings)`
 @param {Object} settings Configuration options for the AJAX request.
 The list of configuration options is the same as for [jQuery.ajax](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method. 
+@return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method.
  Invoking abort on the Promise instance indirectly rejects it.
 
 @body
@@ -72,7 +73,7 @@ $._formData = function (o) {
 	}
 	return kvps.join('&');
 };
-module.exports = function (o) {
+module.exports = namespace.ajax = function (o) {
 	var xhr = $.xhr(), timer, n = 0;
 	var deferred = {};
 	var promise = new Promise(function(resolve,reject){
@@ -133,7 +134,7 @@ module.exports = function (o) {
 
 	if (isPost) {
 		var isJson = o.dataType.indexOf("json") >= 0;
-		data = isJson ? 
+		data = isJson ?
 			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
 			$._formData(o.data);
 		xhr.setRequestHeader("Content-Type", isJson ? "application/json" : "application/x-www-form-urlencoded");
