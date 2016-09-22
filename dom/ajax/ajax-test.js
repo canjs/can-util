@@ -20,7 +20,13 @@ QUnit.asyncTest("abort", function () {
 		url: __dirname+"/test-result.json"
 	});
 	promise.catch(function(xhr) {
-		QUnit.equal(xhr.readyState, 0, "aborts the promise");
+		if(xhr instanceof Error) {
+			// IE9 - see http://stackoverflow.com/questions/7287706/ie-9-javascript-error-c00c023f
+			QUnit.equal(xhr.message, 'Could not complete the operation due to error c00c023f.');
+		} else {
+			QUnit.equal(xhr.readyState, 0, "aborts the promise");
+		}
+		
 		start();
 	});
 	promise.abort();

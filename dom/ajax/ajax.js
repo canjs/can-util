@@ -94,30 +94,34 @@ module.exports = function (o) {
 		}, o.timeout);
 	}
 	xhr.onreadystatechange = function () {
-		if (xhr.readyState === 4) {
-			if (timer) {
-				clearTimeout(timer);
-			}
-			if (xhr.status < 300) {
-				if (o.success) {
-					o.success($._xhrResp(xhr));
+		try {
+			if (xhr.readyState === 4) {
+				if (timer) {
+					clearTimeout(timer);
+				}
+				if (xhr.status < 300) {
+					if (o.success) {
+						o.success($._xhrResp(xhr));
+					}
+				}
+				else if (o.error) {
+					o.error(xhr, xhr.status, xhr.statusText);
+				}
+				if (o.complete) {
+					o.complete(xhr, xhr.statusText);
+				}
+
+				if( xhr.status === 200 ) {
+					deferred.resolve( JSON.parse( xhr.responseText ) );
+				} else {
+					deferred.reject( xhr );
 				}
 			}
-			else if (o.error) {
-				o.error(xhr, xhr.status, xhr.statusText);
+			else if (o.progress) {
+				o.progress(++n);
 			}
-			if (o.complete) {
-				o.complete(xhr, xhr.statusText);
-			}
-
-			if( xhr.status === 200 ) {
-				deferred.resolve( JSON.parse( xhr.responseText ) );
-			} else {
-				deferred.reject( xhr );
-			}
-		}
-		else if (o.progress) {
-			o.progress(++n);
+		} catch(e) {
+			deferred.reject(e);
 		}
 	};
 	var url = o.url, data = null;
