@@ -275,7 +275,7 @@ test('get, set, and addEventListener on focused', function(){
 		focusedCount++;
 
 		test.test();
-		next();
+		setTimeout(next, 50);
 	});
 
 	stop();
