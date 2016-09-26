@@ -33,6 +33,9 @@ var xhrs = [
 		function () { return new ActiveXObject("MSXML2.XMLHTTP"); }
 	],
 	_xhrf = null;
+// used to check for Cross Domain requests
+var originAnchor = document.createElement('a');
+originAnchor.href = location.href;
 
 var $ = {};
 $.xhr = function () {
@@ -80,12 +83,22 @@ module.exports = namespace.ajax = function (o) {
 		deferred.resolve = resolve;
 		deferred.reject = reject;
 	});
+	var urlAnchor;
 
 	promise.abort = function () {
 		xhr.abort();
 	};
 
 	o = assign({ userAgent: "XMLHttpRequest", lang: "en", type: "GET", data: null, dataType: "application/x-www-form-urlencoded" }, o);
+	if(o.crossDomain == null){
+		urlAnchor = document.createElement('a');
+		try {
+			urlAnchor.href = o.url;
+			o.crossDomain = originAnchor.protocol + "//" + originAnchor.host !== urlAnchor.protocol + "//" + urlAnchor.host;
+		} catch (e){
+			o.crossDomain = true;
+		}
+	}
 	if (o.timeout) {
 		timer = setTimeout(function () {
 			xhr.abort();
@@ -112,8 +125,8 @@ module.exports = namespace.ajax = function (o) {
 					o.complete(xhr, xhr.statusText);
 				}
 
-				if( xhr.status === 200 ) {
-					deferred.resolve( JSON.parse( xhr.responseText ) );
+				if (xhr.status >= 200 && xhr.status < 300) {
+					deferred.resolve( $._xhrResp(xhr) );
 				} else {
 					deferred.reject( xhr );
 				}
@@ -131,13 +144,12 @@ module.exports = namespace.ajax = function (o) {
 		url += "?" + $._formData(o.data);
 	}
 	xhr.open(o.type, url);
-
 	if (isPost) {
 		var isJson = o.dataType.indexOf("json") >= 0;
-		data = isJson ?
+		data = (isJson && !o.crossDomain) ?
 			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
 			$._formData(o.data);
-		xhr.setRequestHeader("Content-Type", isJson ? "application/json" : "application/x-www-form-urlencoded");
+		xhr.setRequestHeader("Content-Type", (isJson && !o.crossDomain) ? "application/json" : "application/x-www-form-urlencoded");
 	}
 	// X-Requested-With header
 	xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest" );
