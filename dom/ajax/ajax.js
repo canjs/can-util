@@ -1,5 +1,7 @@
+var Global = require("../../js/global/global");
 var assign = require("../../js/assign/assign");
 var namespace = require("../../namespace");
+var parseURI = require('../../js/parse-uri/parse-uri');
 
 /**
 @module {function} can-util/dom/ajax/ajax ajax
@@ -34,8 +36,7 @@ var xhrs = [
 	],
 	_xhrf = null;
 // used to check for Cross Domain requests
-var originAnchor = document.createElement('a');
-originAnchor.href = location.href;
+var originUrl = parseURI(Global().location.href);
 
 var $ = {};
 $.xhr = function () {
@@ -83,18 +84,19 @@ module.exports = namespace.ajax = function (o) {
 		deferred.resolve = resolve;
 		deferred.reject = reject;
 	});
-	var urlAnchor;
+	var requestUrl;
 
 	promise.abort = function () {
 		xhr.abort();
 	};
 
 	o = assign({ userAgent: "XMLHttpRequest", lang: "en", type: "GET", data: null, dataType: "application/x-www-form-urlencoded" }, o);
+	
+	//how jquery handles check for cross domain
 	if(o.crossDomain == null){
-		urlAnchor = document.createElement('a');
 		try {
-			urlAnchor.href = o.url;
-			o.crossDomain = originAnchor.protocol + "//" + originAnchor.host !== urlAnchor.protocol + "//" + urlAnchor.host;
+			requestUrl = parseURI(o.url);
+			o.crossDomain = originUrl.protocol + "//" + originUrl.host !== requestUrl.protocol + "//" + requestUrl.host;
 		} catch (e){
 			o.crossDomain = true;
 		}

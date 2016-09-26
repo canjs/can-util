@@ -26,6 +26,7 @@ require('./make-promise/make-promise-test');
 require('./is-string/is-string-test');
 require('./is-web-worker/is-web-worker-test');
 require('./join-uris/join-uris-test');
+require('./parse-uri/parse-uri-test');
 require('./last/last-test');
 require('./make-array/make-array-test');
 require('./set-not-enumerable/set-not-enumerable-test');
