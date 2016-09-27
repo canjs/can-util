@@ -2,21 +2,6 @@ var mutate = require('./mutate');
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var DOCUMENT = require("../document/document");
 
-var domDispatch = require('can-util/dom/dispatch/');
-var buildFrag = require('can-util/dom/fragment/');
-var eventsBubble = (function() {
-	var frag = buildFrag("<div><span></span></div>");
-	var bubbles = false;
-
-	frag.firstChild.addEventListener('click', function() {
-		bubbles = true;
-	});
-	
-	domDispatch.call(frag.firstChild.firstChild, 'click');
-
-	return bubbles;
-})();
-
 QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/mutate");
@@ -48,7 +33,7 @@ test("inserting empty frag", function () {
 
 });
 
-if(eventsBubble) {
+if(window.eventsBubble) {
 	test("inserting into a different document fires inserted", function(){
 		var enableMO = disableMO();
 
