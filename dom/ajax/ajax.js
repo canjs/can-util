@@ -96,7 +96,8 @@ module.exports = namespace.ajax = function (o) {
 		userAgent: "XMLHttpRequest",
 		lang: "en",
 		type: "GET",
-		data: null
+		data: null,
+		dataType: "json"
 	}, o);
 
 	//how jquery handles check for cross domain
