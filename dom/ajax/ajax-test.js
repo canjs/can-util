@@ -48,3 +48,14 @@ QUnit.asyncTest("cross domain post request should change data to form data (#90)
 		start();
 	});
 });
+
+QUnit.asyncTest("GET requests with dataType parse JSON (#106)", function(){
+	ajax({
+		type: "get",
+		url: __dirname+"/test-result.txt",
+		dataType: "json"
+	}).then(function(resp){
+		QUnit.equal(resp.message, "VALUE");
+		start();
+	});
+});

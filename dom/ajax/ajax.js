@@ -56,15 +56,17 @@ $.xhr = function () {
 	}
 	return function () { };
 };
-$._xhrResp = function (xhr) {
-	switch (xhr.getResponseHeader("Content-Type").split(";")[0]) {
+$._xhrResp = function (xhr, options) {
+	switch (options.dataType || xhr.getResponseHeader("Content-Type").split(";")[0]) {
 		case "text/xml":
+		case "xml":
 			return xhr.responseXML;
 		case "text/json":
 		case "application/json":
 		case "text/javascript":
 		case "application/javascript":
 		case "application/x-javascript":
+		case "json":
 			return JSON.parse(xhr.responseText);
 		default:
 			return xhr.responseText;
@@ -90,8 +92,13 @@ module.exports = namespace.ajax = function (o) {
 		xhr.abort();
 	};
 
-	o = assign({ userAgent: "XMLHttpRequest", lang: "en", type: "GET", data: null, dataType: "application/x-www-form-urlencoded" }, o);
-	
+	o = assign({
+		userAgent: "XMLHttpRequest",
+		lang: "en",
+		type: "GET",
+		data: null
+	}, o);
+
 	//how jquery handles check for cross domain
 	if(o.crossDomain == null){
 		try {
@@ -117,7 +124,7 @@ module.exports = namespace.ajax = function (o) {
 				}
 				if (xhr.status < 300) {
 					if (o.success) {
-						o.success($._xhrResp(xhr));
+						o.success($._xhrResp(xhr, o));
 					}
 				}
 				else if (o.error) {
@@ -128,7 +135,7 @@ module.exports = namespace.ajax = function (o) {
 				}
 
 				if (xhr.status >= 200 && xhr.status < 300) {
-					deferred.resolve( $._xhrResp(xhr) );
+					deferred.resolve( $._xhrResp(xhr, o) );
 				} else {
 					deferred.reject( xhr );
 				}
