@@ -3,6 +3,7 @@ require('./cid/cid-test');
 require('./cid/cid-test');
 require('./base-url/base-url-test');
 require('./deep-assign/deep-assign-test');
+require('./defaults/defaults-test');
 require('./dev/dev-test');
 require('./diff/diff-test');
 require('./diff-array/diff-array-test');
