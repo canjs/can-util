@@ -1,5 +1,4 @@
-var assign = require("../../js/assign/assign");
-var _document = require("../document/document");
+var domEvents = require("../events/events");
 
 /**
  * @module {function} can-util/dom/dispatch/dispatch dispatch
@@ -13,18 +12,6 @@ var _document = require("../document/document");
  * @param {Boolean} [bubbles=true] Specifies whether this event should bubble (by default it will).
  */
 
-module.exports = function(event, args, bubbles){
-	var doc = _document();
-
-	var ev = doc.createEvent('HTMLEvents');
-	var isString = typeof event === "string";
-
-	// removed / inserted events should not bubble
-	ev.initEvent(isString ? event : event.type, bubbles === undefined ? true : bubbles, false);
-
-	if(!isString) {
-		assign(ev, event);
-	}
-	ev.args = args;
-	return this.dispatchEvent(ev);
+module.exports = function(){
+	return domEvents.dispatch.apply(this, arguments);
 };
