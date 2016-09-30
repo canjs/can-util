@@ -36,3 +36,56 @@ QUnit.asyncTest("abort", function () {
 QUnit.test("added to namespace (#99)", function(){
 	QUnit.equal(namespace.ajax, ajax);
 });
+
+QUnit.asyncTest("ignores case of type parameter for a post request (#100)", function () {
+	var oldXhr = window.XMLHttpRequest || window.ActiveXObject,
+		requestHeaders = {
+			CONTENT_TYPE: "Content-Type"
+		},
+		xhrFixture = function () {
+			this.open = function (type, url) {
+			};
+
+			this.send = function () {
+				this.readyState = 4;
+				this.status = 200;
+				this.onreadystatechange();
+			};
+
+			this.setRequestHeader = function (header, value) {
+				if (header === requestHeaders.CONTENT_TYPE) {
+					var o = {};
+					o[header] = value;
+					this.responseText = JSON.stringify(o);
+				}
+			};
+		};
+
+	// replace with fixture
+	if (window.XMLHttpRequest) {
+		window.XMLHttpRequest = xhrFixture;
+	} else if (window.ActiveXObject) {
+		window.ActiveXObject = xhrFixture;
+	}
+
+	ajax({
+		type: "post",
+		url: "/foo",
+		data: {
+			bar: "qux"
+		}
+	}).then(function (value) {
+		QUnit.equal(value[requestHeaders.CONTENT_TYPE], "application/x-www-form-urlencoded");
+	}, function(reason) {
+		QUnit.notOk(reason, "request failed with reason = ", reason);
+	}).then(function () {
+		// restore original values
+		if (window.XMLHttpRequest) {
+			window.XMLHttpRequest = oldXhr;
+		} else if (window.ActiveXObject) {
+			window.ActiveXObject = oldXhr;
+		}
+		start();
+	});
+
+});
