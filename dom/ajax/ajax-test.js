@@ -37,6 +37,29 @@ QUnit.test("added to namespace (#99)", function(){
 	QUnit.equal(namespace.ajax, ajax);
 });
 
+QUnit.asyncTest("cross domain post request should change data to form data (#90)", function () {
+	ajax({
+		type: "POST",
+		url: "http://httpbin.org/post",
+		data: {'message': 'VALUE'},
+		dataType: 'application/json'
+	}).then(function(resp){
+		QUnit.equal(resp.form.message, "VALUE");
+		start();
+	});
+});
+
+QUnit.asyncTest("GET requests with dataType parse JSON (#106)", function(){
+	ajax({
+		type: "get",
+		url: __dirname+"/test-result.txt",
+		dataType: "json"
+	}).then(function(resp){
+		QUnit.equal(resp.message, "VALUE");
+		start();
+	});
+});
+
 QUnit.asyncTest("ignores case of type parameter for a post request (#100)", function () {
 	var oldXhr = window.XMLHttpRequest || window.ActiveXObject,
 		requestHeaders = {
@@ -76,7 +99,7 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 		}
 	}).then(function (value) {
 		QUnit.equal(value[requestHeaders.CONTENT_TYPE], "application/x-www-form-urlencoded");
-	}, function(reason) {
+	}, function (reason) {
 		QUnit.notOk(reason, "request failed with reason = ", reason);
 	}).then(function () {
 		// restore original values
@@ -87,5 +110,4 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 		}
 		start();
 	});
-
 });

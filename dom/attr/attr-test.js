@@ -218,70 +218,6 @@ test("'selected' is bindable on an <option>", function(){
 	equal(domAttr.get(option2, "selected"), true, "option2 is selected");
 });
 
-test('get, set, and addEventListener on focused', function(){
-	var input = document.createElement("input");
-	var ta = document.getElementById("qunit-fixture");
-	var test;
-	var focusedCount = 0;
-
-
-	ta.appendChild(input);
-
-	var tests = [
-		{
-			action: function(){
-				equal( domAttr.get(input, "focused"), false, "get not focused" );
-
-				domAttr.set(input, "focused", true);
-				if(!document.hasFocus()) {
-					domDispatch.call(input, "focus");
-				}
-			},
-			test: function(){
-				equal(focusedCount, 1, "focused event");
-				equal( domAttr.get(input,"focused"), true, "get focused" );
-			}
-		},
-		{
-			action: function(){
-				domAttr.set(input, "focused", false);
-				if(!document.hasFocus()) {
-					domDispatch.call(input, "blur");
-				}
-			},
-			test: function(){
-				equal(focusedCount, 2, "focused event");
-				equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
-			}
-		}
-	];
-
-	function next(){
-		test = tests.shift();
-		if(!test) {
-			start();
-			return;
-		}
-
-		// Calling the action will trigger an event below, that event will then
-		// call test.test() to make sure it works. This is b/c IE10 fires focus
-		// asynchronously.
-		test.action();
-	}
-
-	// fired on blur and focus events
-	ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
-	domEvents.addEventListener.call(input, "focused", function(){
-		focusedCount++;
-
-		test.test();
-		setTimeout(next, 50);
-	});
-
-	stop();
-	next();
-});
-
 test("get, set, and addEventListener on values", function(){
 	var select = document.createElement("select");
 	select.multiple = true;
@@ -593,3 +529,69 @@ test("attr.special.focused calls after previous events", function(){
 
 	equal(domAttr.get(input, "focused"), false, "not focused yet");
 });
+
+if(window.eventsBubble) {
+	test('get, set, and addEventListener on focused', function(){
+		var input = document.createElement("input");
+		var ta = document.getElementById("qunit-fixture");
+		var test;
+		var focusedCount = 0;
+
+
+		ta.appendChild(input);
+
+		var tests = [
+			{
+				action: function(){
+					equal( domAttr.get(input, "focused"), false, "get not focused" );
+
+					domAttr.set(input, "focused", true);
+					if(!document.hasFocus()) {
+						domDispatch.call(input, "focus");
+					}
+				},
+				test: function(){
+					equal(focusedCount, 1, "focused event");
+					equal( domAttr.get(input,"focused"), true, "get focused" );
+				}
+			},
+			{
+				action: function(){
+					domAttr.set(input, "focused", false);
+					if(!document.hasFocus()) {
+						domDispatch.call(input, "blur");
+					}
+				},
+				test: function(){
+					equal(focusedCount, 2, "focused event");
+					equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
+				}
+			}
+		];
+
+		function next(){
+			test = tests.shift();
+			if(!test) {
+				start();
+				return;
+			}
+
+			// Calling the action will trigger an event below, that event will then
+			// call test.test() to make sure it works. This is b/c IE10 fires focus
+			// asynchronously.
+			test.action();
+		}
+
+		// fired on blur and focus events
+		ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
+		domEvents.addEventListener.call(input, "focused", function(){
+			focusedCount++;
+
+			test.test();
+			setTimeout(next, 50);
+		});
+
+		stop();
+		next();
+	});
+}
