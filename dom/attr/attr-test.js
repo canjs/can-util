@@ -530,6 +530,21 @@ test("attr.special.focused calls after previous events", function(){
 	equal(domAttr.get(input, "focused"), false, "not focused yet");
 });
 
+test("handles removing multiple event handlers", function () {
+	var handler1 = function() {};
+	var handler2 = function() {};
+
+	var div = document.createElement('div');
+
+	domEvents.addEventListener.call(div, "attributes", handler1, false);
+	domEvents.addEventListener.call(div, "attributes", handler2, false);
+
+	domEvents.removeEventListener.call(div, "attributes", handler1);
+	domEvents.removeEventListener.call(div, "attributes", handler2);
+
+	ok(true, 'should not throw');
+});
+
 if(window.eventsBubble) {
 	test('get, set, and addEventListener on focused', function(){
 		var input = document.createElement("input");
