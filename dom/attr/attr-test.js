@@ -545,6 +545,24 @@ test("handles removing multiple event handlers", function () {
 	ok(true, 'should not throw');
 });
 
+test("handles removing multiple event handlers without MUTATION_OBSERVER", function () {
+	var MO = MUTATION_OBSERVER();
+	MUTATION_OBSERVER(null);
+	var handler1 = function() {};
+	var handler2 = function() {};
+
+	var div = document.createElement('div');
+
+	domEvents.addEventListener.call(div, "attributes", handler1, false);
+	domEvents.addEventListener.call(div, "attributes", handler2, false);
+
+	domEvents.removeEventListener.call(div, "attributes", handler1);
+	domEvents.removeEventListener.call(div, "attributes", handler2);
+
+	ok(true, 'should not throw');
+	MUTATION_OBSERVER(MO);
+});
+
 if(window.eventsBubble) {
 	test('get, set, and addEventListener on focused', function(){
 		var input = document.createElement("input");

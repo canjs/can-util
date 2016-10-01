@@ -69,7 +69,9 @@ module.exports = {
 	 */
 	clean: function(prop) {
 		var id = this[expando];
-		delete data[id][prop];
+		if (data[id] && data[id][prop]) {
+			delete data[id][prop];
+		}
 		if(isEmptyObject(data[id])) {
 			delete data[id];
 		}
