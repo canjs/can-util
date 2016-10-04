@@ -227,7 +227,9 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return this.selected;
 				},
 				set: function(val){
-					return this.selected = !!val;
+					val = !!val;
+					setData.set.call(this, "lastSetValue", val);
+					return this.selected = val;
 				},
 				addEventListener: function(eventName, handler, aEL){
 					var option = this;
@@ -235,6 +237,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					var lastVal = option.selected;
 					var localHandler = function(changeEvent){
 						var curVal = option.selected;
+						lastVal = setData.get.call(option, "lastSetValue") || lastVal;
 						if(curVal !== lastVal) {
 							lastVal = curVal;
 

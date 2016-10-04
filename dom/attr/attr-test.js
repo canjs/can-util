@@ -632,9 +632,10 @@ if(window.eventsBubble) {
 }
 
 test("Binding to selected updates the selectedness of options", function(){
+	expect(3);
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
-	option1.selected = true;
+	option1.selected = false;
 	option1.value = "one";
 	select.appendChild(option1);
 
@@ -642,7 +643,11 @@ test("Binding to selected updates the selectedness of options", function(){
 	option2.value = "two";
 	select.appendChild(option2);
 
-	domEvents.addEventListener.call(option1, "selected");
+	domEvents.addEventListener.call(option1, "selected", function(){
+		ok(true, "this was called");
+	});
+
+	domAttr.set(option1, "selected", true);
 
 	option2.selected = true;
 	domDispatch.call(select, "change");
