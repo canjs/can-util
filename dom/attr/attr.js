@@ -96,6 +96,23 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			}
 		}
 	},
+	// Create a handler, only once, that will set the child options any time
+	// the select's value changes.
+	setChildOptionsOnChange = function(select, aEL){
+		var handler = setData.get.call(select, "attrSetChildOptions");
+		if(handler) {
+			return Function.prototype;
+		}
+		handler = function(){
+			setChildOptions(select, select.value);
+		};
+		setData.set.call(select, "attrSetChildOptions", handler);
+		aEL.call(select, "change", handler);
+		return function(rEL){
+			setData.clean.call(select, "attrSetChildOptions");
+			rEL.call(select, "change", handler);
+		};
+	},
 	attr = {
 		special: {
 			checked: {
@@ -224,10 +241,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 							domDispatch.call(option, eventName);
 						}
 					};
+
+					var removeChangeHandler = setChildOptionsOnChange(select, aEL);
 					domEvents.addEventListener.call(select, "change", localHandler);
 					aEL.call(option, eventName, handler);
 
 					return function(rEL){
+						removeChangeHandler(rEL);
 						domEvents.removeEventListener.call(select, "change", localHandler);
 						rEL.call(option, eventName, handler);
 					};

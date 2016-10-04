@@ -203,7 +203,9 @@ test("attr.special addEventListener allows custom binding", function(){
 test("'selected' is bindable on an <option>", function(){
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
+	option1.value = "one";
 	var option2 = document.createElement("option");
+	option2.value = "two";
 	select.appendChild(option1);
 	select.appendChild(option2);
 
@@ -628,3 +630,23 @@ if(window.eventsBubble) {
 		next();
 	});
 }
+
+test("Binding to selected updates the selectedness of options", function(){
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.selected = true;
+	option1.value = "one";
+	select.appendChild(option1);
+
+	var option2 = document.createElement("option");
+	option2.value = "two";
+	select.appendChild(option2);
+
+	domEvents.addEventListener.call(option1, "selected");
+
+	option2.selected = true;
+	domDispatch.call(select, "change");
+
+	equal(option2.selected, true);
+	equal(option1.selected, false);
+});
