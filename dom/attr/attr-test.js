@@ -3,6 +3,7 @@ var domAttr = require('../attr/attr');
 var domEvents = require('../events/events');
 var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
+var mutate = require("../mutate/mutate");
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
 var types = require("../../js/types/types");
 
@@ -654,4 +655,25 @@ test("Binding to selected updates the selectedness of options", function(){
 
 	equal(option2.selected, true);
 	equal(option1.selected, false);
+});
+
+test("Select's value is preserved when inserted into the document", function(){
+	stop();
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = "one";
+	select.appendChild(option1);
+
+	domAttr.set(select, "value", null);
+
+	equal(select.selectedIndex, -1, "was set to -1");
+
+	var ta = document.getElementById("qunit-fixture");
+	mutate.appendChild.call(ta, select);
+
+	setTimeout(function(){
+		equal(select.selectedIndex, -1, "still is -1");
+		start();
+	}, 1);
+
 });

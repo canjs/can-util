@@ -6,6 +6,7 @@ var getDocument = require("../document/document");
 var global = require("../../js/global/global")();
 var isOfGlobalDocument = require("../is-of-global-document/is-of-global-document");
 var setData = require("../data/data");
+var domContains = require("../contains/contains");
 var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
@@ -94,6 +95,8 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			if(!hasSelected) {
 				el.selectedIndex = -1;
 			}
+		} else {
+			el.selectedIndex = -1;
 		}
 	},
 	// Create a handler, only once, that will set the child options any time
@@ -312,6 +315,18 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						setData.set.call(this, "attrValueLastVal", value);
 						//If it's null then special case
 						setChildOptions(this, value === null ? value : this.value);
+
+						// If not in the document reset the value when inserted.
+						var docEl = this.ownerDocument.documentElement;
+						if(!domContains.call(docEl, this)) {
+							var select = this;
+							var initialSetHandler = function(){
+								domEvents.removeEventListener.call(select, "inserted", initialSetHandler);
+								setChildOptions(select, value === null ? value : select.value);
+							};
+							domEvents.addEventListener.call(this, "inserted", initialSetHandler);
+						}
+
 						setupMO(this, function(){
 							var value = setData.get.call(this, "attrValueLastVal");
 							attr.set(this, "value", value);
