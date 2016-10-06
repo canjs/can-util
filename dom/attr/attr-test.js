@@ -674,6 +674,6 @@ test("Select's value is preserved when inserted into the document", function(){
 	setTimeout(function(){
 		equal(select.selectedIndex, -1, "still is -1");
 		start();
-	}, 1);
+	}, 50);
 
 });
