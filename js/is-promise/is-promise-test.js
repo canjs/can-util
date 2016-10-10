@@ -11,10 +11,11 @@ QUnit.test("basics", function() {
 	var isNode = typeof process === "object" && {}.toString.call(process) === "[object process]";
 
 	if (!isNode) {
+		var fixture = document.getElementById('qunit-fixture');
 		var iFrame = document.createElement('IFRAME');
-		document.body.appendChild(iFrame);
+		fixture.appendChild(iFrame);
 		var NativePromise = iFrame.contentWindow.Promise;
-		document.body.removeChild(iFrame);
+		fixture.removeChild(iFrame);
 		
 		if(NativePromise) {
 			QUnit.ok(isPromise(new NativePromise(function(){})), "Native Promise is a Promise");
