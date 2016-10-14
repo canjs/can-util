@@ -129,6 +129,11 @@ test("Map special attributes", function () {
 	domAttr.set(div, "textcontent", "my-content");
 	equal(div.textContent, "my-content", "Map textcontent to textContent");
 
+	document.getElementById("qunit-fixture").removeChild(div);
+	div = document.createElement("input");
+	div.type = "text";
+	document.getElementById("qunit-fixture").appendChild(div);
+	
 	domAttr.set(div, "readonly");
 	equal(div.readOnly, true, "Map readonly to readOnly");
 
