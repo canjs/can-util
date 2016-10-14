@@ -12,11 +12,13 @@ require('./diff-object/diff-object-test');
 // TODO - Depends on can.Map, can.List
 require('./each/each-test');
 
+require('./get/get-test');
 require('./global/global-test');
 require('./import/import-test');
 require('./is-array/is-array-test');
 require('./is-array-like/is-array-like-test');
 require('./is-browser-window/is-browser-window-test');
+require('./is-container/is-container-test');
 require('./is-empty-object/is-empty-object-test');
 require('./is-function/is-function-test');
 require('./is-node/is-node-test');
