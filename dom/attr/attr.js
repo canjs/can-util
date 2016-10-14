@@ -210,21 +210,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				}
 			}),
 			required: booleanProp("required"),
-			readonly: {
-				get: function(){
-					return this.readOnly;
-				},
-				set: function(val){
-					if(val || val == null || typeof val === "string") {
-						val = true;
-					} else {
-						val = false;
-					}
-
-					this.readOnly = val;
-					return val;
-				}
-			},
+			readonly: booleanProp("readOnly"),
 			selected: {
 				get: function(){
 					return this.selected;
