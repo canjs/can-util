@@ -13,11 +13,11 @@ module.exports = {
 		var ll = this.logLevel;
 		if (ll < 2) {
 			Array.prototype.unshift.call(arguments, 'WARN:');
-			if (typeof window !== undefined && window.console && console.warn) {
+			if (typeof console !== "undefined" && console.warn) {
 				this._logger("warn", Array.prototype.slice.call(arguments));
-			} else if (window.console && console.log) {
+			} else if (typeof console !== "undefined" && console.log) {
 				this._logger("log", Array.prototype.slice.call(arguments));
-			} else if (window.opera && window.opera.postError) {
+			} else if (window && window.opera && window.opera.postError) {
 				window.opera.postError("steal.js WARNING: " + out);
 			}
 		}
@@ -32,10 +32,10 @@ module.exports = {
 	log: function (out) {
 		var ll = this.logLevel;
 		if (ll < 1) {
-			if (window.console && console.log) {
+			if (typeof console !== "undefined" && console.log) {
 				Array.prototype.unshift.call(arguments, 'Info:');
 				this._logger("log", Array.prototype.slice.call(arguments));
-			} else if (window.opera && window.opera.postError) {
+			} else if (window && window.opera && window.opera.postError) {
 				window.opera.postError("steal.js INFO: " + out);
 			}
 		}
