@@ -12,10 +12,10 @@ QUnit.test('get Single root', function () {
 		foo: 'bar'
 	};
 	// exists
-	result = get('foo', root);
+	result = get(root, 'foo');
 	equal(result, 'bar', 'got \'bar\'');
 	// not exists
-	result = get('baz', root);
+	result = get(root, 'baz');
 	equal(result, undefined, 'got \'undefined\'');
 });
 
@@ -29,9 +29,9 @@ QUnit.test('get Deep objects', function () {
 		}
 	};
 	// exists
-	result = get('foo.bar', root);
+	result = get(root, 'foo.bar');
 	equal(result, 'baz', 'got \'baz\'');
 	// not exists
-	result = get('foo.world', root);
+	result = get(root, 'foo.world');
 	equal(result, undefined, 'got \'undefined\'');
 });

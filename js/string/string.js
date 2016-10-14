@@ -90,18 +90,16 @@ var string = {
 		canDev.warn('string.getObject is deprecated, please use get instead.');
 		
 		roots = isArray(roots) ? roots : [roots || window];
-		
+
 		var result, l = roots.length;
 
 		for(var i = 0; i < l; i++) {
-			result = get(name, roots[i]);
+			result = get(roots[i], name);
 
 			if(result) {
 				return result;
 			}
 		}
-
-		return get(name, roots);
 	},
 	/**
 	 * @function can-util/js/string/string.capitalize string.capitalize
@@ -202,7 +200,7 @@ var string = {
 		str = str || '';
 		obs.push(str.replace(strReplacer, function (whole, inside) {
 			// Convert inside to type.
-			var ob = get(inside, data);
+			var ob = get(data, inside);
 
 			if(remove === true) {
 				deleteAtPath(data, inside);
