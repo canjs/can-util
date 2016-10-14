@@ -12,8 +12,8 @@ var getNext = function (obj, prop, add) {
         return result;
     };
 /**
- * @function can-util/js/getObject/getObject getObject
- * @signature `getObject(name, roots)`
+ * @function can-util/js/get/get get
+ * @signature `get(name, roots)`
  * @param  {String} name  a String of dot-separated keys, representing a path of properties
  * @param  {Object|Array} roots the object to use as the root for property based navigation
  * @return {*}       the value at the property path descending from `roots`
@@ -31,13 +31,13 @@ var getNext = function (obj, prop, add) {
  * if it's an array, `roots` itself otherwise.
  * 
  * ```js
- * var getObject = require("can-util/js/getObject/getObject");
- * console.log(getObject("a.b.c", {a: {b: {c: "foo"}}})); // -> "foo"
- * console.log(getObject("a.b.c", {a: {}})); // -> undefined
- * console.log(getObject("a.b", [{a: {}}, {a: {b: "bar"}}])); // -> "bar"
+ * var get = require("can-util/js/get/get");
+ * console.log(get("a.b.c", {a: {b: {c: "foo"}}})); // -> "foo"
+ * console.log(get("a.b.c", {a: {}})); // -> undefined
+ * console.log(get("a.b", [{a: {}}, {a: {b: "bar"}}])); // -> "bar"
  * ```
  */
-function getObject(name, roots) {
+function get(name, roots) {
     // The parts of the name we are looking up
     // `['App','Models','Recipe']`
     var parts = name ? name.replace(/\[/g,'.').replace(/]/g,'').split('.') : [],
@@ -68,4 +68,4 @@ function getObject(name, roots) {
     return current;
 }
 
-module.exports = getObject;
+module.exports = get;

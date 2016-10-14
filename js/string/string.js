@@ -1,4 +1,4 @@
-var getObject = require('../get-object/get-object');
+var get = require('../get/get');
 var isContainer = require('../is-container/is-container');
 var canDev = require("../dev/dev");
 
@@ -71,8 +71,8 @@ var string = {
 	 * ```
 	 */
 	getObject: function (name, roots) {
-		canDev.warn('string.getObject is deprecated, please use getObject instead.');
-		return getObject(name, roots);
+		canDev.warn('string.getObject is deprecated, please use get instead.');
+		return get(name, roots);
 	},
 	/**
 	 * @function can-util/js/string/string.capitalize string.capitalize
@@ -173,7 +173,7 @@ var string = {
 		str = str || '';
 		obs.push(str.replace(strReplacer, function (whole, inside) {
 			// Convert inside to type.
-			var ob = string.getObject(inside, data, remove === true ? false : undefined);
+			var ob = get(inside, data, remove === true ? false : undefined);
 			if (ob === undefined || ob === null) {
 				obs = null;
 				return '';
