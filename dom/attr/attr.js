@@ -15,6 +15,10 @@ var types = require("../../js/types/types");
 
 require("../events/attributes/attributes");
 
+var namespaces = {
+	'xlink': 'http://www.w3.org/1999/xlink'
+};
+
 var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 	// Used to convert values to strings.
 	toString = function(value){
@@ -429,7 +433,8 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return function(el, attrName, val){
 						var first = attrName.charAt(0),
 							cachedNode,
-							node;
+							node,
+							attr;
 						if((first === "{" || first === "(" || first === "*") && el.setAttributeNode) {
 							cachedNode = invalidNodes[attrName];
 							if(!cachedNode) {
@@ -440,7 +445,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 							node.value = val;
 							el.setAttributeNode(node);
 						} else {
-							el.setAttribute(attrName, val);
+							attr = attrName.split(':');
+
+							if(attr.length !== 1) {
+								el.setAttributeNS(namespaces[attr[0]], attrName, val);
+							}
+							else {
+								el.setAttribute(attrName, val);
+							}
 						}
 					};
 				}

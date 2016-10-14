@@ -169,6 +169,13 @@ test('set class attribute via className or setAttribute for svg (#2015)', functi
 	equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
 });
 
+test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function() {
+	var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+
+	domAttr.set(use, "xlink:href", "svgUri");
+	equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
+});
+
 test("attr.special addEventListener allows custom binding", function(){
 	var trigger;
 	domAttr.special.foo = {
