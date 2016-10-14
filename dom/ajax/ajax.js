@@ -148,12 +148,13 @@ module.exports = namespace.ajax = function (o) {
 			deferred.reject(e);
 		}
 	};
-	var url = o.url, data = null;
-	var isPost = o.type === "POST" || o.type === "PUT";
+	var url = o.url, data = null, type = o.type.toUpperCase();
+	var isPost = type === "POST" || type === "PUT";
 	if (!isPost && o.data) {
 		url += "?" + $._formData(o.data);
 	}
-	xhr.open(o.type, url);
+	xhr.open(type, url);
+
 	if (isPost) {
 		var isJson = o.dataType.indexOf("json") >= 0;
 		data = (isJson && !o.crossDomain) ?
