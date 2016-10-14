@@ -1,6 +1,7 @@
 var get = require('../get/get');
 var isContainer = require('../is-container/is-container');
 var canDev = require("../dev/dev");
+var isArray = require('../is-array/is-array');
 
 // ##string.js
 // _Miscellaneous string utility functions._
@@ -27,6 +28,21 @@ var strUndHash = /_|-/,
 		// Convert bad values into empty strings
 		var isInvalid = content === null || content === undefined || isNaN(content) && '' + content === 'NaN';
 		return '' + (isInvalid ? '' : content);
+	},
+	deleteAtPath = function(data, path) {
+		var parts = path ? path.replace(/\[/g,'.')
+			.replace(/]/g,'').split('.') : [];
+		var current = data;
+
+		for(var i = 0; i < parts.length - 1; i++) {
+			if(current) {
+				current = current[parts[i]];
+			}
+		}
+
+		if(current) {
+			delete current[parts[parts.length - 1 ]];
+		}
 	};
 
 var string = {
@@ -72,6 +88,19 @@ var string = {
 	 */
 	getObject: function (name, roots) {
 		canDev.warn('string.getObject is deprecated, please use get instead.');
+		
+		roots = isArray(roots) ? roots : [roots || window];
+		
+		var result, l = roots.length;
+
+		for(var i = 0; i < l; i++) {
+			result = get(name, roots[i]);
+
+			if(result) {
+				return result;
+			}
+		}
+
 		return get(name, roots);
 	},
 	/**
@@ -173,7 +202,12 @@ var string = {
 		str = str || '';
 		obs.push(str.replace(strReplacer, function (whole, inside) {
 			// Convert inside to type.
-			var ob = get(inside, data, remove === true ? false : undefined);
+			var ob = get(inside, data);
+
+			if(remove === true) {
+				deleteAtPath(data, inside);
+			}
+
 			if (ob === undefined || ob === null) {
 				obs = null;
 				return '';

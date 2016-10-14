@@ -19,43 +19,6 @@ QUnit.test('get Single root', function () {
 	equal(result, undefined, 'got \'undefined\'');
 });
 
-QUnit.test('get Multiple root', function () {
-	// ## Multiple roots
-	var root1, root2, roots, result;
-	// # Only get
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	// exists in first root
-	result = get('a', roots);
-	equal(result, 1, 'got \'1\'');
-	// exists in second root
-	result = get('b', roots);
-	equal(result, 2, 'got \'2\'');
-	// not exists anywhere
-	result = get('c', roots);
-	equal(result, undefined, 'got \'undefined\'');
-	// # One of roots is not an object
-	// exists in second root
-	root1 = undefined;
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = get('b', roots);
-	equal(result, 2, 'got \'2\'');
-});
-
 QUnit.test('get Deep objects', function () {
 	// ## Deep objects
 	var root, result;

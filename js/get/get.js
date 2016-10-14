@@ -1,16 +1,5 @@
-var isArray = require('../is-array/is-array');
 var isContainer = require('../is-container/is-container');
 
-// Returns the `prop` property from `obj`.
-// If `add` is true and `prop` doesn't exist in `obj`, create it as an
-// empty object.
-var getNext = function (obj, prop, add) {
-        var result = obj[prop];
-        if (result === undefined && add === true) {
-            result = obj[prop] = {};
-        }
-        return result;
-    };
 /**
  * @function can-util/js/get/get get
  * @signature `get(name, roots)`
@@ -37,34 +26,28 @@ var getNext = function (obj, prop, add) {
  * console.log(get("a.b", [{a: {}}, {a: {b: "bar"}}])); // -> "bar"
  * ```
  */
-function get(name, roots) {
+function get(name, obj) {
     // The parts of the name we are looking up
     // `['App','Models','Recipe']`
-    var parts = name ? name.replace(/\[/g,'.').replace(/]/g,'').split('.') : [],
+    var parts = name ? name.replace(/\[/g,'.')
+    		.replace(/]/g,'').split('.') : [],
         length = parts.length,
-        current, r = 0,
-        i, container, rootsLength;
-    // Make sure roots is an `array`.
-    roots = isArray(roots) ? roots : [roots || window];
-    rootsLength = roots.length;
+        current, i, container;
+
+    
     if (!length) {
-        return roots[0];
+        return obj;
     }
-    // For each root, mark it as current.
-    for (r; r < rootsLength; r++) {
-        current = roots[r];
-        container = undefined;
-        // Walk current to the 2nd to last object or until there
-        // is not a container.
-        for (i = 0; i < length && isContainer(current); i++) {
-            container = current;
-            current = getNext(container, parts[i]);
-        }
-        // If we found property break cycle
-        if (container !== undefined && current !== undefined) {
-            break;
-        }
+
+    current = obj;
+
+    // Walk current to the 2nd to last object or until there
+    // is not a container.
+    for (i = 0; i < length && isContainer(current); i++) {
+        container = current;
+        current = container[parts[i]];
     }
+
     return current;
 }
 

@@ -39,10 +39,10 @@ QUnit.test('string.sub with null values', function () {
 });
 
 QUnit.test('string.sub double', function () {
-	equal(string.sub('{b} {d}', [{
+	equal(string.sub('{b} {d}', {
 		b: 'c',
 		d: 'e'
-	}]), 'c e');
+	}), 'c e');
 });
 
 QUnit.test('String.underscore', function () {
