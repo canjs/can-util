@@ -20,11 +20,10 @@ var isContainer = require('../is-container/is-container');
 function get(obj, name) {
     // The parts of the name we are looking up
     // `['App','Models','Recipe']`
-    var parts = name ? name.replace(/\[/g,'.')
+    var parts = typeof name !== 'undefined' ? (name + '').replace(/\[/g,'.')
     		.replace(/]/g,'').split('.') : [],
         length = parts.length,
         current, i, container;
-
     
     if (!length) {
         return obj;
