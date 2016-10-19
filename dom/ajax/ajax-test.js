@@ -37,17 +37,20 @@ QUnit.test("added to namespace (#99)", function(){
 	QUnit.equal(namespace.ajax, ajax);
 });
 
-QUnit.asyncTest("cross domain post request should change data to form data (#90)", function () {
-	ajax({
-		type: "POST",
-		url: "http://httpbin.org/post",
-		data: {'message': 'VALUE'},
-		dataType: 'application/json'
-	}).then(function(resp){
-		QUnit.equal(resp.form.message, "VALUE");
-		start();
+if(typeof XDomainRequest === 'undefined') {
+	// see https://blogs.msdn.microsoft.com/ieinternals/2010/05/13/xdomainrequest-restrictions-limitations-and-workarounds/
+	QUnit.asyncTest("cross domain post request should change data to form data (#90)", function () {
+		ajax({
+			type: "POST",
+			url: "http://httpbin.org/post",
+			data: {'message': 'VALUE'},
+			dataType: 'application/json'
+		}).then(function(resp){
+			QUnit.equal(resp.form.message, "VALUE");
+			start();
+		});
 	});
-});
+}
 
 QUnit.asyncTest("GET requests with dataType parse JSON (#106)", function(){
 	ajax({
