@@ -15,24 +15,6 @@ QUnit.asyncTest("basic get request", function () {
 	});
 });
 
-QUnit.asyncTest("abort", function () {
-	var promise = ajax({
-		type: "get",
-		url: __dirname+"/test-result.json"
-	});
-	promise.catch(function(xhr) {
-		if(xhr instanceof Error) {
-			// IE9 - see http://stackoverflow.com/questions/7287706/ie-9-javascript-error-c00c023f
-			QUnit.equal(xhr.message, 'Could not complete the operation due to error c00c023f.');
-		} else {
-			QUnit.equal(xhr.readyState, 0, "aborts the promise");
-		}
-
-		start();
-	});
-	promise.abort();
-});
-
 QUnit.test("added to namespace (#99)", function(){
 	QUnit.equal(namespace.ajax, ajax);
 });
@@ -111,3 +93,26 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 		start();
 	});
 });
+
+if("abort" in XMLHttpRequest.prototype || (XMLHttpRequest._XHR && "abort" in XMLHttpRequest.prototype)) {
+
+	QUnit.asyncTest("abort", function () {
+		var promise = ajax({
+			type: "get",
+			url: __dirname+"/test-result.json"
+		});
+		promise.catch(function(xhr) {
+			if(xhr instanceof Error) {
+				// IE9 - see http://stackoverflow.com/questions/7287706/ie-9-javascript-error-c00c023f
+				QUnit.equal(xhr.message, 'Could not complete the operation due to error c00c023f.');
+				start();
+			} else {
+				setTimeout(function() {
+					QUnit.equal(xhr.readyState, 0, "aborts the promise");
+					start();
+				}, 50);
+			}
+		});
+		promise.abort();
+	});
+}
