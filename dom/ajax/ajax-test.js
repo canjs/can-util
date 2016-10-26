@@ -19,18 +19,6 @@ QUnit.test("added to namespace (#99)", function(){
 	QUnit.equal(namespace.ajax, ajax);
 });
 
-QUnit.asyncTest("cross domain post request should change data to form data (#90)", function () {
-	ajax({
-		type: "POST",
-		url: "http://httpbin.org/post",
-		data: {'message': 'VALUE'},
-		dataType: 'application/json'
-	}).then(function(resp){
-		QUnit.equal(resp.form.message, "VALUE");
-		start();
-	});
-});
-
 QUnit.asyncTest("GET requests with dataType parse JSON (#106)", function(){
 	ajax({
 		type: "get",
@@ -94,8 +82,22 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 	});
 });
 
-if("abort" in XMLHttpRequest.prototype || (XMLHttpRequest._XHR && "abort" in XMLHttpRequest.prototype)) {
+if(typeof XDomainRequest === 'undefined') {
+	QUnit.asyncTest("cross domain post request should change data to form data (#90)", function () {
+		ajax({
+			type: "POST",
+			url: "http://httpbin.org/post",
+			data: {'message': 'VALUE'},
+			dataType: 'application/json'
+		}).then(function(resp){
+			QUnit.equal(resp.form.message, "VALUE");
+			start();
+		});
+	});
+}
 
+if(System.env !== 'canjs-test') {
+	// Brittle in IE 9
 	QUnit.asyncTest("abort", function () {
 		var promise = ajax({
 			type: "get",
