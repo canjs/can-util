@@ -1,4 +1,3 @@
-//!steal-remove-start
 module.exports = {
 	warnTimeout: 5000,
 	logLevel: 0,
@@ -10,6 +9,7 @@ module.exports = {
 	 * @param {String} out the message
 	 */
 	warn: function (out) {
+		//!steal-remove-start
 		var ll = this.logLevel;
 		if (ll < 2) {
 			Array.prototype.unshift.call(arguments, 'WARN:');
@@ -21,6 +21,7 @@ module.exports = {
 				window.opera.postError("steal.js WARNING: " + out);
 			}
 		}
+		//!steal-remove-end
 	},
 	/**
 	 * Adds a message to the console.
@@ -30,6 +31,7 @@ module.exports = {
 	 * @param {String} out the message
 	 */
 	log: function (out) {
+		//!steal-remove-start
 		var ll = this.logLevel;
 		if (ll < 1) {
 			if (typeof console !== "undefined" && console.log) {
@@ -39,13 +41,15 @@ module.exports = {
 				window.opera.postError("steal.js INFO: " + out);
 			}
 		}
+		//!steal-remove-end
 	},
 	_logger: function (type, arr) {
+		//!steal-remove-start
 		try {
 			console[type].apply(console, arr);
 		} catch(e) {
 			console[type](arr);
 		}
+		//!steal-remove-end
 	}
 };
-//!steal-remove-end
