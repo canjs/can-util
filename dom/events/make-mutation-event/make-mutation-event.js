@@ -2,7 +2,6 @@
 // mutation observers are present.  If they aren't you have to use
 // the mutate methods.
 
-var isEmptyObject = require("../../../js/is-empty-object/");
 var each = require("../../../js/each/");
 var makeArray = require("../../../js/make-array/make-array");
 

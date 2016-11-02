@@ -13,8 +13,8 @@ var getCID = function(obj){
 	}
 };
 
-if(window.Set) {
-	CIDSet = window.Set;
+if(GLOBAL().Set) {
+	CIDSet = GLOBAL().Set;
 } else {
 	var CIDSet = function(){
 		this.values = {};
