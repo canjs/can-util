@@ -1,7 +1,9 @@
 require('./assign/assign-test');
-require('./cid/cid-test');
-require('./cid/cid-test');
 require('./base-url/base-url-test');
+require('./cid/cid-test');
+require('./cid-map/cid-map-test');
+require('./cid-set/cid-set-test');
+
 require('./deep-assign/deep-assign-test');
 require('./defaults/defaults-test');
 require('./dev/dev-test');

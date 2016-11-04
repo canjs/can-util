@@ -31,6 +31,9 @@ if(GLOBAL().Set) {
 	CIDSet.prototype.has = function(value) {
 		return this.values[getCID(value)];
 	};
+	CIDSet.prototype.clear = function(key) {
+		return this.values = {};
+	};
 	Object.defineProperty(CIDSet.prototype,"size",{
 		get: function(){
 			var size = 0;
