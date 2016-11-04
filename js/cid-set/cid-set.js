@@ -22,8 +22,12 @@ if(GLOBAL().Set) {
 	CIDSet.prototype.add = function(value){
 		this.values[getCID(value)] = value;
 	};
-	CIDSet.prototype["delete"] = function(value){
-		delete this.values[getCID(value)];
+	CIDSet.prototype["delete"] = function(key){
+		var has = getCID(key) in this.values;
+		if(has) {
+			delete this.values[getCID(key)];
+		}
+		return has;
 	};
 	CIDSet.prototype.forEach = function(cb, thisArg) {
 		each(this.values, cb, thisArg);

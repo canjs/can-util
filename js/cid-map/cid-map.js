@@ -23,7 +23,11 @@ if(GLOBAL().Map) {
 		this.values[getCID(key)] = value;
 	};
 	CIDSet.prototype["delete"] = function(key){
-		delete this.values[getCID(key)];
+		var has = getCID(key) in this.values;
+		if(has) {
+			delete this.values[getCID(key)];
+		}
+		return has;
 	};
 	CIDSet.prototype.forEach = function(cb, thisArg) {
 		each(this.values, cb, thisArg);
