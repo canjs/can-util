@@ -13,23 +13,26 @@ var getCID = function(obj){
 	}
 };
 
-if(GLOBAL().Set) {
-	CIDSet = GLOBAL().Set;
+if(GLOBAL().Map) {
+	CIDSet = GLOBAL().Map;
 } else {
 	var CIDSet = function(){
 		this.values = {};
 	};
-	CIDSet.prototype.add = function(value){
-		this.values[getCID(value)] = value;
+	CIDSet.prototype.set = function(key, value){
+		this.values[getCID(key)] = value;
 	};
-	CIDSet.prototype["delete"] = function(value){
-		delete this.values[getCID(value)];
+	CIDSet.prototype["delete"] = function(key){
+		delete this.values[getCID(key)];
 	};
 	CIDSet.prototype.forEach = function(cb, thisArg) {
 		each(this.values, cb, thisArg);
 	};
-	CIDSet.prototype.has = function(value) {
-		return this.values[getCID(value)];
+	CIDSet.prototype.has = function(key) {
+		return getCID(key) in this.values;
+	};
+	CIDSet.prototype.get = function(key) {
+		return this.values[getCID(key)];
 	};
 	Object.defineProperty(CIDSet.prototype,"size",{
 		get: function(){
