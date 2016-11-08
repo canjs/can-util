@@ -47,6 +47,23 @@ if(_MutationObserver) {
 		document.getElementById("qunit-fixture").appendChild(div);
 		document.getElementById("qunit-fixture").removeChild(div);
 	});
+
+	asyncTest("with mutation observer - move", function () {
+		var div = document.createElement("div");
+		var span = document.createElement("span");
+		var p = document.createElement("p");
+		div.appendChild(span);
+		div.appendChild(p);
+		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
+		
+		domEvents.addEventListener.call(p, "removed", function(){
+			ok(false, "called removed");
+		});
+
+		start();
+		div.insertBefore(p, span);
+		ok(true);
+	});
 }
 
 asyncTest("basic insertion without mutation observer - removeChild", function(){

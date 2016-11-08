@@ -29,15 +29,21 @@ require("../../is-of-global-document/");
  */
 module.exports = function(specialEventName, mutationNodesProperty){
 	var originalAdd = events.addEventListener,
-		originalRemove = events.removeEventListener;
+		originalRemove = events.removeEventListener,
+		doDispatch = true;
 	var dispatchIfListening = function(mutatedNode, specialEventData, dispatched){
-
 		if(dispatched.has(mutatedNode)) {
 			return true;
 		}
 		dispatched.add(mutatedNode);
+		if(specialEventName === "removed") {
+			var documentElement = getDocument().documentElement;
+			if(documentElement.contains(mutatedNode)) {
+				doDispatch = false;
+			}
+		} 
 
-		if(specialEventData.nodeIdsRespondingToInsert.has(mutatedNode)) {
+		if(doDispatch && specialEventData.nodeIdsRespondingToInsert.has(mutatedNode)) {
 			domDispatch.call(mutatedNode, specialEventName, [], false);
 		}
 	};
