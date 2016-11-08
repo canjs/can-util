@@ -5,30 +5,34 @@ QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/ajax");
 
-QUnit.asyncTest("basic get request", function () {
-	ajax({
-		type: "get",
-		url: __dirname+"/test-result.json"
-	}).then(function(resp){
-		QUnit.equal(resp.message, "VALUE");
-		start();
+if (__dirname !== '/') {
+	QUnit.asyncTest("basic get request", function () {
+		ajax({
+			type: "get",
+			url: __dirname+"/test-result.json"
+		}).then(function(resp){
+			QUnit.equal(resp.message, "VALUE");
+			start();
+		});
 	});
-});
+}
 
 QUnit.test("added to namespace (#99)", function(){
 	QUnit.equal(namespace.ajax, ajax);
 });
 
-QUnit.asyncTest("GET requests with dataType parse JSON (#106)", function(){
-	ajax({
-		type: "get",
-		url: __dirname+"/test-result.txt",
-		dataType: "json"
-	}).then(function(resp){
-		QUnit.equal(resp.message, "VALUE");
-		start();
+if (__dirname !== '/') {
+	QUnit.asyncTest("GET requests with dataType parse JSON (#106)", function(){
+		ajax({
+			type: "get",
+			url: __dirname+"/test-result.txt",
+			dataType: "json"
+		}).then(function(resp){
+			QUnit.equal(resp.message, "VALUE");
+			start();
+		});
 	});
-});
+}
 
 QUnit.asyncTest("ignores case of type parameter for a post request (#100)", function () {
 	var oldXhr = window.XMLHttpRequest || window.ActiveXObject,
@@ -96,7 +100,7 @@ if(typeof XDomainRequest === 'undefined') {
 	});
 }
 
-if(System.env !== 'canjs-test') {
+if(System.env !== 'canjs-test' && __dirname !== '/') {
 	// Brittle in IE 9
 	QUnit.asyncTest("abort", function () {
 		var promise = ajax({
