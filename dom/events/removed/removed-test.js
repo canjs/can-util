@@ -64,6 +64,31 @@ if(_MutationObserver) {
 		div.insertBefore(p, span);
 		ok(true);
 	});
+
+	asyncTest("with mutation observer - move and remove (#146)", function () {
+		var fixture = document.getElementById("qunit-fixture");
+		var div = document.createElement("div");
+		var span = document.createElement("span");
+		var p = document.createElement("p");
+		div.appendChild(span);
+		div.appendChild(p);
+		domMutate.appendChild.call(fixture, div);
+
+		var div2 = document.createElement("div");
+		domMutate.appendChild.call(fixture, div2);
+
+		domEvents.addEventListener.call(p, "removed", function(){
+			ok(false, "called removed");
+		});
+
+		domEvents.addEventListener.call(div2, "removed", function(){
+			ok(true, "div removed");
+		});
+
+		start();
+		div.insertBefore(p, span);
+		domMutate.removeChild.call(fixture, div2);
+	});
 }
 
 asyncTest("basic insertion without mutation observer - removeChild", function(){

@@ -29,9 +29,9 @@ require("../../is-of-global-document/");
  */
 module.exports = function(specialEventName, mutationNodesProperty){
 	var originalAdd = events.addEventListener,
-		originalRemove = events.removeEventListener,
-		doDispatch = true;
+		originalRemove = events.removeEventListener;
 	var dispatchIfListening = function(mutatedNode, specialEventData, dispatched){
+		var doDispatch = true;
 		if(dispatched.has(mutatedNode)) {
 			return true;
 		}
