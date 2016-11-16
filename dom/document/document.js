@@ -12,7 +12,7 @@ var global = require("../../js/global/global");
  *
  * ```js
  * var documentShim = { getElementById() {...} };
- * var domDocument = require("can-util/dom/data/data");
+ * var domDocument = require("can-util/dom/document/document");
  * domDocument(documentShim);
  *
  * ...
