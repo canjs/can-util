@@ -2,18 +2,18 @@
 // mutation observers are present.  If they aren't you have to use
 // the mutate methods.
 
-var each = require("../../../js/each/");
+var each = require("../../../js/each/each");
 var makeArray = require("../../../js/make-array/make-array");
 
 var events = require("../events");
-var domData = require("../../data/");
-var getMutationObserver = require("../../mutation-observer/");
-var domDispatch = require("../../dispatch/");
-var mutationDocument = require("../../mutation-observer/document/");
-var getDocument = require("../../document/");
+var domData = require("../../data/data");
+var getMutationObserver = require("../../mutation-observer/mutation-observer");
+var domDispatch = require("../../dispatch/dispatch");
+var mutationDocument = require("../../mutation-observer/document/document");
+var getDocument = require("../../document/document");
 var CIDStore = require("../../../js/cid-set/cid-set");
 
-require("../../is-of-global-document/");
+require("../../is-of-global-document/is-of-global-document");
 
 /**
  * @module {Function} can-util/dom/events/make-mutation-event/make-mutation-event makeMutationEvent
