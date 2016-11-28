@@ -133,7 +133,7 @@ test("Map special attributes", function () {
 	div = document.createElement("input");
 	div.type = "text";
 	document.getElementById("qunit-fixture").appendChild(div);
-	
+
 	domAttr.set(div, "readonly");
 	equal(div.readOnly, true, "Map readonly to readOnly");
 
@@ -687,5 +687,34 @@ test("Select's value is preserved when inserted into the document", function(){
 		equal(select.selectedIndex, -1, "still is -1");
 		start();
 	}, 50);
+
+});
+
+test("values doesn't double send events (#105)", function(){
+	//var MO = MUTATION_OBSERVER();
+	//MUTATION_OBSERVER(false);
+
+	var div = document.createElement("div");
+	div.innerHTML = "<select multiple><option>1</option><option>2</option></select>";
+	var select = div.firstChild;
+	document.body.appendChild(div);
+
+	var valuesChanges = 0;
+	domEvents.addEventListener.call(select, "values", function(){
+		valuesChanges++;
+	});
+
+	domAttr.set(select, "values",[]);
+	select.innerHTML = "<option>1</option><option>2</option>";
+
+
+	QUnit.stop();
+
+	setTimeout(function(){
+		//MUTATION_OBSERVER(MO);
+		QUnit.equal(valuesChanges, 0);
+		QUnit.start();
+	},50);
+
 
 });
