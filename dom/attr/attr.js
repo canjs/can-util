@@ -12,6 +12,7 @@ var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var each = require("../../js/each/each");
 var types = require("can-types");
+var diff = require('../../js/diff/diff');
 
 require("../events/attributes/attributes");
 
@@ -317,6 +318,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 							domEvents.addEventListener.call(this, "inserted", initialSetHandler);
 						}
 
+						// MO handler is only set up **ONCE**
 						setupMO(this, function(){
 							var value = setData.get.call(this, "attrValueLastVal");
 							attr.set(this, "value", value);
@@ -339,11 +341,19 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						}
 						child = child.nextSibling;
 					}
-					setData.set.call(this, "valuesLastVal", values);
+
+					// store last observed DOM state
+					setData.set.call(this, "currentValues", values);
+
 					return values;
 				},
 				set: function(values){
 					values = values || [];
+
+					// store current DOM state
+					setData.set.call(this, "previousValues", attr.get(this, 'values'));
+
+					// set new DOM state
 					var child = this.firstChild;
 					while(child) {
 						if(child.nodeName === "OPTION") {
@@ -352,11 +362,22 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						child = child.nextSibling;
 					}
 
-					setData.set.call(this, "valuesLastVal", values);
+					// store new DOM state
+					setData.set.call(this, "currentValues", values);
+
+					// MO handler is only set up **ONCE**
 					setupMO(this, function(){
-						var lastVal = setData.get.call(this, "valuesLastVal");
-						attr.set(this, "values", lastVal);
-						domDispatch.call(this, "values");
+						var currentValues = setData.get.call(this, "currentValues");
+						var previousValues = setData.get.call(this,
+							"previousValues");
+						var changes = diff(previousValues.slice().sort(),
+							currentValues.slice().sort());
+
+						attr.set(this, "values", currentValues);
+
+						if (changes.length) {
+							domDispatch.call(this, "values");
+						}
 					});
 
 					return values;

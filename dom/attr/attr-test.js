@@ -689,31 +689,28 @@ test("Select's value is preserved when inserted into the document", function(){
 
 });
 
-test("values doesn't double send events (#105)", function(){
-	//var MO = MUTATION_OBSERVER();
-	//MUTATION_OBSERVER(false);
+test('multi-select does not dispatch a values change event if its selected options are unchanged (#105)', function() {
+	var div = document.createElement('div');
+	div.innerHTML = '<select multiple><option selected>2</option><option selected>1</option><option>3</option></select>';
 
-	var div = document.createElement("div");
-	div.innerHTML = "<select multiple><option>1</option><option>2</option></select>";
 	var select = div.firstChild;
 	document.body.appendChild(div);
+	// the multi-select is in the DOM with values of ['2', '1']
 
 	var valuesChanges = 0;
-	domEvents.addEventListener.call(select, "values", function(){
+	domEvents.addEventListener.call(select, 'values', function(){
 		valuesChanges++;
 	});
 
-	domAttr.set(select, "values",[]);
-	select.innerHTML = "<option>1</option><option>2</option>";
-
+	domAttr.set(select, 'values', ['1', '2']);
+	select.innerHTML = '<option selected>1</option><option selected>2</option><option>3</option>';
+	// we manipulate the multi-select, but don't change its selected options ['1', '2"]
 
 	QUnit.stop();
 
-	setTimeout(function(){
-		//MUTATION_OBSERVER(MO);
-		QUnit.equal(valuesChanges, 0);
+	setTimeout(function() {
+		QUnit.strictEqual(valuesChanges, 0, 'we do not dispatch a change event');
+		document.body.removeChild(div);
 		QUnit.start();
-	},50);
-
-
+	}, 50);
 });
