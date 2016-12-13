@@ -1,2 +1,5 @@
-// The initial namespace where every can- module can tack on
-module.exports = {};
+var namespace = require('can-namespace');
+
+console.warn('can-util/namespace is deprecated, use can-namespace instead');
+
+module.exports = namespace;

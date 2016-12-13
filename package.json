@@ -69,5 +69,10 @@
       "apis": "./doc/apis.json"
     },
     "parent": "can-util"
+  },
+  "dependencies": {
+    "can-cid": "^0.0.3",
+    "can-namespace": "1.0.0",
+    "can-types": "^0.0.1"
   }
 }
