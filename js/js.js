@@ -1,8 +1,4 @@
-/**
- * @module {{}} can-util/js js
- * @parent can-util
- * @description Utilities for manipulating JavaScript data structures.
- */
+
 
 module.exports = {
 	assign: require('./assign/assign'),

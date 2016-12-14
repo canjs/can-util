@@ -1,9 +1,3 @@
-/**
- * @module {{}} can-util/dom dom
- * @parent can-util
- * @description A collection of modules that operate on DOM.
- */
-
 module.exports = {
 	ajax: require('./ajax/ajax'),
 	attr: require('./attr/attr'),
