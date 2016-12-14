@@ -1,6 +1,6 @@
 var Global = require("../../js/global/global");
 var assign = require("../../js/assign/assign");
-var namespace = require("../../namespace");
+var namespace = require("can-namespace");
 var parseURI = require('../../js/parse-uri/parse-uri');
 
 /**
