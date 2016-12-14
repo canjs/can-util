@@ -1,15 +1,17 @@
 var isContainer = require('../is-container/is-container');
 
 /**
- * @function can-util/js/get/get get
+ * @module {function} can-util/js/get/get
+ * @parent can-util/js
+ *
  * @signature `get(obj, path)`
  * @param  {Object} obj the object to use as the root for property based navigation
  * @param  {String} path a String of dot-separated keys, representing a path of properties
- * @return {*}       the value at the property path 
+ * @return {*}       the value at the property path
  *
  * A *path* is a dot-delimited sequence of zero or more property names, such that "foo.bar" means "the property
  * 'bar' of the object at the property 'foo' of the root."  An empty path returns the object passed.
- * 
+ *
  * ```js
  * var get = require("can-util/js/get/get");
  * console.log(get({a: {b: {c: "foo"}}}, "a.b.c")); // -> "foo"
@@ -24,7 +26,7 @@ function get(obj, name) {
     		.replace(/]/g,'').split('.') : [],
         length = parts.length,
         current, i, container;
-    
+
     if (!length) {
         return obj;
     }
