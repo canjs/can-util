@@ -69,7 +69,7 @@ var string = {
 	 *
 	 * Return the result of descending the path `name` through the properties of the object or objects
 	 * `roots`
-	 * 
+	 *
 	 * If `roots` is an Array, each element of the array is evaluated, in order, until
 	 * the path is found in an element's properties (and properties-of-properties, etc.).  Otherwise
 	 * `roots` is evaluated as the root object, returning either the object at the property path
@@ -78,7 +78,7 @@ var string = {
 	 * A *path* is a dot-delimited sequence of zero or more property names, such that "foo.bar" means "the property
 	 * 'bar' of the object at the property 'foo' of the root."  An empty path returns the first object in `roots`
 	 * if it's an array, `roots` itself otherwise.
-	 * 
+	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
 	 * console.log(string.getObject("a.b.c", {a: {b: {c: "foo"}}})); // -> "foo"
@@ -88,7 +88,7 @@ var string = {
 	 */
 	getObject: function (name, roots) {
 		//!steal-remove-start
-		canDev.warn('string.getObject is deprecated, please use get instead.');
+		canDev.warn('string.getObject is deprecated, please use can-util/js/get/get instead.');
 		//!steal-remove-end
 
 		roots = isArray(roots) ? roots : [roots || window];
@@ -111,7 +111,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.capitalize("foo")); // -> "Foo"
 	 * console.log(string.capitalize("123")); // -> "123"
 	 * ```
@@ -129,7 +129,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.camelize("foo-bar")); // -> "fooBar"
 	 * console.log(string.camelize("-webkit-flex-flow")); // -> "WebkitFlexFlow"
 	 * ```
@@ -148,7 +148,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.hyphenate("fooBar")); // -> "foo-bar"
 	 * console.log(string.hyphenate("WebkitFlexFlow")); // -> "Webkit-flex-flow"
 	 * ```
@@ -168,7 +168,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.underscore("fooBar")); // -> "foo_bar"
 	 * console.log(string.underscore("HTMLElement")); // -> "html_element"
 	 * ```
@@ -189,10 +189,10 @@ var string = {
 	 *                       if all properties exist on the object, null otherwise
 	 *
 	 * If `remove` is true, the properties found in delimiters in `str` are removed from `data`.
-	 * 
+	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.sub("foo_{bar}", {bar: "baz"}})); // -> "foo_baz"
 	 * console.log(string.sub("foo_{bar}", {})); // -> null
 	 * ```
