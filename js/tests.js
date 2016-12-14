@@ -27,6 +27,7 @@ require('./is-plain-object/is-plain-object-test');
 require('./is-promise-like/is-promise-like-test');
 require('./is-promise/is-promise-test');
 require('./make-promise/make-promise-test');
+require('./omit/omit-test');
 require('./is-string/is-string-test');
 require('./is-web-worker/is-web-worker-test');
 require('./join-uris/join-uris-test');
