@@ -4,7 +4,7 @@
 
 var makeArray = require("../../js/make-array/make-array");
 var setImmediate = require("../../js/set-immediate/set-immediate");
-var CID = require("../../js/cid/cid");
+var CID = require("can-cid");
 
 var getMutationObserver = require("../mutation-observer/mutation-observer");
 var childNodes = require("../child-nodes/child-nodes");

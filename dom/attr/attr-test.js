@@ -5,7 +5,7 @@ var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
 var mutate = require("../mutate/mutate");
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
-var types = require("../../js/types/types");
+var types = require("can-types");
 
 
 QUnit = require('steal-qunit');

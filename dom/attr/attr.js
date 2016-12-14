@@ -11,7 +11,7 @@ var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var each = require("../../js/each/each");
-var types = require("../../js/types/types");
+var types = require("can-types");
 
 require("../events/attributes/attributes");
 

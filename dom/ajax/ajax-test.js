@@ -1,5 +1,5 @@
 var ajax = require('can-util/dom/ajax/ajax');
-var namespace = require("can-util/namespace");
+var namespace = require("can-namespace");
 
 QUnit = require('steal-qunit');
 

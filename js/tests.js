@@ -1,6 +1,5 @@
 require('./assign/assign-test');
 require('./base-url/base-url-test');
-require('./cid/cid-test');
 require('./cid-map/cid-map-test');
 require('./cid-set/cid-set-test');
 
@@ -28,6 +27,7 @@ require('./is-plain-object/is-plain-object-test');
 require('./is-promise-like/is-promise-like-test');
 require('./is-promise/is-promise-test');
 require('./make-promise/make-promise-test');
+require('./omit/omit-test');
 require('./is-string/is-string-test');
 require('./is-web-worker/is-web-worker-test');
 require('./join-uris/join-uris-test');
@@ -37,4 +37,3 @@ require('./make-array/make-array-test');
 require('./set-not-enumerable/set-not-enumerable-test');
 require('./string/string-test');
 require("./string-to-any/string-to-any-test");
-require('./types/types-test');
