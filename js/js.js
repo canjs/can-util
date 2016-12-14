@@ -6,6 +6,7 @@
 
 module.exports = {
 	assign: require('./assign/assign'),
+	cid: require('./cid/cid'),
 	deepAssign: require('./deep-assign/deep-assign'),
 	dev: require('./dev/dev'),
 	diff: require('./diff/diff'),
@@ -26,5 +27,6 @@ module.exports = {
 	last: require('./last/last'),
 	makeArray: require('./make-array/make-array'),
 	setImmediate: require('./set-immediate/set-immediate'),
-	string: require('./string/string')
+	string: require('./string/string'),
+	types: require('./types/types')
 };
