@@ -36,7 +36,6 @@
   "devDependencies": {
     "bit-docs": "0.0.7",
     "can-event": "^3.0.0-pre.13",
-    "cssify": "^1.0.2",
     "done-serve": "^0.2.4",
     "donejs-cli": "^0.9.5",
     "generator-donejs": "^0.9.0",
@@ -46,7 +45,7 @@
     "steal": "^0.16.0",
     "steal-qunit": "^0.1.1",
     "steal-tools": "^0.16.0",
-    "testee": "^0.2.4"
+    "testee": "^0.3.0"
   },
   "repository": {
     "type": "git",
