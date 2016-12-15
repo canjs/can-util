@@ -25,7 +25,6 @@ require('./is-function/is-function-test');
 require('./is-node/is-node-test');
 require('./is-plain-object/is-plain-object-test');
 require('./is-promise-like/is-promise-like-test');
-require('./is-promise/is-promise-test');
 require('./make-promise/make-promise-test');
 require('./omit/omit-test');
 require('./is-string/is-string-test');

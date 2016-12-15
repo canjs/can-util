@@ -1,3 +1,4 @@
+var types = require('can-types');
 /**
  * @module {function} can-util/js/is-promise/is-promise isPromise
  * @parent can-util/js
@@ -20,5 +21,5 @@
  * @return {Boolean} True if the object is a Promise.
  */
 module.exports = function(obj) {
-	return (obj instanceof Promise || (Object.prototype.toString.call(obj) === '[object Promise]'));
+	return types.isPromise(obj);
 };
