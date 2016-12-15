@@ -1,7 +1,7 @@
-var GLOBAL = require("can-util/js/global/global");
-var each = require("can-util/js/each/each");
+var GLOBAL = require("../global/global");
+var each = require("../each/each");
 var CID = require("can-cid");
-var domData = require("can-util/dom/data/data");
+var domData = require("../../dom/data/data");
 
 var CIDSet;
 
