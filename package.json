@@ -38,7 +38,7 @@
     "jshint": "^2.9.1",
     "mocha": "^3.0.2",
     "mocha-qunit-ui": "^0.1.2",
-    "steal": "^1.0.2",
+    "steal": "^1.0.4",
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.0.0",
     "testee": "^0.3.0"
