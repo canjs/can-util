@@ -1,4 +1,3 @@
-var canEvent = require("can-event");
 var domAttr = require('../attr/attr');
 var domEvents = require('../events/events');
 var domData = require("../data/data");
@@ -227,7 +226,7 @@ test("'selected' is bindable on an <option>", function(){
 	});
 
 	option2.selected = true;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(domAttr.get(option1, "selected"), false, "option1 is not selected");
 	equal(domAttr.get(option2, "selected"), true, "option2 is selected");
@@ -252,19 +251,19 @@ test("get, set, and addEventListener on values", function(){
 	deepEqual(domAttr.get(select, "values"), [], "None selected to start");
 
 	option1.selected = true;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(valuesCount, 1, "values event");
 	deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
 
 	option2.selected = true;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(valuesCount, 2, "values event");
 	deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
 
 	option1.selected = option2.selected = false;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(valuesCount, 3, "values event");
 	deepEqual(domAttr.get(select, "values"), [], "none selected");
@@ -289,7 +288,7 @@ test("get, set, and addEventListener on innerHTML", function(){
 	equal(domAttr.get(div, "innerHTML"), "<span></span>", "got innerhtml");
 
 	domAttr.set(div, "innerHTML", "<p>hello</p>");
-	canEvent.trigger.call(div, "change");
+	domDispatch.call(div, "change");
 	equal(count, 1, "innerHTML event");
 
 	equal(domAttr.get(div, "innerHTML"), "<p>hello</p>", "got innerhtml");
