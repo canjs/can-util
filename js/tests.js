@@ -6,6 +6,7 @@ require('./cid-set/cid-set-test');
 require('./deep-assign/deep-assign-test');
 require('./defaults/defaults-test');
 require('./dev/dev-test');
+require('./log/log-test');
 require('./diff/diff-test');
 require('./diff-array/diff-array-test');
 require('./diff-object/diff-object-test');
