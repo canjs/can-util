@@ -5,6 +5,26 @@ QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/ajax");
 
+var makeFixture = function(XHR){
+
+	var oldXhr = window.XMLHttpRequest || window.ActiveXObject;
+	if (window.XMLHttpRequest) {
+		window.XMLHttpRequest = XHR;
+	} else if (window.ActiveXObject) {
+		window.ActiveXObject = XHR;
+	}
+
+	return function restoreXHR(){
+		if (window.XMLHttpRequest) {
+			window.XMLHttpRequest = oldXhr;
+		} else if (window.ActiveXObject) {
+			window.ActiveXObject = oldXhr;
+		}
+	};
+};
+
+
+
 if (__dirname !== '/') {
 	QUnit.asyncTest("basic get request", function () {
 		ajax({
@@ -35,11 +55,10 @@ if (__dirname !== '/') {
 }
 
 QUnit.asyncTest("ignores case of type parameter for a post request (#100)", function () {
-	var oldXhr = window.XMLHttpRequest || window.ActiveXObject,
-		requestHeaders = {
+	var requestHeaders = {
 			CONTENT_TYPE: "Content-Type"
 		},
-		xhrFixture = function () {
+		restore = makeFixture(function () {
 			this.open = function (type, url) {
 			};
 
@@ -56,18 +75,13 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 					this.responseText = JSON.stringify(o);
 				}
 			};
-		};
+		});
 
-	// replace with fixture
-	if (window.XMLHttpRequest) {
-		window.XMLHttpRequest = xhrFixture;
-	} else if (window.ActiveXObject) {
-		window.ActiveXObject = xhrFixture;
-	}
+
 
 	ajax({
 		type: "post",
-		url: "/foo",
+		url: "http://anotherdomain.com/foo",
 		data: {
 			bar: "qux"
 		}
@@ -77,11 +91,7 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 		QUnit.notOk(reason, "request failed with reason = ", reason);
 	}).then(function () {
 		// restore original values
-		if (window.XMLHttpRequest) {
-			window.XMLHttpRequest = oldXhr;
-		} else if (window.ActiveXObject) {
-			window.ActiveXObject = oldXhr;
-		}
+		restore();
 		start();
 	});
 });
@@ -122,3 +132,42 @@ if(System.env !== 'canjs-test' && __dirname !== '/') {
 		promise.abort();
 	});
 }
+
+
+QUnit.asyncTest("crossDomain is true for relative requests", function(){
+	var headers = {},
+		restore = makeFixture(function () {
+			this.open = function (type, url) {
+			};
+
+			this.send = function () {
+				this.readyState = 4;
+				this.status = 200;
+				this.responseText = JSON.stringify({great: "success"});
+				this.onreadystatechange();
+			};
+
+			this.setRequestHeader = function (header, value) {
+				headers[header] = value;
+			};
+		});
+
+	ajax({
+		type: "post",
+		url: "/foo",
+		data: {
+			bar: "qux"
+		},
+		dataType: "json"
+	}).then(function (value) {
+		QUnit.deepEqual(headers, {
+			"Content-Type": "application/json",
+			"X-Requested-With": "XMLHttpRequest"});
+	}, function (reason) {
+		QUnit.notOk(reason, "request failed with reason = ", reason);
+	}).then(function () {
+		// restore original values
+		restore();
+		start();
+	});
+});

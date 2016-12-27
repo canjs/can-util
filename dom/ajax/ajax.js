@@ -104,7 +104,9 @@ module.exports = namespace.ajax = function (o) {
 	if(o.crossDomain == null){
 		try {
 			requestUrl = parseURI(o.url);
-			o.crossDomain = originUrl.protocol + "//" + originUrl.host !== requestUrl.protocol + "//" + requestUrl.host;
+			o.crossDomain = !!((requestUrl.protocol && requestUrl.protocol !== originUrl.protocol) ||
+				(requestUrl.host && requestUrl.host !== originUrl.host));
+
 		} catch (e){
 			o.crossDomain = true;
 		}
