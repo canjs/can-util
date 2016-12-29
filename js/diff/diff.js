@@ -55,7 +55,7 @@ module.exports = exports = function(oldList, newList, identity){
 		// look for single insert, does the next newList item equal the current oldList.
 		// 1 2 3
 		// 1 2 4 3
-		if(  newIndex+1 < newLength && newList[newIndex+1] === oldItem) {
+		if(  newIndex+1 < newLength && identity(newList[newIndex+1], oldItem)) {
 			patches.push({index: newIndex, deleteCount: 0, insert: [ newList[newIndex] ]});
 			oldIndex++;
 			newIndex += 2;
@@ -64,7 +64,7 @@ module.exports = exports = function(oldList, newList, identity){
 		// look for single removal, does the next item in the oldList equal the current newList item.
 		// 1 2 3
 		// 1 3
-		else if( oldIndex+1 < oldLength  && oldList[oldIndex+1] === newItem ) {
+		else if( oldIndex+1 < oldLength  && identity(oldList[oldIndex+1], newItem) ) {
 			patches.push({index: newIndex, deleteCount: 1, insert: []});
 			oldIndex += 2;
 			newIndex++;
