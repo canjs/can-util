@@ -2,6 +2,9 @@ var slice = [].slice;
 // a b c
 // a b c d
 // [[2,0, d]]
+
+var defaultIdentity = function(a, b){ return a === b; };
+
 /**
  * @module {function} can-util/js/diff/diff diff
  * @parent can-util/js
@@ -34,8 +37,16 @@ var slice = [].slice;
  * ); // -> [{index: 1, deleteCount: 1, insert: [{id:3}]}]
  * ```
  */
+
+// TODO: update for a better type reference. E.g.:
+//    @typdef {function(*,*)} can-util/diff/diff/typedefs.identity identify(a, b)
+//
+//    @param {*} a This is something.
+//    @param {can-util/diff/diff/typedefs.identity} identity(a, b)
+//    @option {*} a
+
 module.exports = exports = function(oldList, newList, identity){
-	identity = identity || function(a,b){ return a === b; };
+	identity = identity || defaultIdentity;
 	
 	var oldIndex = 0,
 		newIndex =  0,
