@@ -342,17 +342,11 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						child = child.nextSibling;
 					}
 
-					// store last observed DOM state
-					setData.set.call(this, "currentValues", values);
-
 					return values;
 				},
 				set: function(values){
 					values = values || [];
-
-					// store current DOM state
-					setData.set.call(this, "previousValues", attr.get(this, 'values'));
-
+					
 					// set new DOM state
 					var child = this.firstChild;
 					while(child) {
@@ -363,17 +357,26 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					}
 
 					// store new DOM state
-					setData.set.call(this, "currentValues", values);
+					setData.set.call(this, "stickyValues", attr.get(this,"values") );
 
 					// MO handler is only set up **ONCE**
+					// TODO: should this be moved into addEventListener?
 					setupMO(this, function(){
-						var currentValues = setData.get.call(this, "currentValues");
+
+						// Get the previous sticky state
 						var previousValues = setData.get.call(this,
-							"previousValues");
+							"stickyValues");
+
+						// Set DOM to previous sticky state
+						attr.set(this, "values", previousValues);
+
+						// Get the new result after trying to maintain the sticky state
+						var currentValues = setData.get.call(this,
+							"stickyValues");
+
+						// If there are changes, trigger a `values` event.
 						var changes = diff(previousValues.slice().sort(),
 							currentValues.slice().sort());
-
-						attr.set(this, "values", currentValues);
 
 						if (changes.length) {
 							domDispatch.call(this, "values");
