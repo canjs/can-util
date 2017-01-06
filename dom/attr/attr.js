@@ -12,6 +12,7 @@ var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var each = require("../../js/each/each");
 var types = require("can-types");
+var diff = require('../../js/diff/diff');
 
 require("../events/attributes/attributes");
 
@@ -317,6 +318,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 							domEvents.addEventListener.call(this, "inserted", initialSetHandler);
 						}
 
+						// MO handler is only set up **ONCE**
 						setupMO(this, function(){
 							var value = setData.get.call(this, "attrValueLastVal");
 							attr.set(this, "value", value);
@@ -339,11 +341,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						}
 						child = child.nextSibling;
 					}
-					setData.set.call(this, "valuesLastVal", values);
+
 					return values;
 				},
 				set: function(values){
 					values = values || [];
+					
+					// set new DOM state
 					var child = this.firstChild;
 					while(child) {
 						if(child.nodeName === "OPTION") {
@@ -352,11 +356,31 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						child = child.nextSibling;
 					}
 
-					setData.set.call(this, "valuesLastVal", values);
+					// store new DOM state
+					setData.set.call(this, "stickyValues", attr.get(this,"values") );
+
+					// MO handler is only set up **ONCE**
+					// TODO: should this be moved into addEventListener?
 					setupMO(this, function(){
-						var lastVal = setData.get.call(this, "valuesLastVal");
-						attr.set(this, "values", lastVal);
-						domDispatch.call(this, "values");
+
+						// Get the previous sticky state
+						var previousValues = setData.get.call(this,
+							"stickyValues");
+
+						// Set DOM to previous sticky state
+						attr.set(this, "values", previousValues);
+
+						// Get the new result after trying to maintain the sticky state
+						var currentValues = setData.get.call(this,
+							"stickyValues");
+
+						// If there are changes, trigger a `values` event.
+						var changes = diff(previousValues.slice().sort(),
+							currentValues.slice().sort());
+
+						if (changes.length) {
+							domDispatch.call(this, "values");
+						}
 					});
 
 					return values;
