@@ -76,7 +76,7 @@ $._formData = function (o) {
 	var kvps = [], regEx = /%20/g, val;
 	for (var k in o) {
 		val = o[k];
-		val = typeof val === "undefined" || val === null ? "" : val;
+		val = (val == null) ? "" : val;
 		kvps.push(encodeURIComponent(k).replace(regEx, "+") + "=" + encodeURIComponent(val.toString()).replace(regEx, "+"));
 	}
 	return kvps.join('&');
