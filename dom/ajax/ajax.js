@@ -73,9 +73,11 @@ $._xhrResp = function (xhr, options) {
 	}
 };
 $._formData = function (o) {
-	var kvps = [], regEx = /%20/g;
+	var kvps = [], regEx = /%20/g, val;
 	for (var k in o) {
-		kvps.push(encodeURIComponent(k).replace(regEx, "+") + "=" + encodeURIComponent(o[k].toString()).replace(regEx, "+"));
+		val = o[k];
+		val = typeof val === "undefined" || val === null ? "" : val;
+		kvps.push(encodeURIComponent(k).replace(regEx, "+") + "=" + encodeURIComponent(val.toString()).replace(regEx, "+"));
 	}
 	return kvps.join('&');
 };

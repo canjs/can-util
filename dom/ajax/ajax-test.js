@@ -171,3 +171,18 @@ QUnit.asyncTest("crossDomain is true for relative requests", function(){
 		start();
 	});
 });
+
+if (__dirname !== '/') {
+	QUnit.asyncTest("correctly serializes null and undefined values (#177)", function () {
+		ajax({
+			type: "get",
+			url: __dirname + "/test-result.txt",
+			data: {
+				foo: null
+			}
+		}).then(function (resp) {
+			QUnit.equal(resp.message, "VALUE");
+			start();
+		});
+	});
+}
