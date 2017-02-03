@@ -24,7 +24,7 @@
  */
 module.exports = function (d, s) {
 	for (var prop in s) {
-		if (s.hasOwnProperty(prop)) {
+		if (Object.prototype.hasOwnProperty.call(s, prop)) {
 			d[prop] = s[prop];
 		}
 	}
