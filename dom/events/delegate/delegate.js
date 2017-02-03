@@ -6,6 +6,13 @@ var isEmptyObject = require("../../../js/is-empty-object/is-empty-object");
 
 var dataName = "delegateEvents";
 
+// Some events do not bubble, so delegarting them requires registering the handler in the
+// capturing phase.
+// http://www.quirksmode.org/blog/archives/2008/04/delegating_the.html
+var useCapture = function(eventType) {
+	return eventType === 'focus' || eventType === 'blur';
+};
+
 /**
  * @module {events} can-util/dom/events/delegate/delegate delegateEvents
  * @parent can-util/dom/events/events
@@ -111,7 +118,7 @@ domEvents.addDelegateListener = function(eventType, selector, handler) {
 	// if the first of that event type, bind
 	if (!(eventTypeEvents = events[eventType])) {
 		eventTypeEvents = events[eventType] = {};
-		domEvents.addEventListener.call(this, eventType, handleEvent, false);
+		domEvents.addEventListener.call(this, eventType, handleEvent, useCapture(eventType));
 	}
 
 	if (!eventTypeEvents[selector]) {
@@ -156,7 +163,7 @@ domEvents.removeDelegateListener = function(eventType, selector, handler) {
 			delete eventTypeEvents[selector];
 			// if there are no more events for that eventType, unbind
 			if(isEmptyObject(eventTypeEvents)) {
-				domEvents.removeEventListener.call(this, eventType, handleEvent, false);
+				domEvents.removeEventListener.call(this, eventType, handleEvent, useCapture(eventType));
 				delete events[eventType];
 				if(isEmptyObject(events)) {
 					domData.clean.call(this, dataName);

@@ -72,4 +72,19 @@ QUnit.test("basics", function(){
 		insert: []
 	}]);
 
+	// identity:
+	patches = diff([{id:1},{id:2}], [{id:1},{id:1.5},{id:3}], function(a,b){ return a.id === b.id; });
+	deepEqual(patches, [{
+		index: 1,
+		deleteCount: 1,
+		insert: [{id:1.5},{id:3}]
+	}], 'identity works');
+	
+	// identity for a single middle insertion:
+	patches = diff([{id:1},{id:2}], [{id:1},{id:3},{id:2}], function(a,b){ return a.id === b.id; });
+	deepEqual(patches, [{
+		index: 1,
+		deleteCount: 0,
+		insert: [{id:3}]
+	}], 'identity for a single middle insertion');
 });

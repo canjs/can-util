@@ -1,3 +1,6 @@
+var get = require('../get/get');
+var isContainer = require('../is-container/is-container');
+var canDev = require("../dev/dev");
 var isArray = require('../is-array/is-array');
 
 // ##string.js
@@ -21,23 +24,25 @@ var strUndHash = /_|-/,
 	strSingleQuote = /'/g,
 	strHyphenMatch = /-+(.)?/g,
 	strCamelMatch = /[a-z][A-Z]/g,
-	// Returns the `prop` property from `obj`.
-	// If `add` is true and `prop` doesn't exist in `obj`, create it as an
-	// empty object.
-	getNext = function (obj, prop, add) {
-		var result = obj[prop];
-		if (result === undefined && add === true) {
-			result = obj[prop] = {};
-		}
-		return result;
-	},
-	// Returns `true` if the object can have properties (no `null`s).
-	isContainer = function (current) {
-		return /^f|^o/.test(typeof current);
-	}, convertBadValues = function (content) {
+	convertBadValues = function (content) {
 		// Convert bad values into empty strings
 		var isInvalid = content === null || content === undefined || isNaN(content) && '' + content === 'NaN';
 		return '' + (isInvalid ? '' : content);
+	},
+	deleteAtPath = function(data, path) {
+		var parts = path ? path.replace(/\[/g,'.')
+			.replace(/]/g,'').split('.') : [];
+		var current = data;
+
+		for(var i = 0; i < parts.length - 1; i++) {
+			if(current) {
+				current = current[parts[i]];
+			}
+		}
+
+		if(current) {
+			delete current[parts[parts.length - 1 ]];
+		}
 	};
 
 var string = {
@@ -57,15 +62,14 @@ var string = {
 	},
 	/**
 	 * @function can-util/js/string/string.getObject string.getObject
-	 * @signature `string.getObject(name, roots, add)`
+	 * @signature `string.getObject(name, roots)`
 	 * @param  {String} name  a String of dot-separated keys, representing a path of properties
 	 * @param  {Object|Array} roots the object to use as the root for property based navigation
-	 * @param  {Boolean} add  if true, add the parts at each step as new objects
 	 * @return {*}       the value at the property path descending from `roots`
 	 *
 	 * Return the result of descending the path `name` through the properties of the object or objects
 	 * `roots`
-	 * 
+	 *
 	 * If `roots` is an Array, each element of the array is evaluated, in order, until
 	 * the path is found in an element's properties (and properties-of-properties, etc.).  Otherwise
 	 * `roots` is evaluated as the root object, returning either the object at the property path
@@ -75,9 +79,6 @@ var string = {
 	 * 'bar' of the object at the property 'foo' of the root."  An empty path returns the first object in `roots`
 	 * if it's an array, `roots` itself otherwise.
 	 *
-	 * If `add` is `true` and `path` is not found in any roots, a matching path that resolves to an empty object
-	 * is added to the first object in `roots` if `roots` is an array, `roots` itself otherwise.
-	 * 
 	 * ```js
 	 * var string = require("can-util/js/string/string");
 	 * console.log(string.getObject("a.b.c", {a: {b: {c: "foo"}}})); // -> "foo"
@@ -85,46 +86,22 @@ var string = {
 	 * console.log(string.getObject("a.b", [{a: {}}, {a: {b: "bar"}}])); // -> "bar"
 	 * ```
 	 */
-	getObject: function (name, roots, add) {
-		// The parts of the name we are looking up
-		// `['App','Models','Recipe']`
-		var parts = name ? name.split('.') : [],
-			length = parts.length,
-			current, r = 0,
-			i, container, rootsLength;
-		// Make sure roots is an `array`.
+	getObject: function (name, roots) {
+		//!steal-remove-start
+		canDev.warn('string.getObject is deprecated, please use can-util/js/get/get instead.');
+		//!steal-remove-end
+
 		roots = isArray(roots) ? roots : [roots || window];
-		rootsLength = roots.length;
-		if (!length) {
-			return roots[0];
-		}
-		// For each root, mark it as current.
-		for (r; r < rootsLength; r++) {
-			current = roots[r];
-			container = undefined;
-			// Walk current to the 2nd to last object or until there
-			// is not a container.
-			for (i = 0; i < length && isContainer(current); i++) {
-				container = current;
-				current = getNext(container, parts[i]);
-			}
-			// If we found property break cycle
-			if (container !== undefined && current !== undefined) {
-				break;
+
+		var result, l = roots.length;
+
+		for(var i = 0; i < l; i++) {
+			result = get(roots[i], name);
+
+			if(result) {
+				return result;
 			}
 		}
-		// Remove property from found container
-		if (add === false && current !== undefined) {
-			delete container[parts[i - 1]];
-		}
-		// When adding property add it to the first root
-		if (add === true && current === undefined) {
-			current = roots[0];
-			for (i = 0; i < length && isContainer(current); i++) {
-				current = getNext(current, parts[i], true);
-			}
-		}
-		return current;
 	},
 	/**
 	 * @function can-util/js/string/string.capitalize string.capitalize
@@ -134,7 +111,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.capitalize("foo")); // -> "Foo"
 	 * console.log(string.capitalize("123")); // -> "123"
 	 * ```
@@ -152,7 +129,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.camelize("foo-bar")); // -> "fooBar"
 	 * console.log(string.camelize("-webkit-flex-flow")); // -> "WebkitFlexFlow"
 	 * ```
@@ -171,7 +148,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.hyphenate("fooBar")); // -> "foo-bar"
 	 * console.log(string.hyphenate("WebkitFlexFlow")); // -> "Webkit-flex-flow"
 	 * ```
@@ -191,7 +168,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.underscore("fooBar")); // -> "foo_bar"
 	 * console.log(string.underscore("HTMLElement")); // -> "html_element"
 	 * ```
@@ -212,10 +189,10 @@ var string = {
 	 *                       if all properties exist on the object, null otherwise
 	 *
 	 * If `remove` is true, the properties found in delimiters in `str` are removed from `data`.
-	 * 
+	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
-	 * 
+	 *
 	 * console.log(string.sub("foo_{bar}", {bar: "baz"}})); // -> "foo_baz"
 	 * console.log(string.sub("foo_{bar}", {})); // -> null
 	 * ```
@@ -225,7 +202,12 @@ var string = {
 		str = str || '';
 		obs.push(str.replace(strReplacer, function (whole, inside) {
 			// Convert inside to type.
-			var ob = string.getObject(inside, data, remove === true ? false : undefined);
+			var ob = get(data, inside);
+
+			if(remove === true) {
+				deleteAtPath(data, inside);
+			}
+
 			if (ob === undefined || ob === null) {
 				obs = null;
 				return '';

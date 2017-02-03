@@ -57,10 +57,15 @@ events.addEventListener = function(eventName){
 events.removeEventListener = function(eventName){
 	if(eventName === "attributes") {
 		var MutationObserver = getMutationObserver();
+		var observer;
 
 		if(isOfGlobalDocument(this) && MutationObserver) {
-			domData.get.call(this, "canAttributesObserver").disconnect();
-			domData.clean.call(this, "canAttributesObserver");
+			observer = domData.get.call(this, "canAttributesObserver");
+
+			if (observer && observer.disconnect) {
+				observer.disconnect();
+				domData.clean.call(this, "canAttributesObserver");
+			}
 		} else {
 			domData.clean.call(this, "canHasAttributesBindings");
 		}

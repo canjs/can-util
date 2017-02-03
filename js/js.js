@@ -1,8 +1,4 @@
-/**
- * @module {{}} can-util/js js
- * @parent can-util
- * @description Utilities for manipulating JavaScript data structures.
- */
+
 
 module.exports = {
 	assign: require('./assign/assign'),
@@ -26,6 +22,7 @@ module.exports = {
 	joinURIs: require('./join-uris/join-uris'),
 	last: require('./last/last'),
 	makeArray: require('./make-array/make-array'),
+	omit: require('./omit/omit'),
 	setImmediate: require('./set-immediate/set-immediate'),
 	string: require('./string/string'),
 	types: require('./types/types')

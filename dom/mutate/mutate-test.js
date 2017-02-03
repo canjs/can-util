@@ -33,23 +33,25 @@ test("inserting empty frag", function () {
 
 });
 
-test("inserting into a different document fires inserted", function(){
-	var enableMO = disableMO();
+if(window.eventsBubble) {
+	test("inserting into a different document fires inserted", function(){
+		var enableMO = disableMO();
 
-	var doc = document.implementation.createHTMLDocument('Demo');
-	var oldDoc = DOCUMENT();
-	DOCUMENT(doc);
+		var doc = document.implementation.createHTMLDocument('Demo');
+		var oldDoc = DOCUMENT();
+		DOCUMENT(doc);
 
-	var div = document.createElement("div");
-	div.addEventListener("inserted", function(){
-		ok(true, "called");
+		var div = document.createElement("div");
+		div.addEventListener("inserted", function(){
+			ok(true, "called");
+		});
+		mutate.appendChild.call(doc.body, div);
+
+		stop();
+		setTimeout(function(){
+			enableMO();
+			DOCUMENT(oldDoc);
+			start();
+		}, 10);
 	});
-	mutate.appendChild.call(doc.body, div);
-
-	stop();
-	setTimeout(function(){
-		enableMO();
-		DOCUMENT(oldDoc);
-		start();
-	}, 10);
-});
+}

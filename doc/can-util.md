@@ -1,4 +1,7 @@
-@page can-util
+@module {Object} can-util
 @parent can-infrastructure
+@package ../package.json
+@group can-util/dom can-util/dom
+@group can-util/js can-util/js
 
-A set of utilities.
+Common JavaScript utilities for the rest of CanJS.
