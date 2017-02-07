@@ -19,3 +19,8 @@ QUnit.test("Object with a .length property", function(){
 
 	ok(isArrayLike(obj));
 });
+
+QUnit.test("function should be false", function(){
+	var func = function(){};
+	ok( !isArrayLike( func ) );
+});
