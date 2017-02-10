@@ -23,7 +23,7 @@ var originalAdd = events.addEventListener,
  * function attributesHandler() {
  * 	console.log("attributes event fired");
  * }
- * 
+ *
  * events.addEventListener.call(el, "attributes", attributesHandler, false);
  *
  * events.removeEventListener.call(el, "attributes", attributesHandler);
