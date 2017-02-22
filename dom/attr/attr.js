@@ -128,7 +128,11 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return this.checked;
 				},
 				set: function(val){
-					var notFalse = !!val || val === undefined || val === "";
+					// - `set( truthy )` => TRUE
+					// - `set( "" )`     => TRUE
+					// - `set()`         => TRUE
+					// - `set(undefined)` => false.
+					var notFalse = !!val || val === "" || arguments.length === 0;
 					this.checked = notFalse;
 					if(notFalse && this.type === "radio") {
 						this.defaultChecked = true;
@@ -433,7 +437,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			// call its setter, and if so use the setter.
 			// Otherwise fallback to setAttribute.
 			if(typeof setter === "function" && test.call(el)) {
-				newValue = setter.call(el, val);
+				// To distinguish calls with explicit undefined, e.g.:
+				// - `attr.set(el, "checked")`
+				// - `attr.set(el, "checked", undefined)`
+				if (arguments.length === 2){
+					newValue = setter.call(el);
+				} else {
+					newValue = setter.call(el, val);
+				}
 			} else {
 				attr.setAttribute(el, attrName, val);
 			}
