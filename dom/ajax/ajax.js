@@ -159,12 +159,14 @@ module.exports = namespace.ajax = function (o) {
 	}
 	xhr.open(type, url);
 
+	var isJson = o.dataType.indexOf("json") >= 0;
 	if (isPost) {
-		var isJson = o.dataType.indexOf("json") >= 0;
 		data = (isJson && !o.crossDomain) ?
 			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
 			$._formData(o.data);
 		xhr.setRequestHeader("Content-Type", (isJson && !o.crossDomain) ? "application/json" : "application/x-www-form-urlencoded");
+	} else if (type === "GET" && o.crossDomain){
+		xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 	}
 	// X-Requested-With header
 	xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest" );

@@ -108,6 +108,48 @@ if(typeof XDomainRequest === 'undefined') {
 			start();
 		});
 	});
+	
+	// Test GET CORS:
+	QUnit.asyncTest("GET CORS should set content-type header (#187)", function () {
+
+		var hasCorrectHeader, restore;
+		restore = makeFixture(function () {
+			this.open = function (type, url) {
+			};
+
+			this.send = function () {
+				this.readyState = 4;
+				this.status = 200;
+				this.onreadystatechange();
+			};
+
+			this.setRequestHeader = function (header, value) {
+				if (header === "Content-Type" && value === "application/x-www-form-urlencoded"){
+					hasCorrectHeader = true;
+				}
+				var o = {};
+				o[header] = value;
+				this.responseText = JSON.stringify(o);
+			};
+		});
+		
+		ajax({
+			url: "http://query.yahooapis.com/v1/public/yql",
+			data: {
+				fmt: "JSON",
+				q: 'select * from geo.places where text="sunnyvale, ca"',
+				format: "json"
+			}
+		}).then(function(response){
+			QUnit.ok(hasCorrectHeader, "Content-Type for GET CORS should be set to `application/x-www-form-urlencoded`");
+			restore();
+			start();
+		}, function(err){
+			QUnit.ok(false, "Should be resolved");
+			restore();
+			start();
+		});
+	});
 }
 
 if(System.env !== 'canjs-test' && __dirname !== '/') {
