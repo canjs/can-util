@@ -714,3 +714,16 @@ test('multi-select does not dispatch a values change event if its selected optio
 		QUnit.start();
 	}, 50);
 });
+
+test('setting checked to undefined should result in false for checkboxes (#184)', function(){
+	var input = document.createElement('input');
+	input.type = 'checkbox';
+
+	domAttr.set(input, 'checked', undefined);
+	QUnit.equal(input.checked, false, 'Should set checked to false');
+	
+	domAttr.set(input, 'checked', true);
+	QUnit.equal(input.checked, true, 'Should become true');
+	domAttr.set(input, 'checked', undefined);
+	QUnit.equal(input.checked, false, 'Should become false again');
+});
