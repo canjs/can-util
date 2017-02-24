@@ -108,6 +108,14 @@ if(typeof XDomainRequest === 'undefined') {
 			start();
 		});
 	});
+
+
+	// A helper to make a predicate for a given array that checks whether it contains a given value:
+	function makePredicateContains(arr){
+		return function(val){
+			return arr.indexOf(val) !== -1;
+		};
+	}
 	
 	// Test simple GET CORS:
 	QUnit.asyncTest("GET CORS should be a simple request - without a preflight (#187)", function () {
@@ -240,12 +248,4 @@ if (__dirname !== '/') {
 			start();
 		});
 	});
-}
-
-
-// A helper to make a predicate for a given array that checks whether it contains a given value:
-function makePredicateContains(arr){
-	return function(val){
-		return arr.indexOf(val) !== -1;
-	}
 }
