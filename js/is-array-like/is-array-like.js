@@ -11,7 +11,7 @@ function isArrayLike(obj){
 		"length" in obj && obj.length;
 
 	// var length = "length" in obj && obj.length;
-	return typeof arr !== "function" &&
+	return typeof obj !== "function" &&
 		( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj );
 }
 
