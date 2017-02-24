@@ -2,6 +2,7 @@ var Global = require("../../js/global/global");
 var assign = require("../../js/assign/assign");
 var namespace = require("can-namespace");
 var parseURI = require('../../js/parse-uri/parse-uri');
+var param = require("../../js/param/param");
 
 /**
 @module {function} can-util/dom/ajax/ajax ajax
@@ -38,8 +39,7 @@ var xhrs = [
 // used to check for Cross Domain requests
 var originUrl = parseURI(Global().location.href);
 
-var $ = {};
-$.xhr = function () {
+var makeXhr = function () {
 	if (_xhrf != null) {
 		return _xhrf();
 	}
@@ -56,7 +56,8 @@ $.xhr = function () {
 	}
 	return function () { };
 };
-$._xhrResp = function (xhr, options) {
+
+var _xhrResp = function (xhr, options) {
 	switch (options.dataType || xhr.getResponseHeader("Content-Type").split(";")[0]) {
 		case "text/xml":
 		case "xml":
@@ -72,17 +73,9 @@ $._xhrResp = function (xhr, options) {
 			return xhr.responseText;
 	}
 };
-$._formData = function (o) {
-	var kvps = [], regEx = /%20/g, val;
-	for (var k in o) {
-		val = o[k];
-		val = (val == null) ? "" : val;
-		kvps.push(encodeURIComponent(k).replace(regEx, "+") + "=" + encodeURIComponent(val.toString()).replace(regEx, "+"));
-	}
-	return kvps.join('&');
-};
+
 module.exports = namespace.ajax = function (o) {
-	var xhr = $.xhr(), timer, n = 0;
+	var xhr = makeXhr(), timer, n = 0;
 	var deferred = {};
 	var promise = new Promise(function(resolve,reject){
 		deferred.resolve = resolve;
@@ -129,7 +122,7 @@ module.exports = namespace.ajax = function (o) {
 				}
 				if (xhr.status < 300) {
 					if (o.success) {
-						o.success($._xhrResp(xhr, o));
+						o.success( _xhrResp(xhr, o) );
 					}
 				}
 				else if (o.error) {
@@ -140,7 +133,7 @@ module.exports = namespace.ajax = function (o) {
 				}
 
 				if (xhr.status >= 200 && xhr.status < 300) {
-					deferred.resolve( $._xhrResp(xhr, o) );
+					deferred.resolve( _xhrResp(xhr, o) );
 				} else {
 					deferred.reject( xhr );
 				}
@@ -155,7 +148,7 @@ module.exports = namespace.ajax = function (o) {
 	var url = o.url, data = null, type = o.type.toUpperCase();
 	var isPost = type === "POST" || type === "PUT";
 	if (!isPost && o.data) {
-		url += "?" + $._formData(o.data);
+		url += "?" + param(o.data);
 	}
 	xhr.open(type, url);
 
@@ -167,7 +160,7 @@ module.exports = namespace.ajax = function (o) {
 		var isJson = o.dataType.indexOf("json") >= 0;
 		data = (isJson && !isSimpleCors) ?
 			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
-			$._formData(o.data);
+			param(o.data);
 
 		// CORS simple: `Content-Type` has to be `application/x-www-form-urlencoded`:
 		xhr.setRequestHeader("Content-Type", (isJson && !isSimpleCors) ? "application/json" : "application/x-www-form-urlencoded");
@@ -175,7 +168,7 @@ module.exports = namespace.ajax = function (o) {
 	
 	// CORS simple: no custom headers, so we don't add `X-Requested-With` header:
 	if (!isSimpleCors){
-		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest" );
+		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
 	}
 
 	xhr.send(data);
