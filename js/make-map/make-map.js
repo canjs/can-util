@@ -3,7 +3,7 @@ var each = require('../each/each');
 /**
  * @module {function} can-util/js/make-map/make-map makeMap
  * @parent can-util/js
- * @signature `makeArray(arr)`
+ * @signature `makeMap( string )`
  * @param  {String} string A comma separated list of values
  * @return {Object} A JavaScript object with the same keys as the passed-in comma-separated values
  *

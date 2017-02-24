@@ -1,5 +1,6 @@
 var ajax = require('can-util/dom/ajax/ajax');
 var namespace = require("can-namespace");
+var makeMap = require('can-util/js/make-map/make-map');
 
 QUnit = require('steal-qunit');
 
@@ -23,10 +24,11 @@ var makeFixture = function(XHR){
 	};
 };
 
-// A helper to make a predicate for a given array that checks whether it contains a given value:
-var makePredicateContains = function (arr){
+// A helper to make a predicate for a given comma-separated list that checks whether it contains a given value:
+var makePredicateContains = function (str){
+	var obj = makeMap(str);
 	return function(val){
-		return arr.indexOf(val) !== -1;
+		return obj[val];
 	};
 };
 
@@ -121,12 +123,9 @@ if(typeof XDomainRequest === 'undefined') {
 
 		// CORS simple requests: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests
 		var isSimpleRequest = true, restore;
-		var isSimpleMethod = makePredicateContains(['GET', 'POST', 'HEAD']);
-		var isSimpleHeader = makePredicateContains([
-			'Accept', 'Accept-Language', 'Content-Language', 'Content-Type',
-			'DPR', 'Downlink', 'Save-Data', 'Viewport-Width', 'Width'
-		]);
-		var isSimpleContentType = makePredicateContains(['application/x-www-form-urlencoded', 'multipart/form-data', 'text/plain']);
+		var isSimpleMethod = makePredicateContains("GET,POST,HEAD");
+		var isSimpleHeader = makePredicateContains("Accept,Accept-Language,Content-Language,Content-Type,DPR,Downlink,Save-Data,Viewport-Width,Width");
+		var isSimpleContentType = makePredicateContains("application/x-www-form-urlencoded,multipart/form-data,text/plain");
 		
 		restore = makeFixture(function () {
 			this.open = function (type, url) {
