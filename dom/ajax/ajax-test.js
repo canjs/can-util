@@ -23,6 +23,13 @@ var makeFixture = function(XHR){
 	};
 };
 
+// A helper to make a predicate for a given array that checks whether it contains a given value:
+var makePredicateContains = function (arr){
+	return function(val){
+		return arr.indexOf(val) !== -1;
+	};
+};
+
 
 
 if (__dirname !== '/') {
@@ -108,14 +115,6 @@ if(typeof XDomainRequest === 'undefined') {
 			start();
 		});
 	});
-
-
-	// A helper to make a predicate for a given array that checks whether it contains a given value:
-	function makePredicateContains(arr){
-		return function(val){
-			return arr.indexOf(val) !== -1;
-		};
-	}
 	
 	// Test simple GET CORS:
 	QUnit.asyncTest("GET CORS should be a simple request - without a preflight (#187)", function () {
