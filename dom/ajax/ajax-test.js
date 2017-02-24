@@ -114,16 +114,16 @@ if(typeof XDomainRequest === 'undefined') {
 
 		// CORS simple requests: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests
 		var isSimpleRequest = true, restore;
-		var simpleMethods = ['GET', 'POST', 'HEAD'];
-		var simpleHeaders = [
-			'Accept','Accept-Language','Content-Language','Content-Type',
+		var isSimpleMethod = makePredicateContains(['GET', 'POST', 'HEAD']);
+		var isSimpleHeader = makePredicateContains([
+			'Accept', 'Accept-Language', 'Content-Language', 'Content-Type',
 			'DPR', 'Downlink', 'Save-Data', 'Viewport-Width', 'Width'
-		];
-		var simpleContentType = 'application/x-www-form-urlencoded';
+		]);
+		var isSimpleContentType = makePredicateContains(['application/x-www-form-urlencoded', 'multipart/form-data', 'text/plain']);
 		
 		restore = makeFixture(function () {
 			this.open = function (type, url) {
-				if (simpleMethods.indexOf(type) === -1){
+				if (!isSimpleMethod(type)){
 					isSimpleRequest = false;
 				}
 			};
@@ -137,10 +137,10 @@ if(typeof XDomainRequest === 'undefined') {
 			};
 		
 			this.setRequestHeader = function (header, value) {
-				if (header === "Content-Type" && value !== simpleContentType){
+				if (header === "Content-Type" && !isSimpleHeader(value)){
 					isSimpleRequest = false;
 				}
-				if (simpleHeaders.indexOf(header) === -1){
+				if (isSimpleContentType(header)){
 					isSimpleRequest = false;
 				}
 				response[header] = value;
@@ -240,4 +240,12 @@ if (__dirname !== '/') {
 			start();
 		});
 	});
+}
+
+
+// A helper to make a predicate for a given array that checks whether it contains a given value:
+function makePredicateContains(arr){
+	return function(val){
+		return arr.indexOf(val) !== -1;
+	}
 }
