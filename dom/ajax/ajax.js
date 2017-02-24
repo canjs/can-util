@@ -159,15 +159,24 @@ module.exports = namespace.ajax = function (o) {
 	}
 	xhr.open(type, url);
 
+	// For CORS to send a "simple" request (to avoid a preflight check), the following methods are allowed: GET/POST/HEAD,
+	// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests
+	var isSimpleCors = o.crossDomain && ['GET', 'POST', 'HEAD'].indexOf(type) !== -1;
+	
 	if (isPost) {
 		var isJson = o.dataType.indexOf("json") >= 0;
-		data = (isJson && !o.crossDomain) ?
+		data = (isJson && !isSimpleCors) ?
 			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
 			$._formData(o.data);
-		xhr.setRequestHeader("Content-Type", (isJson && !o.crossDomain) ? "application/json" : "application/x-www-form-urlencoded");
+
+		// CORS simple: `Content-Type` has to be `application/x-www-form-urlencoded`:
+		xhr.setRequestHeader("Content-Type", (isJson && !isSimpleCors) ? "application/json" : "application/x-www-form-urlencoded");
 	}
-	// X-Requested-With header
-	xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest" );
+	
+	// CORS simple: no custom headers, so we don't add `X-Requested-With` header:
+	if (!isSimpleCors){
+		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest" );
+	}
 
 	xhr.send(data);
 	return promise;
