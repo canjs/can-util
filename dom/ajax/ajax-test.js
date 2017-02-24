@@ -109,39 +109,52 @@ if(typeof XDomainRequest === 'undefined') {
 		});
 	});
 	
-	// Test GET CORS:
-	QUnit.asyncTest("GET CORS should set content-type header (#187)", function () {
+	// Test simple GET CORS:
+	QUnit.asyncTest("GET CORS should be a simple request - without a preflight (#187)", function () {
 
-		var hasCorrectHeader, restore;
+		// CORS simple requests: https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests
+		var isSimpleRequest = true, restore;
+		var simpleMethods = ['GET', 'POST', 'HEAD'];
+		var simpleHeaders = [
+			'Accept','Accept-Language','Content-Language','Content-Type',
+			'DPR', 'Downlink', 'Save-Data', 'Viewport-Width', 'Width'
+		];
+		var simpleContentType = 'application/x-www-form-urlencoded';
+		
 		restore = makeFixture(function () {
 			this.open = function (type, url) {
+				if (simpleMethods.indexOf(type) === -1){
+					isSimpleRequest = false;
+				}
 			};
 
+			var response = {};
 			this.send = function () {
+				this.responseText = JSON.stringify(response);
 				this.readyState = 4;
 				this.status = 200;
 				this.onreadystatechange();
 			};
-
+		
 			this.setRequestHeader = function (header, value) {
-				if (header === "Content-Type" && value === "application/x-www-form-urlencoded"){
-					hasCorrectHeader = true;
+				if (header === "Content-Type" && value !== simpleContentType){
+					isSimpleRequest = false;
 				}
-				var o = {};
-				o[header] = value;
-				this.responseText = JSON.stringify(o);
+				if (simpleHeaders.indexOf(header) === -1){
+					isSimpleRequest = false;
+				}
+				response[header] = value;
 			};
 		});
 		
 		ajax({
 			url: "http://query.yahooapis.com/v1/public/yql",
 			data: {
-				fmt: "JSON",
 				q: 'select * from geo.places where text="sunnyvale, ca"',
 				format: "json"
 			}
 		}).then(function(response){
-			QUnit.ok(hasCorrectHeader, "Content-Type for GET CORS should be set to `application/x-www-form-urlencoded`");
+			QUnit.ok(isSimpleRequest, "CORS GET is simple");
 			restore();
 			start();
 		}, function(err){
