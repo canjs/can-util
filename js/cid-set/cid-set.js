@@ -1,17 +1,8 @@
 var GLOBAL = require("../global/global");
 var each = require("../each/each");
-var CID = require("can-cid");
-var domData = require("../../dom/data/data");
+var getCID = require("../cid/get-cid");
 
 var CIDSet;
-
-var getCID = function(obj){
-	if(typeof obj.nodeType === "number") {
-		return domData.cid.call(obj);
-	} else {
-		return CID(obj);
-	}
-};
 
 if(GLOBAL().Set) {
 	CIDSet = GLOBAL().Set;
@@ -33,7 +24,7 @@ if(GLOBAL().Set) {
 		each(this.values, cb, thisArg);
 	};
 	CIDSet.prototype.has = function(value) {
-		return this.values[getCID(value)];
+		return (getCID(value) in this.values);
 	};
 	CIDSet.prototype.clear = function(key) {
 		return this.values = {};
