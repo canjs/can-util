@@ -1,17 +1,8 @@
 var GLOBAL = require("../global/global");
 var each = require("../each/each");
-var CID = require("can-cid");
-var domData = require("../../dom/data/data");
+var getCID = require("../cid/get-cid");
 
 var CIDSet;
-
-var getCID = function(obj){
-	if(typeof obj.nodeType === "number") {
-		return domData.cid.call(obj);
-	} else {
-		return CID(obj);
-	}
-};
 
 if(GLOBAL().Map) {
 	CIDSet = GLOBAL().Map;
@@ -20,7 +11,7 @@ if(GLOBAL().Map) {
 		this.values = {};
 	};
 	CIDSet.prototype.set = function(key, value){
-		this.values[getCID(key)] = value;
+		this.values[getCID(key)] = {key: key, value: value};
 	};
 	CIDSet.prototype["delete"] = function(key){
 		var has = getCID(key) in this.values;
@@ -30,13 +21,15 @@ if(GLOBAL().Map) {
 		return has;
 	};
 	CIDSet.prototype.forEach = function(cb, thisArg) {
-		each(this.values, cb, thisArg);
+		each(this.values, function(pair){
+			return cb.call(thisArg || this, pair.value, pair.key, this);
+		}, this);
 	};
 	CIDSet.prototype.has = function(key) {
 		return getCID(key) in this.values;
 	};
 	CIDSet.prototype.get = function(key) {
-		return this.values[getCID(key)];
+		return this.values[getCID(key)].value;
 	};
 	CIDSet.prototype.clear = function(key) {
 		return this.values = {};
