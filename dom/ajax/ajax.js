@@ -28,19 +28,14 @@ var param = require("../../js/param/param");
  *    });
  *    ```
  * 
- *    @param {can-util/typedefs/ajaxOptions} ajaxOptions Configuration options for the AJAX request.
- *      - __url__ {String} The requested url.
- *      - __type__ {String} The method of the request. Ex: `GET`, `PUT`, `POST`, etc. Capitalization is ignored. Default is `GET`.
- *      - __data__ {Object} The data of the request. If data needs to be urlencoded (e.g. for GET requests or for CORS) it is serialized with [can-util/js/param].
- *      - __dataType__ {String} Type of data. Default is `json`.
- *      - __crossDomain__ {Boolean} If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to true. This allows, for example, server-side redirection to another domain. Default: `false` for same-domain requests, `true` for cross-domain requests.
- *      - __timeout__ {Number} Set a timeout (in milliseconds) for the request. A value of 0 means there will be no timeout.
- *      - __timeoutFn__ {Function} Timeout callback to be called after `xhr.abort()`.
- *      - __success__ {Function} A function to be called if the request succeeds. The function gets passed one argument based on content type: `xhr.responseText`, `xhr.responseXML` or parsed JSON.
- *      - __error__ {Function} A function to be called if the request fails. The function receives three arguments: `xhr`, `xhr.status` and `xhr.statusText`. 
- *      - __complete__ {Function} A function to be called when the request finishes (after success and error callbacks are executed). The function gets passed two arguments: `xhr`, `xhr.statusText`.
- *      - __userAgent__ {String} Default: `XMLHttpRequest`.
- *      - __lang__ {String} Default `en`.
+ *    @param {Object} ajaxOptions Configuration options for the AJAX request.
+ *      - __url__ `{String}` The requested url.
+ *      - __type__ `{String}` The method of the request. Ex: `GET`, `PUT`, `POST`, etc. Capitalization is ignored. _Default is `GET`_.
+ *      - __data__ `{Object}` The data of the request. If data needs to be urlencoded (e.g. for GET requests or for CORS) it is serialized with [can-util/js/param].
+ *      - __dataType__ `{String}` Type of data. _Default is `json`_.
+ *      - __crossDomain__ `{Boolean}` If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to true. This allows, for example, server-side redirection to another domain. Default: `false` for same-domain requests, `true` for cross-domain requests.
+ *      - __userAgent__ `{String}` _Default: `XMLHttpRequest`_.
+ *      - __lang__ `{String}` _Default `en`_.
  *
  *    @return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method. Invoking abort on the Promise instance indirectly rejects it.
  * 
