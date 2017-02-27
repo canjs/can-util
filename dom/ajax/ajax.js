@@ -5,27 +5,45 @@ var parseURI = require('../../js/parse-uri/parse-uri');
 var param = require("../../js/param/param");
 
 /**
-@module {function} can-util/dom/ajax/ajax ajax
-@parent can-util/dom
-@signature `ajax(settings)`
-@param {Object} settings Configuration options for the AJAX request.
-The list of configuration options is the same as for [jQuery.ajax](http://api.jquery.com/jQuery.ajax/#jQuery-ajax-settings).
-@return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method.
- Invoking abort on the Promise instance indirectly rejects it.
-
-@body
-`ajax( settings )` is used to make an asynchronous HTTP (AJAX) request
-similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax]. The example below
-makes use of [can-util/dom/frag/frag].
-
-        ajax({
-                url: 'http://canjs.com/docs/can.ajax.html',
-                success: function(document) {
-                        var frag = can.frag(document);
-                        return frag.querySelector(".heading h1").innerText; //-> ajax
-                }
-        });
-
+ * @module {function} can-util/dom/ajax/ajax ajax
+ * @parent can-util/dom
+ * 
+ * Make an asynchronous HTTP (AJAX) request.
+ * 
+ * @signature `ajax( ajaxOptions )`
+ * 
+ *    Is used to make an asynchronous HTTP (AJAX) request similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax].
+ *   
+ *    ```
+ *    var ajax = require("can-util/dom/ajax/ajax");
+ *    
+ *    ajax({
+ *      url: "http://query.yahooapis.com/v1/public/yql",
+ *      data: {
+ *        format: "json",
+ *        q: 'select * from geo.places where text="sunnyvale, ca"'
+ *      }
+ *    }).then(function(response){
+ *      console.log( response.query.count ); // => 2
+ *    });
+ *    ```
+ * 
+ *    @param {can-util/typedefs/ajaxOptions} ajaxOptions Configuration options for the AJAX request.
+ *      - __url__ {String} The requested url.
+ *      - __type__ {String} The method of the request. Ex: `GET`, `PUT`, `POST`, etc. Capitalization is ignored. Default is `GET`.
+ *      - __data__ {Object} The data of the request. If data needs to be urlencoded (e.g. for GET requests or for CORS) it is serialized with [can-util/js/param].
+ *      - __dataType__ {String} Type of data. Default is `json`.
+ *      - __crossDomain__ {Boolean} If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to true. This allows, for example, server-side redirection to another domain. Default: `false` for same-domain requests, `true` for cross-domain requests.
+ *      - __timeout__ {Number} Set a timeout (in milliseconds) for the request. A value of 0 means there will be no timeout.
+ *      - __timeoutFn__ {Function} Timeout callback to be called after `xhr.abort()`.
+ *      - __success__ {Function} A function to be called if the request succeeds. The function gets passed one argument based on content type: `xhr.responseText`, `xhr.responseXML` or parsed JSON.
+ *      - __error__ {Function} A function to be called if the request fails. The function receives three arguments: `xhr`, `xhr.status` and `xhr.statusText`. 
+ *      - __complete__ {Function} A function to be called when the request finishes (after success and error callbacks are executed). The function gets passed two arguments: `xhr`, `xhr.statusText`.
+ *      - __userAgent__ {String} Default: `XMLHttpRequest`.
+ *      - __lang__ {String} Default `en`.
+ *
+ *    @return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method. Invoking abort on the Promise instance indirectly rejects it.
+ * 
  */
 
 // from https://gist.github.com/mythz/1334560
