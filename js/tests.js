@@ -37,4 +37,5 @@ require('./make-array/make-array-test');
 require('./make-map/make-map-test');
 require('./set-not-enumerable/set-not-enumerable-test');
 require('./string/string-test');
-require("./string-to-any/string-to-any-test");
+require('./string-to-any/string-to-any-test');
+require('./param/param-test');
