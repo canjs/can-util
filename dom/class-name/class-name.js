@@ -9,7 +9,7 @@ var has = function(className) {
 };
 
 /**
- * @module {{}} can-util/dom/class-name/class-name className
+ * @module {{}} can-util/dom/class-name/class-name class-name
  * @parent can-util/dom
  * @description Allows querying and manipulation of classes on HTML elements
  *

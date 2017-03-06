@@ -1,7 +1,7 @@
 var assign = require('../assign/assign');
 
 /**
- * @module {function} can-util/js/diff-object/diff-object diffObject
+ * @module {function} can-util/js/diff-object/diff-object diff-object
  * @parent can-util/js
  * @signature `diffObject(oldObject, newObject)`
  *
@@ -10,7 +10,7 @@ var assign = require('../assign/assign');
  * @return {Array} an array of object-patch objects
  *
  * Find the differences between two objects, based on properties and values
- * 
+ *
  * The object-patch object format has the following keys:
  * - **property**: the property key on the new object
  * - **type**:     the type of operation on this property: add, remove, or set

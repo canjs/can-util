@@ -1,7 +1,7 @@
 var getGlobal = require("../global/global");
 
 /**
- * @module {function} can-util/js/base-url/base-url baseUrl
+ * @module {function} can-util/js/base-url/base-url base-url
  * @parent can-util/js
  * @signature `baseUrl(optionalBaseUrlToSet)`
  *

@@ -1,6 +1,6 @@
 var types = require('can-types');
 /**
- * @module {function} can-util/js/is-promise/is-promise isPromise
+ * @module {function} can-util/js/is-promise/is-promise is-promise
  * @parent can-util/js
  * @signature `isPromise(obj)`
  *
