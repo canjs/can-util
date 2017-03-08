@@ -1,7 +1,7 @@
 var isContainer = require('../is-container/is-container');
 
 /**
- * @module {function} can-util/js/get/get
+ * @module {function} can-util/js/get/get get
  * @parent can-util/js
  *
  * @signature `get(obj, path)`

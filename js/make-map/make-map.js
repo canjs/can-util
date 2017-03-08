@@ -1,7 +1,7 @@
 var each = require('../each/each');
 
 /**
- * @module {function} can-util/js/make-map/make-map makeMap
+ * @module {function} can-util/js/make-map/make-map make-map
  * @parent can-util/js
  * @signature `makeMap( string )`
  * @param  {String} string A comma separated list of values

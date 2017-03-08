@@ -1,4 +1,4 @@
-@module {function} can-util/js/is-array-like/is-array-like isArrayLike
+@module {function} can-util/js/is-array-like/is-array-like is-array-like
 @parent can-util/js
 @signature `isArrayLike(obj)`
 

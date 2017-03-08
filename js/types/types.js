@@ -1,5 +1,5 @@
 /**
- * @module can-util/js/types/types
+ * @module can-util/js/types/types types
  * @parent can-util/js
  * @description Deprecated. Use [can-types] instead.
  */

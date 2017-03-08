@@ -1,7 +1,7 @@
 var each = require('../each/each');
 
 /**
- * @module {function} can-util/js/make-array/make-array makeArray
+ * @module {function} can-util/js/make-array/make-array make-array
  * @parent can-util/js
  * @signature `makeArray(arr)`
  * @param  {ArrayLike} arr any array-like object
