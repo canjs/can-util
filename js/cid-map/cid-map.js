@@ -2,39 +2,40 @@ var GLOBAL = require("../global/global");
 var each = require("../each/each");
 var getCID = require("../cid/get-cid");
 
-var CIDSet;
+var CIDMap;
 
 if(GLOBAL().Map) {
-	CIDSet = GLOBAL().Map;
+	CIDMap = GLOBAL().Map;
 } else {
-	var CIDSet = function(){
+	var CIDMap = function(){
 		this.values = {};
 	};
-	CIDSet.prototype.set = function(key, value){
+	CIDMap.prototype.set = function(key, value){
 		this.values[getCID(key)] = {key: key, value: value};
 	};
-	CIDSet.prototype["delete"] = function(key){
+	CIDMap.prototype["delete"] = function(key){
 		var has = getCID(key) in this.values;
 		if(has) {
 			delete this.values[getCID(key)];
 		}
 		return has;
 	};
-	CIDSet.prototype.forEach = function(cb, thisArg) {
+	CIDMap.prototype.forEach = function(cb, thisArg) {
 		each(this.values, function(pair){
 			return cb.call(thisArg || this, pair.value, pair.key, this);
 		}, this);
 	};
-	CIDSet.prototype.has = function(key) {
+	CIDMap.prototype.has = function(key) {
 		return getCID(key) in this.values;
 	};
-	CIDSet.prototype.get = function(key) {
-		return this.values[getCID(key)].value;
+	CIDMap.prototype.get = function(key) {
+		var obj = this.values[getCID(key)];
+		return obj && obj.value;
 	};
-	CIDSet.prototype.clear = function(key) {
+	CIDMap.prototype.clear = function(key) {
 		return this.values = {};
 	};
-	Object.defineProperty(CIDSet.prototype,"size",{
+	Object.defineProperty(CIDMap.prototype,"size",{
 		get: function(){
 			var size = 0;
 			each(this.values, function(){
@@ -45,4 +46,4 @@ if(GLOBAL().Map) {
 	});
 }
 
-module.exports = CIDSet;
+module.exports = CIDMap;

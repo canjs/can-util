@@ -5,7 +5,8 @@ QUnit.module("can-util/js/cid-map");
 
 QUnit.test("basics", function(){
 	var o1 = {},
-		o2 = {};
+		o2 = {},
+		o3 = {};
 
 	var map = new CIDMap();
 
@@ -14,6 +15,7 @@ QUnit.test("basics", function(){
 
 	QUnit.equal( map.get(o1), "o1");
 	QUnit.equal( map.get(o2), "o2");
+	QUnit.equal( map.get(o3), undefined);
 
 	QUnit.equal(map.size, 2);
 
