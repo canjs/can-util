@@ -42,6 +42,19 @@ if(_MutationObserver) {
 		document.getElementById("qunit-fixture").removeChild(div);
 	});
 
+	asyncTest("with mutation observer - disabled removal - removeChild", function () {
+		var input = document.createElement("input");
+		input.disabled = true;
+
+		domEvents.addEventListener.call(input,"removed", function(){
+			ok(true, "called back");
+			start();
+		});
+
+		document.getElementById("qunit-fixture").appendChild(input);
+		document.getElementById("qunit-fixture").removeChild(input);
+	});
+
 	asyncTest("with mutation observer - basic removal - replaceChild", function () {
 		var div = document.createElement("div");
 		var div2 = document.createElement("div");
@@ -112,7 +125,7 @@ if(_MutationObserver) {
 	});
 }
 
-asyncTest("basic insertion without mutation observer - removeChild", function(){
+asyncTest("basic removal without mutation observer - removeChild", function(){
 	getMutationObserver(null);
 
 	var div = document.createElement("div");
@@ -125,6 +138,22 @@ asyncTest("basic insertion without mutation observer - removeChild", function(){
 
 	domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	domMutate.removeChild.call(document.getElementById("qunit-fixture"), div);
+});
+
+asyncTest("disabled removal without mutation observer - removeChild", function(){
+	getMutationObserver(null);
+
+	var input = document.createElement("input");
+	input.disabled = true;
+
+	domEvents.addEventListener.call(input,"removed", function(){
+		ok(true, "called back");
+		getMutationObserver(_MutationObserver);
+		start();
+	});
+
+	domMutate.appendChild.call(document.getElementById("qunit-fixture"), input);
+	domMutate.removeChild.call(document.getElementById("qunit-fixture"), input);
 });
 
 asyncTest("basic insertion without mutation observer - replaceChild", function(){
