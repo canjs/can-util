@@ -24,3 +24,7 @@ QUnit.test("function should be false", function(){
 	var func = function(){};
 	ok( !isArrayLike( func ) );
 });
+
+QUnit.test("0 should be false", function(){
+	ok( !isArrayLike( 0 ) );
+});
