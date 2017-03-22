@@ -95,7 +95,7 @@ module.exports = {
 	},
 	/**
 	 * @function can-util/dom/data/data.set domData.set
-	 * @signature `domData.set.call(el, key, value)`
+	 * @signature `domData.set.call(el, name, value)`
 	 *
 	 * @param {String} name the key to store the value under
 	 * @param {*} value     the value to store under the key
