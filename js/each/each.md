@@ -1,15 +1,15 @@
 @module {function} can-util/js/each/each each
 @parent can-util/js
 
-@signature `each(collection, callback, context)`
+@signature `each(elements, callback, context)`
 
-Loop over each element in an Array-Like or Object data structure.
+A generic iterator function that can be used to iterate over both Array-Like and object data structure. Array-Like data structures are iterated by their numerical index. Objects are iterated by their named properties, i.e. in each stage of iteration the each function emits the key and its corresponding value.
 
-  @param {Object|ArrayLike} collection
-  @param {function(element, key, collection)} callback
+  @param {Object|ArrayLike} [elements] the object or Array-Like elements to iterate over
+  @param {function(element, key, elements)} [callback] the function that would be executed in each iteration
   @param {Object} [context] the context object
 
-  @return {collection}  the orignal collection
+  @return {Object|ArrayLike}  the original elements
 
 ```js
  var each = require("can-util/js/each/each");
