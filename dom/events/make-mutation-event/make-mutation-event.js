@@ -19,7 +19,7 @@ require("../../is-of-global-document/is-of-global-document");
  * @module {Function} can-util/dom/events/make-mutation-event/make-mutation-event makeMutationEvent
  * @parent can-util/dom/events/events
  *
- * @signature `makeMutationEvent(specialEventNae, mutationNodesProperty)`
+ * @signature `makeMutationEvent(specialEventName, mutationNodesProperty)`
  *
  * @param {String} specialEventName the event to handle as a mutation observer-based event
  * @param {String} mutationNodesProperty the property of interest in a DOM mutation
