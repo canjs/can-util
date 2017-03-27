@@ -35,7 +35,7 @@
   "devDependencies": {
     "async": "^2.2.0",
     "bit-docs": "0.0.7",
-    "done-serve": "^0.2.4",
+    "done-serve": "^1.0.0",
     "donejs-cli": "^1.0.0",
     "generator-donejs": "^0.9.0",
     "http-server": "^0.9.0",
