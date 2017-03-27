@@ -11,7 +11,7 @@ var childNodes = require("../child-nodes/child-nodes");
 var domContains = require("../contains/contains");
 var domDispatch = require("../dispatch/dispatch");
 var DOCUMENT = require("../document/document");
-
+var domData = require("../data/data");
 
 var mutatedElements;
 var checks = {
@@ -41,6 +41,9 @@ var fireOn = function(elems, root, check, event, dispatched) {
 			dispatched[cid] = true;
 			children = makeArray(elem.getElementsByTagName("*"));
 			domDispatch.call(elem, event, [], false);
+			if (event === "removed") {
+				domData.delete.call(elem);
+			}
 
 			for (var j = 0, child;
 				(child = children[j]) !== undefined; j++) {
@@ -48,6 +51,10 @@ var fireOn = function(elems, root, check, event, dispatched) {
 				cid = CID(child);
 				if(!dispatched[cid]) {
 					domDispatch.call(child, event, [], false);
+					// jshint maxdepth:5
+					if (event === "removed") {
+						domData.delete.call(child);
+					}
 					dispatched[cid] = true;
 				}
 			}
