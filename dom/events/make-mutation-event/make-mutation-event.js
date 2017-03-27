@@ -8,6 +8,7 @@ var domDispatch = require("../../dispatch/dispatch");
 var mutationDocument = require("../../mutation-observer/document/document");
 var getDocument = require("../../document/document");
 var CIDStore = require("../../../js/cid-set/cid-set");
+var string = require("../../../js/string/string");
 
 require("../../is-of-global-document/is-of-global-document");
 
@@ -26,23 +27,6 @@ require("../../is-of-global-document/is-of-global-document");
 module.exports = function(specialEventName, mutationNodesProperty){
 	var originalAdd = events.addEventListener,
 		originalRemove = events.removeEventListener;
-	/*var dispatchIfListening = function(mutatedNode, specialEventData, dispatched){
-		var doDispatch = true;
-		if(dispatched.has(mutatedNode)) {
-			return true;
-		}
-		dispatched.add(mutatedNode);
-		if(specialEventName === "removed") {
-			var documentElement = getDocument().documentElement;
-			if(documentElement.contains(mutatedNode)) {
-				doDispatch = false;
-			}
-		}
-
-		if(doDispatch && specialEventData.nodeIdsRespondingToInsert.has(mutatedNode)) {
-			domDispatch.call(mutatedNode, specialEventName, [], false);
-		}
-	};*/
 
 	events.addEventListener = function(eventName){
 		// on an inserted event
@@ -59,11 +43,12 @@ module.exports = function(specialEventName, mutationNodesProperty){
 						// so we don't double check (a parent and then a child added to the parent)
 						if(specialEventData.nodeIdsRespondingToInsert.has(mutatedNode)) {
 							domDispatch.call(mutatedNode, specialEventName, [], false);
+							specialEventData.nodeIdsRespondingToInsert.delete(mutatedNode);
 						}
 					},
 					nodeIdsRespondingToInsert: new CIDStore()
 				};
-				mutationDocument[mutationNodesProperty](specialEventData.handler);
+				mutationDocument["on" + string.capitalize(mutationNodesProperty)](specialEventData.handler);
 				domData.set.call(documentElement,specialEventName+"Data", specialEventData);
 			}
 			specialEventData.nodeIdsRespondingToInsert.add(this);
@@ -80,7 +65,7 @@ module.exports = function(specialEventName, mutationNodesProperty){
 				specialEventData.nodeIdsRespondingToInsert["delete"](this);
 
 				if(!specialEventData.nodeIdsRespondingToInsert.size) {
-					mutationDocument[mutationNodesProperty+"Off"](specialEventData.handler);
+					mutationDocument["off" + string.capitalize(mutationNodesProperty)](specialEventData.handler);
 					domData.clean.call(documentElement,specialEventName+"Data");
 				}
 			}

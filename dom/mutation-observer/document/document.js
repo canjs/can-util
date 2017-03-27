@@ -1,9 +1,10 @@
 var getDocument = require("../../document/document");
-var domData = require("../../data/data");
-
+var domDataCore = require("../../data/core");
+var MUTATION_OBSERVER = require("../../mutation-observer/mutation-observer");
 var each = require("../../../js/each/each");
 var CIDStore = require("../../../js/cid-set/cid-set");
 var makeArray = require("../../../js/make-array/make-array");
+var string = require("../../../js/string/string");
 
 var dispatchIfListening = function(mutatedNode, nodes, dispatched){
 	if(dispatched.has(mutatedNode)) {
@@ -26,31 +27,32 @@ var dispatchIfListening = function(mutatedNode, nodes, dispatched){
 	});
 };
 
-
 var mutationObserverDocument = {
-	add: function(handler){
-		var documentElement = getDocument().documentElement;
-		var globalObserverData = domData.get.call(documentElement,"globalObserverData");
-		if(!globalObserverData) {
-
-			var observer = new MutationObserver(function (mutations) {
-				globalObserverData.handlers.forEach(function(handler){
-					handler(mutations);
+	add: function(handler) {
+		var MO = MUTATION_OBSERVER();
+		if (MO) {
+			var documentElement = getDocument().documentElement;
+			var globalObserverData = domDataCore.get.call(documentElement, "globalObserverData");
+			if(!globalObserverData) {
+				var observer = new MO(function (mutations) {
+					globalObserverData.handlers.forEach(function(handler){
+						handler(mutations);
+					});
 				});
-			});
-			observer.observe(documentElement, {childList: true, subtree: true});
+				observer.observe(documentElement, {childList: true, subtree: true});
 
-			globalObserverData = {
-				observer: observer,
-				handlers: []
-			};
-			domData.set.call(documentElement,"globalObserverData", globalObserverData);
+				globalObserverData = {
+					observer: observer,
+					handlers: []
+				};
+				domDataCore.set.call(documentElement, "globalObserverData", globalObserverData);
+			}
+			globalObserverData.handlers.push(handler);
 		}
-		globalObserverData.handlers.push(handler);
 	},
 	remove: function(handler){
 		var documentElement = getDocument().documentElement;
-		var globalObserverData = domData.get.call(documentElement,"globalObserverData");
+		var globalObserverData = domDataCore.get.call(documentElement, "globalObserverData");
 		if(globalObserverData) {
 			var index = globalObserverData.handlers.indexOf(handler);
 			if(index >= 0) {
@@ -58,30 +60,42 @@ var mutationObserverDocument = {
 			}
 			if(globalObserverData.handlers.length === 0 ){
 				globalObserverData.observer.disconnect();
-				domData.clean.call(documentElement,"globalObserverData");
+				domDataCore.clean.call(documentElement, "globalObserverData");
 			}
 		}
 	}
 };
 
-var makeMutationMethods = function(name){
+var makeMutationMethods = function(name) {
 	var mutationName = name.toLowerCase() + "Nodes";
 
-	var mutationData = {
-		name: mutationName,
-		handlers: [],
-		afterHandlers: [],
-		hander: null
+	var getMutationData = function() {
+		var documentElement = getDocument().documentElement;
+		var mutationData = domDataCore.get.call(documentElement, mutationName + "MutationData");
+
+		if(!mutationData) {
+			mutationData = {
+				name: mutationName,
+				handlers: [],
+				afterHandlers: [],
+				hander: null
+			};
+			if (MUTATION_OBSERVER()) {
+				domDataCore.set.call(documentElement, mutationName + "MutationData", mutationData);
+			}
+		}
+		return mutationData;
 	};
 
-	var setup = function(){
-		if( mutationData.handlers.length === 0 || mutationData.afterHandlers.length === 0 ) {
+	var setup = function() {
+		var mutationData = getMutationData();
 
+		if( mutationData.handlers.length === 0 || mutationData.afterHandlers.length === 0 ) {
 			mutationData.handler = function(mutations){
 				var dispatched = new CIDStore();
 
 				mutations.forEach(function(mutation){
-					each(mutation[mutationName],function(mutatedNode){
+					each(mutation[mutationName], function(mutatedNode){
 						var children = mutatedNode.getElementsByTagName && makeArray( mutatedNode.getElementsByTagName("*") );
 
 						var alreadyChecked = dispatchIfListening(mutatedNode, mutationData, dispatched);
@@ -96,37 +110,40 @@ var makeMutationMethods = function(name){
 			};
 			this.add(mutationData.handler);
 		}
+		return mutationData;
 	};
 
-	var teardown = function(){
-		if( mutationData.handlers.length === 0 || mutationData.afterHandlers.length === 0 ) {
+	var teardown = function() {
+		var documentElement = getDocument().documentElement;
+		var mutationData = getMutationData();
+		if( mutationData.handlers.length === 0 && mutationData.afterHandlers.length === 0 ) {
 			this.remove(mutationData.handler);
+			domDataCore.clean.call(documentElement, mutationName + "MutationData");
 		}
 	};
 
-	mutationObserverDocument[name+"Nodes"] = function(handler){
-		setup.call(this);
-		mutationData.handlers.push(handler);
-	};
-	mutationObserverDocument["after"+name+"Nodes"] = function(handler){
-		setup.call(this);
-		mutationData.afterHandlers.push(handler);
+	var createOnOffHandlers = function(name, handlerList) {
+		mutationObserverDocument["on" + name] = function(handler) {
+			var mutationData = setup.call(this);
+			mutationData[handlerList].push(handler);
+		};
+
+		mutationObserverDocument["off" + name] = function(handler) {
+			var mutationData = getMutationData();
+			var index = mutationData[handlerList].indexOf(handler);
+			if(index >=0 ) {
+				mutationData[handlerList].splice(index, 1);
+			}
+			teardown.call(this);
+		};
 	};
 
-	mutationObserverDocument[name+"NodesOff"] = function(handler){
-		var index = mutationData.handlers.indexOf(handler);
-		if(index >=0 ) {
-			mutationData.handlers.splice(index, 1);
-		}
-		teardown.call(this);
+	var createHandlers = function(name) {
+		createOnOffHandlers(name, "handlers");
+		createOnOffHandlers("After" + name, "afterHandlers");
 	};
-	mutationObserverDocument["after"+name+"NodesOff"] = function(handler){
-		var index = mutationData.afterHandlers.indexOf(handler);
-		if(index >=0 ) {
-			mutationData.afterHandlers.splice(index, 1);
-		}
-		teardown.call(this);
-	};
+
+	createHandlers(string.capitalize(mutationName));
 };
 
 makeMutationMethods("added");
