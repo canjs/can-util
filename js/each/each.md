@@ -3,16 +3,19 @@
 
 @signature `each(elements, callback, context)`
 
-Loop over each element in an Array-Like data structure.
+A generic iterator function that can be used to iterate over both Array-Like and object data structure. Array-Like data structures are iterated by their numerical index. Objects are iterated by their named properties, i.e. in each stage of iteration the each function emits the key and its corresponding value.
 
-  @param {Object|ArrayLike} elements
-  @param {function(element, key, elements)} callback
+  @param {Object|ArrayLike} [elements] the object or Array-Like elements to iterate over
+  @param {function(element, key, elements)} [callback] the function that would be executed in each iteration
   @param {Object} [context] the context object
 
-  @return {ArrayLike}  the orignal array of elements
+  @return {Object|ArrayLike}  the original elements
 
 ```js
  var each = require("can-util/js/each/each");
  
  each([2,1,0], function(i) { console.log(this[i]); }, [4,5,6]); // -> 6 \n 5 \n 4
+ each({foo: 'bar', abc: 'xyz'}, function(val, key) {
+     console.log(key + ': ' + val);
+ }); // -> "foo: bar" \n "abc: xyz"
 ```

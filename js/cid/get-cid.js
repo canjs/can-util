@@ -1,9 +1,9 @@
 var CID = require("can-cid");
-var domData = require("../../dom/data/data");
+var domDataCore = require("../../dom/data/core");
 
 module.exports = function(obj){
 	if(typeof obj.nodeType === "number") {
-		return domData.cid.call(obj);
+		return domDataCore.cid.call(obj);
 	} else {
 		var type = typeof obj;
 		var isObject = type !== null && (type === "object" || type === "function");

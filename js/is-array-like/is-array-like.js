@@ -4,6 +4,9 @@ function isArrayLike(obj){
 	if(type === "string") {
 		return true;
 	}
+	else if(type === "number") {
+		return false;
+	}
 	// The `in` check is from jQuery’s fix for an iOS 8 64-bit JIT object length bug:
 	// https://github.com/jquery/jquery/pull/2185
 	var length = obj && type !== 'boolean' &&
