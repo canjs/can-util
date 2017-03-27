@@ -22,7 +22,9 @@
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
     "document": "bit-docs",
-    "develop": "done-serve --static --develop --port 8080"
+    "develop": "done-serve --static --develop --port 8080",
+    "http-server": "http-server -p 3000 --silent",
+    "ci": "npm run build && npm run test && node test/test-sauce-labs.js"
   },
   "main": "can-util",
   "keywords": [
@@ -31,17 +33,21 @@
     "donejs"
   ],
   "devDependencies": {
+    "async": "^2.2.0",
     "bit-docs": "0.0.7",
     "done-serve": "^0.2.4",
     "donejs-cli": "^0.9.5",
     "generator-donejs": "^0.9.0",
+    "http-server": "^0.9.0",
     "jshint": "^2.9.1",
     "mocha": "^3.0.2",
     "mocha-qunit-ui": "^0.1.2",
+    "saucelabs": "^1.4.0",
     "steal": "^1.0.4",
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.0.0",
-    "testee": "^0.3.0"
+    "testee": "^0.3.0",
+    "wd": "^1.1.3"
   },
   "repository": {
     "type": "git",
