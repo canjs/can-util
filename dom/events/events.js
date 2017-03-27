@@ -22,6 +22,8 @@ module.exports = {
 	},
 	dispatch: function(event, args, bubbles){
 		var doc = _document();
+		var ret;
+		var dispatchingOnDisabled = this.disabled;
 
 		var ev = doc.createEvent('HTMLEvents');
 		var isString = typeof event === "string";
@@ -33,6 +35,16 @@ module.exports = {
 			assign(ev, event);
 		}
 		ev.args = args;
-		return this.dispatchEvent(ev);
+		// In FireFox, dispatching an event on a disabled element throws an error.
+		// So ensure the mutatedNode is not disabled.
+		// https://bugzilla.mozilla.org/show_bug.cgi?id=329509
+		if(dispatchingOnDisabled) {
+			this.disabled = false;
+		}
+		ret = this.dispatchEvent(ev);
+		if(dispatchingOnDisabled) {
+			this.disabled = true;
+		}
+		return ret;
 	}
 };
