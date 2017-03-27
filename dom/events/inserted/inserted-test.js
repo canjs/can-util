@@ -28,6 +28,17 @@ function runTest(name, MUT_OBS) {
 
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});
+	asyncTest("basic disabled insertion with mutation observer", function () {
+		var input = document.createElement("input");
+		input.disabled = true;
+
+		domEvents.addEventListener.call(input,"inserted", function(){
+			ok(true, "called back");
+			start();
+		});
+
+		domMutate.appendChild.call(document.getElementById("qunit-fixture"), input);
+	});
 	asyncTest("parent then child inserted - appendChild", function () {
 		expect(1);
 		var div = document.createElement("div");

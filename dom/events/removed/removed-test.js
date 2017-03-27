@@ -43,7 +43,7 @@ if(_MutationObserver) {
 	});
 
 	asyncTest("with mutation observer - disabled removal - removeChild", function () {
-		var input = document.createElement("input");
+		var input = document.createElement("removed");
 		input.disabled = true;
 
 		domEvents.addEventListener.call(input,"removed", function(){

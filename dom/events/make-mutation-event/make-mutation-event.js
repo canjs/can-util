@@ -37,10 +37,6 @@ module.exports = function(specialEventName, mutationNodesProperty){
 		}
 		dispatched.add(mutatedNode);
 		if(specialEventName === "removed") {
-			// In FireFox, dispatching an event on a disabled element throws an error.
-			// So ensure the mutatedNode is not disabled.
-			// https://bugzilla.mozilla.org/show_bug.cgi?id=329509
-			mutatedNode.disabled = false;
 			var documentElement = getDocument().documentElement;
 			if(documentElement.contains(mutatedNode)) {
 				doDispatch = false;
