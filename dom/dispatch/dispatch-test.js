@@ -17,19 +17,6 @@ test("basic synthetic events", function () {
 
 });
 
-test("synthetic events on disabled element", function () {
-	expect(1);
-	var input = document.createElement("input");
-	input.disabled = true;
-
-	domEvents.addEventListener.call(input, "foo", function(){
-		ok(true, "called back");
-	});
-
-	document.getElementById("qunit-fixture").appendChild(input);
-	domDispatch.call(input, "foo", [], false);
-});
-
 test("more complex synthetic events", function () {
 	var div = document.createElement("div");
 	var arr = [];

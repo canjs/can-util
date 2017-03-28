@@ -1,6 +1,12 @@
 var assign = require("../../js/assign/assign");
 var _document = require("../document/document");
+var isPlainObject = require("../../js/is-plain-object/is-plain-object");
 
+function isDispatchingOnDisabled(element, ev) {
+	var isInsertedOrRemoved = isPlainObject(ev) ? (ev.type === 'inserted' || ev.type === 'removed') : (ev === 'inserted' || ev === 'removed');
+	var isDisabled = !!element.disabled;
+	return isInsertedOrRemoved && isDisabled;
+}
 /**
  * @module {{}} can-util/dom/events/events events
  * @parent can-util/dom
@@ -23,7 +29,7 @@ module.exports = {
 	dispatch: function(event, args, bubbles){
 		var doc = _document();
 		var ret;
-		var dispatchingOnDisabled = this.disabled;
+		var dispatchingOnDisabled = isDispatchingOnDisabled(this, event);
 
 		var ev = doc.createEvent('HTMLEvents');
 		var isString = typeof event === "string";
