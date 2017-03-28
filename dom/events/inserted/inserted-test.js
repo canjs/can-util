@@ -39,9 +39,10 @@ function runTest(name, MUT_OBS) {
 		});
 
 		// With no mutation observer this test will not pass without a setTimeout
+		// There is a setTimeout, 0 in the non-mutation observer code path
 		setTimeout(function(){
 			domMutate.appendChild.call(document.getElementById("qunit-fixture"), input);
-		}, 20);
+		}, 50);
 	});
 	asyncTest("parent then child inserted - appendChild", function () {
 		expect(1);
