@@ -1,5 +1,6 @@
 var assign = require("../../js/assign/assign");
 var _document = require("../document/document");
+var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
 var isPlainObject = require("../../js/is-plain-object/is-plain-object");
 var fixSyntheticEventsOnDisabled = false;
 
@@ -58,6 +59,10 @@ module.exports = {
 // This determines if we have to work around that when dispatching events.
 // https://bugzilla.mozilla.org/show_bug.cgi?id=329509
 (function() {
+	if(!isBrowserWindow()) {
+		return;
+	}
+
 	var input = document.createElement("input");
 	input.disabled = true;
 	var timer = setTimeout(function() {
