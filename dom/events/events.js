@@ -54,14 +54,22 @@ module.exports = {
 };
 
 // In FireFox, dispatching a synthetic event on a disabled element throws an error.
+// Other browsers, like IE 10 do not dispatch synthetic events on disabled elements at all.
 // This determines if we have to work around that when dispatching events.
 // https://bugzilla.mozilla.org/show_bug.cgi?id=329509
 (function() {
 	var input = document.createElement("input");
 	input.disabled = true;
+	var timer = setTimeout(function() {
+		fixSyntheticEventsOnDisabled = true;
+	}, 50);
+	module.exports.addEventListener.call(input, 'foo', function(){
+		clearTimeout(timer);
+	});
 	try {
 		module.exports.dispatch.call(input, 'foo', [], false);
 	} catch(e) {
+		clearTimeout(timer);
 		fixSyntheticEventsOnDisabled = true;
 	}
 })();
