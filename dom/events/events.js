@@ -1,6 +1,7 @@
 var assign = require("../../js/assign/assign");
 var _document = require("../document/document");
 var isPlainObject = require("../../js/is-plain-object/is-plain-object");
+var fixSyntheticEventsOnDisabled = false;
 
 function isDispatchingOnDisabled(element, ev) {
 	var isInsertedOrRemoved = isPlainObject(ev) ? (ev.type === 'inserted' || ev.type === 'removed') : (ev === 'inserted' || ev === 'removed');
@@ -29,7 +30,7 @@ module.exports = {
 	dispatch: function(event, args, bubbles){
 		var doc = _document();
 		var ret;
-		var dispatchingOnDisabled = isDispatchingOnDisabled(this, event);
+		var dispatchingOnDisabled = fixSyntheticEventsOnDisabled && isDispatchingOnDisabled(this, event);
 
 		var ev = doc.createEvent('HTMLEvents');
 		var isString = typeof event === "string";
@@ -41,9 +42,6 @@ module.exports = {
 			assign(ev, event);
 		}
 		ev.args = args;
-		// In FireFox, dispatching an event on a disabled element throws an error.
-		// So ensure the mutatedNode is not disabled.
-		// https://bugzilla.mozilla.org/show_bug.cgi?id=329509
 		if(dispatchingOnDisabled) {
 			this.disabled = false;
 		}
@@ -54,3 +52,16 @@ module.exports = {
 		return ret;
 	}
 };
+
+// In FireFox, dispatching a synthetic event on a disabled element throws an error.
+// This determines if we have to work around that when dispatching events.
+// https://bugzilla.mozilla.org/show_bug.cgi?id=329509
+(function() {
+	var input = document.createElement("input");
+	input.disabled = true;
+	try {
+		module.exports.dispatch.call(input, 'foo', [], false);
+	} catch(e) {
+		fixSyntheticEventsOnDisabled = true;
+	}
+})();
