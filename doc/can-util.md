@@ -11,16 +11,84 @@ Common JavaScript utilities for the rest of CanJS.
 ## can-util/js
 
 - [can-util/js/assign/assign] - A simplified version of [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign), which only accepts a single source argument.
+  ```js
+  var assign = require("can-util/js/assign/assign");
+  var res = assign({},{foo:"bar"});
+  res.foo //-> "bar"
+  ```
+
 - [can-util/js/base-url/base-url] - Get and/or set the "base" (containing path) of the document.
-- [can-util/js/cid/cid] - Deprecated. Use [can-cid] instead.
+
+  ```js
+  var BASEURL = require("can-util/js/base-url/base-url");
+  window.location.href //-> "http://server.com/path/my.html"
+  BASEURL() //-> "http://server.com/path/"
+  ```
+
+- [can-util/js/cid-map/cid-map]
+
+  ```js
+  var Map = require("can-util/js/cid-map/cid-map");
+  var map = new Map();
+  var obj = {};
+  map.set(obj, "value");
+  map.get(obj) //-> "value"
+  ```
+
+- [can-util/js/cid-set/cid-set]
+
+  ```js
+  var Set = require("can-util/js/cid-set/cid-set");
+  var map = new set();
+  var obj = {};
+  map.add(obj);
+  map.has(obj) //-> true
+  ```
+
 - [can-util/js/deep-assign/deep-assign] - Assign properties from a source object to a target object, deeply copying properties that are objects or arrays.
+  ```js
+  var deepAssign = require("can-util/js/deep-assign/deep-assign");
+  var res = deepAssign({},{obj: {foo: "bar"}});
+  res.obj.foo //-> "bar"
+  ```
+
 - [can-util/js/defaults/defaults] - Mimics [_.defaults](https://lodash.com/docs/4.16.2#defaults). Assigns first level properties in sources from left to right if they are not already defined.
+  ```js
+  var defaults = require("can-util/js/defaults/defaults");
+  var obj = {a: 1, b: 2};
+  var src = {b: 3, c: 3};
+  defaults(obj, src, {a: 2, d: 4})
+  obj //-> {a: 1, b: 2, c: 3, d: 4}
+  ```
+
 - [can-util/js/deparam/deparam] - Takes a string of name value pairs and returns a Object literal that represents those params.
+  ```js
+  var deparam = require("can-util/js/deparam/deparam");
+  deparam("foo[]=bar&foo[]=baz") //-> {foo: ["bar", "baz"]}
+  ```
+
 - [can-util/js/dev/dev] - Utilities for logging development-mode messages. Use this module for anything that should be shown to the user during development but isn't needed in production. In production these functions become noops.
+  ```js
+  var dev = require("can-util/js/dev/dev");
+  //!steal-remove-start
+  dev.log("Something happened") //logs 'Something happened'
+  //!steal-remove-end
+  ```
+
 - [can-util/js/diff/diff] - Returns the difference between two ArrayLike objects (that have nonnegative integer keys and the `length` property) as an array of patch objects.
+  ```js
+  var diff = require("can-util/js/diff/diff");
+  diff([1], [1, 2]) //-> [{index: 1, deleteCount: 0, insert: [2]}]
+  ```
+
 - [can-util/js/diff-object/diff-object] - Find the differences between two objects, based on properties and values.
 - [can-util/js/each/each] - Loop over each element in an Array-Like data structure.
 - [can-util/js/get/get] - Returns the value at the specified property path of an object.
+  ```js
+  var get = require("can-util/js/get/get");
+  get( {a: {b: {c: "foo"}}}, "a.b.c" ) //-> "foo"
+  ```
+
 - [can-util/js/global/global] - Returns the global that an environment provides.      
 - [can-util/js/import/import] - Imports a module.
 - [can-util/js/is-array-like/is-array-like] - Determines if an object is "array like", meaning it can be looped over. Any object with a `.length` property is array like.
@@ -34,6 +102,13 @@ Common JavaScript utilities for the rest of CanJS.
 - [can-util/js/is-string/is-string] - Determines if the provided argument is a string.
 - [can-util/js/is-web-worker/is-web-worker] - Determines if the code is running with a [Web Worker](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
 - [can-util/js/join-uris/join-uris] - Provides a convenient way to join together URIs handling relative paths.
+  ```js
+  var joinURIs = require("can-util/js/join-uris/join-uris");
+  var base = "http://example.com/some/long/path";
+  var href = "../../images/foo.png";
+
+  joinURIs(base, href) //-> "http://example.com/images/foo.png"
+  ```
 - [can-util/js/log/log] - Utilities for logging to the console.
 - [can-util/js/make-array/make-array] - Takes any array-like object (can-list, NodeList, etc.) and converts it to a JavaScript array.
 - [can-util/js/make-promise/make-promise] - Will make isPromiseLike object into [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise).
@@ -42,18 +117,62 @@ Common JavaScript utilities for the rest of CanJS.
 - [can-util/js/set-immediate/set-immediate] - Polyfill for setImmediate() if it doesn't exist in the global context.
 - [can-util/js/string/string] - String utilities used by CanJS libraries.
 - [can-util/js/string-to-any/string-to-any] - Turns a string representation of a primitive type back into the associated primitive.
+  ```js
+  var stringToAny = require("can-util/js/string-to-any/string-to-any");
+  stringToAny("NaN"); // -> NaN
+  stringToAny("44.4"); // -> 44.4
+  stringToAny("false"); // -> false
+  ```
 - [can-util/js/types/types] - Deprecated. Use [can-types] instead.
 
 ## can-util/dom
 
 - [can-util/dom/ajax/ajax] - Used to make an asynchronous HTTP (AJAX) request
 similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax].
+  ```js
+  var ajax = require("can-util/dom/ajax/ajax");
+  ajax({
+    url: "http://query.yahooapis.com/v1/public/yql",
+    data: {
+      format: "json",
+      q: 'select * from geo.places where text="sunnyvale, ca"'
+    }
+  }) //-> Promise
+  ```
+
 - [can-util/dom/attr/attr] - A module that makes it easy to access attributes and properties of elements.
+  ```js
+  var domAttr = require("can-util/dom/attr/attr");
+  var div = document.querySelector("div");
+  domAttr.set(div, "foo", "bar");
+  domAttr.get(div, "foo") //-> "bar"
+  ```
 - [can-util/dom/child-nodes/child-nodes] - Get all of the childNodes of a given node.
 - [can-util/dom/class-name/class-name] - Allows querying and manipulation of classes on HTML elements.
 - [can-util/dom/data/data] - Allows associating data as a key/value pair for a particular DOM node.
 - [can-util/dom/dispatch/dispatch] - Dispatch an event on an element.
 - [can-util/dom/document/document] - Optionally sets, and returns, the document object for the context.
 - [can-util/dom/events/events] - Allows you to listen to a domEvent and special domEvents as well as dispatch domEvents.
+  ```js
+  var domEvents = require("can-util/dom/events/events");
+  var div = document.querySelector("div");
+  domEvents.addEventListener.call(div, "customevent", function(ev){
+
+  });
+  domEvents.dispatch.call(div, "customevent", [], true);
+  ```
 - [can-util/dom/frag/frag] - Convert a String, HTMLElement, documentFragment, or contentArray into a documentFragment.
+  ```js
+  var domFrag = require("can-util/dom/frag/frag");
+  var p = document.createElement("p");
+  p.innerHTML = "Welcome to <b>CanJS</b>";
+  var contentArray = ["<h1>Hi There</h1>", p];
+  frag( contentArray ) //-> [h1, p]
+  ```
+
 - [can-util/dom/mutate/mutate] - Mutate an element by appending, inserting, and removing DOM nodes. Use this so that on the server "inserted" will be fired.
+  ```js
+  var domMutate = require("can-util/dom/mutate/mutate");
+  var div = document.createElement("div");
+  domMutate.appendChild.call( document.getElementById("qunit-fixture"), div );
+  ```

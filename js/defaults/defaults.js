@@ -13,7 +13,7 @@
  * var obj = {a: 1, b: 2};
  * var src = {b: 3, c: 3};
  *
- * assign(obj, src, {a: 2, d: 4});
+ * defaults(obj, src, {a: 2, d: 4});
  *
  * console.log(obj); // -> {a: 1, b: 2, c: 3, d: 4}
  * ```
