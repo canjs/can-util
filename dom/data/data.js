@@ -115,7 +115,7 @@ module.exports = {
 	 * Remove all data for an element previously added by [can-util/dom/data/data.set set]
 	 *
 	 * ```js
-	 * domData.delete.call(el, "metadata");
+	 * domData.delete.call(el);
 	 * ```
 	 */
 	delete: deleteNode
