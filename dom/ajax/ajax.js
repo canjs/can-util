@@ -2,21 +2,21 @@ var Global = require("../../js/global/global");
 var assign = require("../../js/assign/assign");
 var namespace = require("can-namespace");
 var parseURI = require('../../js/parse-uri/parse-uri');
-var param = require("../../js/param/param");
+var param = require("can-param");
 
 /**
  * @module {function} can-util/dom/ajax/ajax ajax
  * @parent can-util/dom
- * 
+ *
  * Make an asynchronous HTTP (AJAX) request.
- * 
+ *
  * @signature `ajax( ajaxOptions )`
- * 
+ *
  *    Is used to make an asynchronous HTTP (AJAX) request similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax].
- *   
+ *
  *    ```
  *    var ajax = require("can-util/dom/ajax/ajax");
- *    
+ *
  *    ajax({
  *      url: "http://query.yahooapis.com/v1/public/yql",
  *      data: {
@@ -27,7 +27,7 @@ var param = require("../../js/param/param");
  *      console.log( response.query.count ); // => 2
  *    });
  *    ```
- * 
+ *
  *    @param {Object} ajaxOptions Configuration options for the AJAX request.
  *      - __url__ `{String}` The requested url.
  *      - __type__ `{String}` The method of the request. Ex: `GET`, `PUT`, `POST`, etc. Capitalization is ignored. _Default is `GET`_.
@@ -36,7 +36,7 @@ var param = require("../../js/param/param");
  *      - __crossDomain__ `{Boolean}` If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to true. This allows, for example, server-side redirection to another domain. Default: `false` for same-domain requests, `true` for cross-domain requests.
  *
  *    @return {Promise} A Promise that resolves to the data. The Promise instance is abortable and exposes an `abort` method. Invoking abort on the Promise instance indirectly rejects it.
- * 
+ *
  */
 
 // from https://gist.github.com/mythz/1334560
@@ -166,7 +166,7 @@ module.exports = namespace.ajax = function (o) {
 	// For CORS to send a "simple" request (to avoid a preflight check), the following methods are allowed: GET/POST/HEAD,
 	// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests
 	var isSimpleCors = o.crossDomain && ['GET', 'POST', 'HEAD'].indexOf(type) !== -1;
-	
+
 	if (isPost) {
 		var isJson = o.dataType.indexOf("json") >= 0;
 		data = (isJson && !isSimpleCors) ?
@@ -176,7 +176,7 @@ module.exports = namespace.ajax = function (o) {
 		// CORS simple: `Content-Type` has to be `application/x-www-form-urlencoded`:
 		xhr.setRequestHeader("Content-Type", (isJson && !isSimpleCors) ? "application/json" : "application/x-www-form-urlencoded");
 	}
-	
+
 	// CORS simple: no custom headers, so we don't add `X-Requested-With` header:
 	if (!isSimpleCors){
 		xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
