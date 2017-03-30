@@ -29,7 +29,9 @@ module.exports = function(setUrl){
 		return setBaseUrl;
 	}
 	var global = getGlobal();
-	if(global.location) {
+	if (global.document && 'baseURI' in global.document) {
+		return global.document.baseURI;
+	} else if(global.location) {
 		var href = global.location.href;
 		var lastSlash = href.lastIndexOf("/");
 		return lastSlash !== -1 ? href.substr(0, lastSlash) : href;
