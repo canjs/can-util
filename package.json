@@ -75,6 +75,7 @@
   "dependencies": {
     "can-cid": "^1.0.0",
     "can-namespace": "1.0.0",
+    "can-param": "^1.0.0",
     "can-types": "^1.0.1"
   }
 }
