@@ -84,22 +84,28 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			}
 		}
 	},
-	setChildOptions = function(el, value){
-		if(value != null) {
-			var child = el.firstChild,
-				hasSelected = false;
-			while(child) {
-				if(child.nodeName === "OPTION") {
-					if(value === child.value) {
-						hasSelected = child.selected = true;
-						break;
-					}
+	_findOptionToSelect = function (parent, value) {
+		var child = parent.firstChild;
+		while (child) {
+			if (child.nodeName === 'OPTION' && value === child.value) {
+				return child;
+			}
+			if (child.nodeName === 'OPTGROUP') {
+				var groupChild = _findOptionToSelect(child, value);
+				if (groupChild) {
+					return groupChild;
 				}
-				child = child.nextSibling;
 			}
-			if(!hasSelected) {
-				el.selectedIndex = -1;
-			}
+			child = child.nextSibling;
+		}
+	},
+	setChildOptions = function(el, value){
+		var option;
+		if (value != null) {
+			option = _findOptionToSelect(el, value);
+		}
+		if (option) {
+			option.selected = true;
 		} else {
 			el.selectedIndex = -1;
 		}
@@ -350,7 +356,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				},
 				set: function(values){
 					values = values || [];
-					
+
 					// set new DOM state
 					var child = this.firstChild;
 					while(child) {
