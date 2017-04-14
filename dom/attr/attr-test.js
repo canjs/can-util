@@ -436,7 +436,7 @@ test("Multiselect values is updated on any children added/removed", function(){
 	}
 });
 
-test("Select options within optgroups should be set properly", function() {
+test("Select options within optgroups should be set via `value` properly", function() {
 	function tag (tag, value) {
 		var el = document.createElement(tag);
 		if (value) {
@@ -467,6 +467,41 @@ test("Select options within optgroups should be set properly", function() {
 	equal(domAttr.get(select, 'value'), 'list2-item2', 'updated value');
 	equal(option11.selected, false, 'initial option is not selected');
 	equal(option22.selected, true, 'second option is selected');
+});
+
+test("Select options within optgroups should be set via `values` properly", function() {
+	function tag (tag, value) {
+		var el = document.createElement(tag);
+		if (value) {
+			el.value = value;
+		}
+		return el;
+	}
+
+	var select = tag('select');
+	select.multiple = true;
+	var optgroup1 = tag('optgroup');
+	var option11 = tag('option', 'list1-item1');
+	option11.selected = true; // initial selection
+	var option12 = tag('option', 'list1-item2');
+	var optgroup2 = tag('optgroup');
+	var option21 = tag('option', 'list2-item1');
+	var option22 = tag('option', 'list2-item2');
+
+	select.appendChild(optgroup1);
+	select.appendChild(optgroup2);
+	optgroup1.appendChild(option11);
+	optgroup1.appendChild(option12);
+	optgroup2.appendChild(option21);
+	optgroup2.appendChild(option22);
+
+	deepEqual(domAttr.get(select, 'values'), ['list1-item1'], 'initial value');
+
+	domAttr.set(select, 'values', ['list1-item2', 'list2-item2']);
+	deepEqual(domAttr.get(select, 'values'), ['list1-item2', 'list2-item2'], 'updated value');
+	equal(option11.selected, false, 'initial option is not selected');
+	equal(option12.selected, true, 'second option is selected');
+	equal(option22.selected, true, 'third option is selected');
 });
 
 test("Setting a value that will be appended later", function(){

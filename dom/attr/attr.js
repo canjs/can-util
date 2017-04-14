@@ -110,6 +110,32 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			el.selectedIndex = -1;
 		}
 	},
+	forEachOption = function (parent, fn) {
+		var child = parent.firstChild;
+		while (child) {
+			if (child.nodeName === 'OPTION') {
+				fn(child);
+			}
+			if (child.nodeName === 'OPTGROUP') {
+				forEachOption(child, fn);
+			}
+			child = child.nextSibling;
+		}
+	},
+	collectSelectedOptions = function (parent) {
+		var selectedValues = [];
+		forEachOption(parent, function (option) {
+			if (option.selected) {
+				selectedValues.push(option.value);
+			}
+		});
+		return selectedValues;
+	},
+	markSelectedOptions = function (parent, values) {
+		forEachOption(parent, function (option) {
+			option.selected = values.indexOf(option.value) !== -1;
+		});
+	},
 	// Create a handler, only once, that will set the child options any time
 	// the select's value changes.
 	setChildOptionsOnChange = function(select, aEL){
@@ -343,28 +369,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			},
 			values: {
 				get: function(){
-					var values = [];
-					var child = this.firstChild;
-					while(child) {
-						if(child.nodeName === "OPTION" && child.selected) {
-							values.push(child.value);
-						}
-						child = child.nextSibling;
-					}
-
-					return values;
+					return collectSelectedOptions(this);
 				},
 				set: function(values){
 					values = values || [];
 
 					// set new DOM state
-					var child = this.firstChild;
-					while(child) {
-						if(child.nodeName === "OPTION") {
-							child.selected = values.indexOf(child.value) !== -1;
-						}
-						child = child.nextSibling;
-					}
+					markSelectedOptions(this, values);
 
 					// store new DOM state
 					setData.set.call(this, "stickyValues", attr.get(this,"values") );
