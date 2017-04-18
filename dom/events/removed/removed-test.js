@@ -123,6 +123,22 @@ if(_MutationObserver) {
 		div.insertBefore(p, span);
 		domMutate.removeChild.call(fixture, div2);
 	});
+
+	asyncTest("with mutation observer - remaining event handlers fire after one is removed (#236)", function () {
+		var div = document.createElement("div");
+
+		domEvents.addEventListener.call(div,"removed", function (){
+			ok(true, "called back");
+			start();
+		});
+
+		function removeTwo () {}
+		domEvents.addEventListener.call(div, "removed", removeTwo);
+		domEvents.removeEventListener.call(div, "removed", removeTwo);
+
+		document.getElementById("qunit-fixture").appendChild(div);
+		document.getElementById("qunit-fixture").removeChild(div);
+	});
 }
 
 asyncTest("basic removal without mutation observer - removeChild", function(){

@@ -7,7 +7,7 @@ var getMutationObserver = require("../../mutation-observer/mutation-observer");
 var domDispatch = require("../../dispatch/dispatch");
 var mutationDocument = require("../../mutation-observer/document/document");
 var getDocument = require("../../document/document");
-var CIDStore = require("../../../js/cid-set/cid-set");
+var CIDMap = require("../../../js/cid-map/cid-map");
 var string = require("../../../js/string/string");
 
 require("../../is-of-global-document/is-of-global-document");
@@ -46,12 +46,15 @@ module.exports = function(specialEventName, mutationNodesProperty){
 							specialEventData.nodeIdsRespondingToInsert.delete(mutatedNode);
 						}
 					},
-					nodeIdsRespondingToInsert: new CIDStore()
+					nodeIdsRespondingToInsert: new CIDMap()
 				};
 				mutationDocument["on" + string.capitalize(mutationNodesProperty)](specialEventData.handler);
-				domData.set.call(documentElement,specialEventName+"Data", specialEventData);
+				domData.set.call(documentElement, specialEventName+"Data", specialEventData);
 			}
-			specialEventData.nodeIdsRespondingToInsert.add(this);
+
+			// count the number of handlers for this event
+			var count = specialEventData.nodeIdsRespondingToInsert.get(this) || 0;
+			specialEventData.nodeIdsRespondingToInsert.set(this, count + 1);
 		}
 		return originalAdd.apply(this, arguments);
 
@@ -60,13 +63,21 @@ module.exports = function(specialEventName, mutationNodesProperty){
 	events.removeEventListener = function(eventName){
 		if(eventName === specialEventName && getMutationObserver() ) {
 			var documentElement = getDocument().documentElement;
-			var specialEventData = domData.get.call(documentElement,specialEventName+"Data");
+			var specialEventData = domData.get.call(documentElement, specialEventName+"Data");
 			if(specialEventData) {
-				specialEventData.nodeIdsRespondingToInsert["delete"](this);
+				var newCount = specialEventData.nodeIdsRespondingToInsert.get(this) - 1;
+
+				// if there is still at least one handler for this event, update the count
+				// otherwise remove this element from the CIDMap
+				if (newCount) {
+					specialEventData.nodeIdsRespondingToInsert.set(this, newCount);
+				} else {
+					specialEventData.nodeIdsRespondingToInsert.delete(this);
+				}
 
 				if(!specialEventData.nodeIdsRespondingToInsert.size) {
 					mutationDocument["off" + string.capitalize(mutationNodesProperty)](specialEventData.handler);
-					domData.clean.call(documentElement,specialEventName+"Data");
+					domData.clean.call(documentElement, specialEventName+"Data");
 				}
 			}
 		}
