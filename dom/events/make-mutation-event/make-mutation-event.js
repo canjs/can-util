@@ -1,3 +1,5 @@
+'use strict';
+
 // This sets up an inserted event to work through mutation observers if
 // mutation observers are present.  If they aren't you have to use
 // the mutate methods.

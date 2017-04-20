@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var load = require('./import');
 var isNode = require('../is-node/is-node')();

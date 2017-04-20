@@ -1,3 +1,5 @@
+'use strict';
+
 var isEmptyObject = require("./is-empty-object");
 var QUnit = require("../../test/qunit");
 

@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = {
 	ajax: require('./ajax/ajax'),
 	attr: require('./attr/attr'),

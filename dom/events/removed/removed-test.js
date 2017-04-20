@@ -1,3 +1,5 @@
+'use strict';
+
 require('can-util/dom/events/removed/');
 var each = require('can-util/js/each/');
 var domEvents = require('can-util/dom/events/');

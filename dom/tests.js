@@ -1,3 +1,5 @@
+'use strict';
+
 require("./ajax/ajax-test");
 require("./attr/attr-test");
 require("./data/data-test");

@@ -1,3 +1,5 @@
+'use strict';
+
 var domData = require("./data");
 var domDataCore = require("./core");
 var diff = require("../../js/diff-object/diff-object");

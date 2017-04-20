@@ -1,3 +1,5 @@
+'use strict';
+
 // # can/util/inserted
 // Used to alert interested parties of when an element is inserted into the DOM.
 // Given a list of elements, check if the first is in the DOM, and if so triggers the `inserted` event on all elements and their descendants.

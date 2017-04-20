@@ -1,3 +1,5 @@
+'use strict';
+
 var canDev = require("../dev/dev");
 
 /**

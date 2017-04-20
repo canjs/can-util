@@ -1,3 +1,5 @@
+'use strict';
+
 var get = require('../get/get');
 var isContainer = require('../is-container/is-container');
 var canDev = require("../dev/dev");

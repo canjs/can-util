@@ -1,3 +1,5 @@
+'use strict';
+
 var matches = require("./matches");
 
 QUnit = require("steal-qunit");

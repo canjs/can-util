@@ -1,3 +1,5 @@
+'use strict';
+
 var mutate = require('./mutate');
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var DOCUMENT = require("../document/document");

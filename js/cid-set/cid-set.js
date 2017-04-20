@@ -1,3 +1,5 @@
+'use strict';
+
 var GLOBAL = require("../global/global");
 var each = require("../each/each");
 var getCID = require("../cid/get-cid");

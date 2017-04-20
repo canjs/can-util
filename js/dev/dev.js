@@ -1,3 +1,5 @@
+'use strict';
+
 var canLog = require("../log/log");
 
 /**

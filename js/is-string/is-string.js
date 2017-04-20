@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/is-string/is-string is-string
  * @parent can-util/js

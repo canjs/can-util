@@ -1,3 +1,5 @@
+'use strict';
+
 module.exports = function(url){
 		var m = String(url).replace(/^\s+|\s+$/g, '').match(/^([^:\/?#]+:)?(\/\/(?:[^:@]*(?::[^:@]*)?@)?(([^:\/?#]*)(?::(\d*))?))?([^?#]*)(\?[^#]*)?(#[\s\S]*)?/);
 			// authority = '//' + user + ':' + pass '@' + hostname + ':' port
