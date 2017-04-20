@@ -1,3 +1,5 @@
+'use strict';
+
 // From http://jaketrent.com/post/addremove-classes-raw-javascript/
 
 var has = function(className) {

@@ -1,3 +1,5 @@
+'use strict';
+
 var _document = require("../document/document");
 var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
 var isPlainObject = require("../../js/is-plain-object/is-plain-object");
@@ -39,9 +41,10 @@ module.exports = {
 		ev.initEvent(isString ? event : event.type, bubbles === undefined ? true : bubbles, false);
 
 		if(!isString) {
-			// TODO: make this work in strict mode
 			for (var prop in event) {
-				ev[prop] = event[prop];
+				if (ev[prop] === undefined) {
+					ev[prop] = event[prop];
+				}
 			}
 		}
 		ev.args = args;

@@ -1,3 +1,5 @@
+'use strict';
+
 require('can-util/dom/events/inserted/');
 var domEvents = require('can-util/dom/events/');
 var domDispatch = require('can-util/dom/dispatch/');

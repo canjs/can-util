@@ -1,3 +1,5 @@
+'use strict';
+
 var global = require("../../js/global/global")();
 var setMutationObserver;
 module.exports = function(setMO){

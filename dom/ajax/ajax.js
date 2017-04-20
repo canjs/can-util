@@ -1,3 +1,5 @@
+'use strict';
+
 var Global = require("../../js/global/global");
 var assign = require("../../js/assign/assign");
 var namespace = require("can-namespace");

@@ -1,3 +1,5 @@
+'use strict';
+
 var ajax = require('can-util/dom/ajax/ajax');
 var namespace = require("can-namespace");
 var makeMap = require('can-util/js/make-map/make-map');

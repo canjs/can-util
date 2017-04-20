@@ -1,3 +1,5 @@
+'use strict';
+
 var domEvents = require("../events");
 var domData = require("../../data/data");
 var domMatches = require("../../matches/matches");

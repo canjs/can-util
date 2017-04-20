@@ -1,3 +1,5 @@
+'use strict';
+
 var events = require("../events");
 var isOfGlobalDocument = require("../../is-of-global-document/is-of-global-document");
 var domData = require("../../data/data");

@@ -1,3 +1,5 @@
+'use strict';
+
 var getDocument = require("../../document/document");
 var domDataCore = require("../../data/core");
 var MUTATION_OBSERVER = require("../../mutation-observer/mutation-observer");

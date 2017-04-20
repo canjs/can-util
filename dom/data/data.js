@@ -1,3 +1,5 @@
+'use strict';
+
 var domDataCore = require("./core");
 var mutationDocument = require("../mutation-observer/document/document");
 

@@ -1,3 +1,5 @@
+'use strict';
+
 var domAttr = require('../attr/attr');
 var domEvents = require('../events/events');
 var domData = require("../data/data");
