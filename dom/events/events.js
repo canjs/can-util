@@ -1,4 +1,3 @@
-var assign = require("../../js/assign/assign");
 var _document = require("../document/document");
 var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
 var isPlainObject = require("../../js/is-plain-object/is-plain-object");
@@ -40,7 +39,10 @@ module.exports = {
 		ev.initEvent(isString ? event : event.type, bubbles === undefined ? true : bubbles, false);
 
 		if(!isString) {
-			assign(ev, event);
+			// TODO: make this work in strict mode
+			for (var prop in event) {
+				ev[prop] = event[prop];
+			}
 		}
 		ev.args = args;
 		if(dispatchingOnDisabled) {

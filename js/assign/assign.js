@@ -22,7 +22,7 @@
  *
  * @return {Object} Returns the `target` argument.
  */
-
+'use strict';
 module.exports = function (d, s) {
 	for (var prop in s) {
 		d[prop] = s[prop];
