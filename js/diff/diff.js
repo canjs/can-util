@@ -1,3 +1,5 @@
+'use strict';
+
 var slice = [].slice;
 // a b c
 // a b c d

@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require("../../test/qunit");
 var stringToAny = require("./string-to-any");
 var each = require("../each/each");

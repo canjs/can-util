@@ -1,3 +1,5 @@
+'use strict';
+
 require('./assign/assign-test');
 require('./base-url/base-url-test');
 require('./cid-map/cid-map-test');

@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var getGlobal = require('./global');
 var isBrowserWindow = require('../is-browser-window/is-browser-window');

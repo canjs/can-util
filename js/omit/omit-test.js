@@ -1,3 +1,5 @@
+'use strict';
+
 var omit = require('./omit');
 var QUnit = require('../../test/qunit');
 

@@ -1,3 +1,5 @@
+'use strict';
+
 var getGlobal = require("../global/global");
 
 /**

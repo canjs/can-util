@@ -1,3 +1,5 @@
+'use strict';
+
 var parseURI = require('../parse-uri/parse-uri');
 
 module.exports = function(base, href) {

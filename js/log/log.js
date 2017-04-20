@@ -1,3 +1,5 @@
+'use strict';
+
 exports.warnTimeout = 5000;
 exports.logLevel = 0;
 

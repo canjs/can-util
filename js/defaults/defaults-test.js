@@ -1,3 +1,5 @@
+'use strict';
+
 var defaults = require('./defaults');
 var QUnit = require('../../test/qunit');
 

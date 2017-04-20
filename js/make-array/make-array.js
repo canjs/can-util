@@ -1,3 +1,5 @@
+'use strict';
+
 var each = require('../each/each');
 var isArrayLike = require('../is-array-like/is-array-like');
 

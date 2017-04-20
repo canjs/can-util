@@ -1,3 +1,5 @@
+'use strict';
+
 // The following is from jQuery
 function isArrayLike(obj){
 	var type = typeof obj;

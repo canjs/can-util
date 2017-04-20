@@ -1,3 +1,5 @@
+'use strict';
+
 var isContainer = require('../is-container/is-container');
 
 /**

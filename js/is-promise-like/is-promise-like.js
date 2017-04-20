@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/is-promise-like/is-promise-like is-promise-like
  * @parent can-util/js

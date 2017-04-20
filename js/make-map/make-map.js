@@ -1,3 +1,5 @@
+'use strict';
+
 var each = require('../each/each');
 
 /**

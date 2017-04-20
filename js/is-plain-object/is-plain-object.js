@@ -1,3 +1,5 @@
+'use strict';
+
 var core_hasOwn = Object.prototype.hasOwnProperty;
 
 function isWindow(obj) {

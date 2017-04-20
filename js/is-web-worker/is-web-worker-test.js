@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var isWebWorker = require('./is-web-worker');
 

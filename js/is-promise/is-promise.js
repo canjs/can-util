@@ -1,3 +1,5 @@
+'use strict';
+
 var types = require('can-types');
 /**
  * @module {function} can-util/js/is-promise/is-promise is-promise
