@@ -29,8 +29,6 @@ var singleReference;
          // check if it has a single reference map
          var keyName = CID(key);
          obj[keyName] = value;
-         console.log(keyName + 'keyName');
-         console.log(obj + '\n');
       },
 
       getAndDelete: function(obj, key){

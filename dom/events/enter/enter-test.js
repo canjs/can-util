@@ -3,7 +3,7 @@
 var domEvents = require("../events");
 require('./enter');
 
-QUnit = require('steal-qunit');
+var QUnit = require('../../../test/qunit');
 
 QUnit.module("can-util/dom/events/enter");
 
