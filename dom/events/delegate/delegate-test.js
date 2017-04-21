@@ -11,7 +11,6 @@ QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/events/delegate");
 
-
 test("basics", 2, function () {
 	stop();
 	var frag = buildFrag("<ul><li><span/></li><li></li></ul>");
