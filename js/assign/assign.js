@@ -1,5 +1,3 @@
-'use strict';
-
 /**
  * @module {function} can-util/js/assign/assign assign
  * @parent can-util/js
