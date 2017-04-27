@@ -5,7 +5,7 @@ var domEvents = require('can-util/dom/events/');
 var domDispatch = require('can-util/dom/dispatch/');
 var domData = require('can-util/dom/data/');
 require('can-util/dom/events/delegate/');
-require('can-util/dom/events/delegate/derive-enter-leave');
+require('can-util/dom/events/delegate/enter-leave');
 var buildFrag = require('can-util/dom/fragment/');
 
 QUnit = require('steal-qunit');
@@ -70,7 +70,7 @@ test("blur", 2, function () {
 	domDispatch.call(div.firstChild, "blur", [], false);
 });
 
-test("mouseenter", 2, function() {
+test("mouseenter", 3, function() {
 	stop();
 
 	var frag = buildFrag("<div><button></button></div>"),
@@ -80,6 +80,7 @@ test("mouseenter", 2, function() {
 
 	var handler = function(ev) {
 		ok(true, "called");
+		equal(ev.type, 'mouseenter', 'event in handler has delegated event type');
 		domEvents.removeDelegateListener.call(div, 'mouseenter', "button", handler);
 		var dE = domData.get.call(this, "delegateEvents");
 		equal(dE, undefined, "data removed");
