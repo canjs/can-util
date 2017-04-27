@@ -1,6 +1,7 @@
 'use strict';
 
-var getGlobal = require("../global/global");
+var getGlobal = require('../global/global');
+var getDomDocument = require('../../dom/document/document');
 
 /**
  * @module {function} can-util/js/base-url/base-url base-url
@@ -31,8 +32,9 @@ module.exports = function(setUrl){
 		return setBaseUrl;
 	}
 	var global = getGlobal();
-	if (global.document && 'baseURI' in global.document) {
-		return global.document.baseURI;
+	var domDocument = getDomDocument();
+	if (domDocument && 'baseURI' in domDocument) {
+		return domDocument.baseURI;
 	} else if(global.location) {
 		var href = global.location.href;
 		var lastSlash = href.lastIndexOf("/");
