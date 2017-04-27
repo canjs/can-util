@@ -1,3 +1,5 @@
+'use strict';
+
 var isEmptyObject = require("../../js/is-empty-object/is-empty-object");
 
 var data = {};

@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var joinURIs = require('./join-uris');
 

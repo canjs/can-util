@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var each  = require('./each');
 var types = require('can-types');

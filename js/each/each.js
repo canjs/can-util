@@ -1,3 +1,5 @@
+'use strict';
+
 /* jshint maxdepth:7*/
 var isArrayLike = require('../is-array-like/is-array-like');
 var has = Object.prototype.hasOwnProperty;

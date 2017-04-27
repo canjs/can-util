@@ -1,3 +1,5 @@
+'use strict';
+
 var getDocument = require("../document/document"),
 	childNodes = require("../child-nodes/child-nodes");
 // fragment.js

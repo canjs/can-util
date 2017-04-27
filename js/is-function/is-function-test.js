@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var isFunction = require('./is-function');
 

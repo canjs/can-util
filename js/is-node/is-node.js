@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/is-node/is-node is-node
  * @parent can-util/js

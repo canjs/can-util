@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var getBaseUrl = require('./base-url');
 var getGlobal = require("../global/global");

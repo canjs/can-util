@@ -1,3 +1,5 @@
+'use strict';
+
 var domEvents = require("../events/events");
 
 /**

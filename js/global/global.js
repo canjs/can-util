@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/global/global global
  * @parent can-util/js

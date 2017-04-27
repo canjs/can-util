@@ -1,3 +1,5 @@
+'use strict';
+
 require('can-util/dom/events/inserted/');
 var domEvents = require('can-util/dom/events/');
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/');

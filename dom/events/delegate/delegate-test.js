@@ -1,3 +1,5 @@
+'use strict';
+
 require('can-util/dom/events/inserted/');
 var domEvents = require('can-util/dom/events/');
 var domDispatch = require('can-util/dom/dispatch/');
@@ -8,7 +10,6 @@ var buildFrag = require('can-util/dom/fragment/');
 QUnit = require('steal-qunit');
 
 QUnit.module("can-util/dom/events/delegate");
-
 
 test("basics", 2, function () {
 	stop();

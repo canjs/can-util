@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/is-web-worker/is-web-worker is-web-worker
  * @parent can-util/js

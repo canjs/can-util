@@ -1,3 +1,5 @@
+'use strict';
+
 var LOCATION = require("./location");
 QUnit = require("steal-qunit");
 

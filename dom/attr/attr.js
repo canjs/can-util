@@ -1,3 +1,5 @@
+'use strict';
+
 // # can/util/attr.js
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
@@ -84,25 +86,57 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			}
 		}
 	},
-	setChildOptions = function(el, value){
-		if(value != null) {
-			var child = el.firstChild,
-				hasSelected = false;
-			while(child) {
-				if(child.nodeName === "OPTION") {
-					if(value === child.value) {
-						hasSelected = child.selected = true;
-						break;
-					}
+	_findOptionToSelect = function (parent, value) {
+		var child = parent.firstChild;
+		while (child) {
+			if (child.nodeName === 'OPTION' && value === child.value) {
+				return child;
+			}
+			if (child.nodeName === 'OPTGROUP') {
+				var groupChild = _findOptionToSelect(child, value);
+				if (groupChild) {
+					return groupChild;
 				}
-				child = child.nextSibling;
 			}
-			if(!hasSelected) {
-				el.selectedIndex = -1;
-			}
+			child = child.nextSibling;
+		}
+	},
+	setChildOptions = function(el, value){
+		var option;
+		if (value != null) {
+			option = _findOptionToSelect(el, value);
+		}
+		if (option) {
+			option.selected = true;
 		} else {
 			el.selectedIndex = -1;
 		}
+	},
+	forEachOption = function (parent, fn) {
+		var child = parent.firstChild;
+		while (child) {
+			if (child.nodeName === 'OPTION') {
+				fn(child);
+			}
+			if (child.nodeName === 'OPTGROUP') {
+				forEachOption(child, fn);
+			}
+			child = child.nextSibling;
+		}
+	},
+	collectSelectedOptions = function (parent) {
+		var selectedValues = [];
+		forEachOption(parent, function (option) {
+			if (option.selected) {
+				selectedValues.push(option.value);
+			}
+		});
+		return selectedValues;
+	},
+	markSelectedOptions = function (parent, values) {
+		forEachOption(parent, function (option) {
+			option.selected = values.indexOf(option.value) !== -1;
+		});
 	},
 	// Create a handler, only once, that will set the child options any time
 	// the select's value changes.
@@ -337,28 +371,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			},
 			values: {
 				get: function(){
-					var values = [];
-					var child = this.firstChild;
-					while(child) {
-						if(child.nodeName === "OPTION" && child.selected) {
-							values.push(child.value);
-						}
-						child = child.nextSibling;
-					}
-
-					return values;
+					return collectSelectedOptions(this);
 				},
 				set: function(values){
 					values = values || [];
-					
+
 					// set new DOM state
-					var child = this.firstChild;
-					while(child) {
-						if(child.nodeName === "OPTION") {
-							child.selected = values.indexOf(child.value) !== -1;
-						}
-						child = child.nextSibling;
-					}
+					markSelectedOptions(this, values);
 
 					// store new DOM state
 					setData.set.call(this, "stickyValues", attr.get(this,"values") );

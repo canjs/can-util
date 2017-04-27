@@ -1,3 +1,5 @@
+'use strict';
+
 var CID = require("can-cid");
 var domDataCore = require("../../dom/data/core");
 

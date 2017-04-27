@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/omit/omit omit
  * @parent can-util/js

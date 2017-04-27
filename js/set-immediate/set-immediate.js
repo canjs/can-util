@@ -1,3 +1,5 @@
+'use strict';
+
 var global = require("../global/global")();
 
 /**

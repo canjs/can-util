@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/dom/child-nodes/child-nodes child-nodes
  * @parent can-util/dom

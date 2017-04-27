@@ -1,3 +1,5 @@
+'use strict';
+
 var canLog = require("../log/log");
 
 /**
@@ -47,6 +49,25 @@ module.exports = {
 	log: function() {
 		//!steal-remove-start
 		canLog.log.apply(this, arguments);
+		//!steal-remove-end
+	},
+	/**
+	 * @function can-util/js/dev/dev.error error
+	 * @parent can-util/js/dev/dev
+	 * @description
+	 *
+	 * Adds an error message to the console.
+	 *
+	 * ```
+	 * dev.error(new Error("Oh no!"));
+	 * ```
+	 *
+	 * @signature `dev.error(err)`
+	 * @param {String|Error} err The error to be logged.
+	 */
+	error: function() {
+		//!steal-remove-start
+		canLog.error.apply(this, arguments);
 		//!steal-remove-end
 	},
 	_logger: canLog._logger

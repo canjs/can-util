@@ -1,3 +1,5 @@
+'use strict';
+
 var getDocument = require('../document/document');
 var fragment = require('../fragment/fragment');
 var each = require('../../js/each/each');
