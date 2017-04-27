@@ -38,5 +38,6 @@ require('./last/last-test');
 require('./make-array/make-array-test');
 require('./make-map/make-map-test');
 require('./set-not-enumerable/set-not-enumerable-test');
+require('./single-reference/single-reference-test');
 require('./string/string-test');
 require('./string-to-any/string-to-any-test');
