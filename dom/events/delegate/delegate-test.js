@@ -89,5 +89,9 @@ test("mouseenter", 3, function() {
 	domEvents.addDelegateListener.call(div, "mouseenter", "button", handler);
 
 	// dispatch bubbling mouseover since it's being coerced into mouseenter
-	domDispatch.call(div.firstChild, "mouseover", [], true);
+	domDispatch.call(div.firstChild, {
+		type: "mouseover",
+		view: window,
+		relatedTarget: div
+	}, [], true);
 });
