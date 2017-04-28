@@ -96,6 +96,7 @@ function removeListener (root, el) {
 }
 
 /**
+ * @hide
  * @module {events} can-util/dom/events/radiochange/radiochange radiochange
  * @parent can-util/dom/events/events
  *
