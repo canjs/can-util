@@ -10,7 +10,7 @@
  */
 
 var domEvents = require("../events"),
-	singleRef = require("../../../js/single-reference/"),
+	singleRef = require("../../../js/single-reference/single-reference"),
 	cid = require("../../../js/cid/get-cid");
 
 // Some mouse/pointer events do not bubble so we derive these events from other
