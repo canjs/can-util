@@ -1,5 +1,7 @@
 # can-util
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/canjs/can-util.svg)](https://greenkeeper.io/)
+
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/can-util.svg)](https://saucelabs.com/u/can-util)
 
 [![Build Status](https://travis-ci.org/canjs/can-util.png?branch=master)](https://travis-ci.org/canjs/can-util)
