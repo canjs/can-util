@@ -614,6 +614,22 @@ test("attr.special.focused calls after previous events", function(){
 	equal(domAttr.get(input, "focused"), false, "not focused yet");
 });
 
+test("attr.special.focused binds on inserted if element is detached", 2, function(){
+	var input = document.createElement("input");
+	input.type = "text";
+	var ta = document.getElementById("qunit-fixture");
+
+	stop();
+	domAttr.set(input, "focused", true);
+	equal(domAttr.get(input, "focused"), false, "not focused yet");
+	domEvents.addEventListener.call(input, "inserted", function() {
+		equal(domAttr.get(input, "focused"), true, "it is now focused");
+		start();		
+	});
+	mutate.appendChild.call(ta, input);
+
+});
+
 test("handles removing multiple event handlers", function () {
 	var handler1 = function() {};
 	var handler2 = function() {};
