@@ -205,16 +205,30 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return this === document.activeElement;
 				},
 				set: function(val){
-					var cur = attr.get(this, "focused");
-					if(cur !== val) {
-						var element = this;
-						types.queueTask([function(){
-							if(val) {
-								element.focus();
-							} else {
-								element.blur();
-							}
-						}, this, []]);
+					var cur = attr.get(this, 'focused');
+					var docEl = this.ownerDocument.documentElement;
+					var element = this;
+					function focusTask() {
+						if (val) {
+							element.focus();
+						} else {
+							element.blur();
+						}                            		
+					}
+					if (cur !== val) {
+						if (!domContains.call(docEl, element)) {
+							var initialSetHandler = function () {
+								domEvents.removeEventListener.call(element, 'inserted', initialSetHandler);
+								focusTask();
+							};
+							domEvents.addEventListener.call(element, 'inserted', initialSetHandler);
+						} else {
+							types.queueTask([
+								focusTask,
+								this,
+								[]
+							]);
+						}
 					}
 					return !!val;
 				},
