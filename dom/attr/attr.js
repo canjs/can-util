@@ -17,6 +17,7 @@ var types = require("can-types");
 var diff = require('../../js/diff/diff');
 
 require("../events/attributes/attributes");
+require("../events/inserted/inserted");
 
 var namespaces = {
 	'xlink': 'http://www.w3.org/1999/xlink'
