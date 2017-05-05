@@ -32,6 +32,8 @@ module.exports = {
 	 * Determine wheter a DOM node has a given class name.
 	 *
 	 * ```js
+	 * var className = require("can-util/dom/class-name/class-name");
+	 * 
 	 * var isContainer = className.has.call(el, "container");
 	 * ```
 	 *
@@ -48,6 +50,8 @@ module.exports = {
 	 * Add a class name to a DOM node if it is not already there.
 	 *
 	 * ```js
+	 * var className = require("can-util/dom/class-name/class-name");
+	 * 
 	 * className.add.call(el, "container");
 	 * ```
 	 *
@@ -71,6 +75,8 @@ module.exports = {
 	 * Remove a class name from a DOM node if it exists on the node
 	 *
 	 * ```js
+	 * var className = require("can-util/dom/class-name/class-name");
+	 * 
 	 * className.remove.call(el, "container");
 	 * ```
 	 *

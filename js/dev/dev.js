@@ -21,6 +21,8 @@ module.exports = {
 	 * Adds a warning message to the console.
 	 *
 	 * ```
+	 * var dev = require('can-util/js/dev/dev');
+	 * 
 	 * dev.warn("something evil");
 	 * ```
 	 *
@@ -40,6 +42,8 @@ module.exports = {
 	 * Adds a message to the console.
 	 *
 	 * ```
+	 * var dev = require('can-util/js/dev/dev');
+	 * 
 	 * dev.log("hi");
 	 * ```
 	 *
@@ -59,6 +63,8 @@ module.exports = {
 	 * Adds an error message to the console.
 	 *
 	 * ```
+	 * var dev = require("can-util/js/dev/dev");
+	 * 
 	 * dev.error(new Error("Oh no!"));
 	 * ```
 	 *

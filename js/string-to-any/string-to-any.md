@@ -16,6 +16,8 @@ Examines the provided string to see if it can be converted to a primitive type. 
 * Any [String](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String)
 
 ```js
+var stringToAny = require("can-util/js/string-to-any/string-to-any");
+
 stringToAny("NaN"); // -> NaN
 stringToAny("44.4"); // -> 44.4
 stringToAny("false"); // -> false

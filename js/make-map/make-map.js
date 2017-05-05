@@ -10,6 +10,12 @@ var each = require('../each/each');
  * @return {Object} A JavaScript object with the same keys as the passed-in comma-separated values
  *
  * makeMap takes a comma-separated string (can-list, NodeList, etc.) and converts it to a JavaScript object
+ * 
+ * ```
+ * var makeMap = require("can-util/js/make-map/make-map");
+ * 
+ * makeMap("a,b,c"); //-> { a: true, b: true, c: true }
+ * ```
  */
 function makeMap(str) {
 	var obj = {}, items = str.split(",");

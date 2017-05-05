@@ -69,6 +69,8 @@ module.exports = {
 	 * Remove data from an element previously added by [can-util/dom/data/data.set set]
 	 *
 	 * ```js
+	 * var domData = require("can-util/dom/data/data");
+	 * 
 	 * domData.clean.call(el, "metadata");
 	 * ```
 	 */
@@ -80,6 +82,8 @@ module.exports = {
 	 * Get data that was stored in a DOM Node using the specified `key`.
 	 *
 	 * ```js
+	 * var domData = require("can-util/dom/data/data");
+	 * 
 	 * var metadata = domData.get.call(el, "metadata");
 	 * ```
 	 *
@@ -96,6 +100,8 @@ module.exports = {
 	 * Set data to be associated with a DOM Node using the specified `key`. If data already exists for this key, it will be overwritten.
 	 *
 	 * ```js
+	 * var domData = require("can-util/dom/data/data");
+	 * 
 	 * domData.set.call(el, "metadata", {
 	 *   foo: "bar"
 	 * });
@@ -117,6 +123,8 @@ module.exports = {
 	 * Remove all data for an element previously added by [can-util/dom/data/data.set set]
 	 *
 	 * ```js
+	 * var domData = require("can-util/dom/data/data");
+	 * 
 	 * domData.delete.call(el);
 	 * ```
 	 */

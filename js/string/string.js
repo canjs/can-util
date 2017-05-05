@@ -53,6 +53,12 @@ var string = {
 	 * @signature `string.esc(content)`
 	 * @param  {String} content a string
 	 * @return {String}         the string safely HTML-escaped
+	 * 
+	 * ```js
+	 * var string = require("can-util/js/string/string");
+	 * 
+	 * string.esc("<div>&nbsp;</div>"); //-> "&lt;div&gt;&amp;nbsp;&lt;/div&gt;"
+	 * ```
 	 */
 	esc: function (content) {
 		return convertBadValues(content)
@@ -83,6 +89,7 @@ var string = {
 	 *
 	 * ```js
 	 * var string = require("can-util/js/string/string");
+	 * 
 	 * console.log(string.getObject("a.b.c", {a: {b: {c: "foo"}}})); // -> "foo"
 	 * console.log(string.getObject("a.b.c", {a: {}})); // -> undefined
 	 * console.log(string.getObject("a.b", [{a: {}}, {a: {b: "bar"}}])); // -> "bar"
