@@ -38,9 +38,9 @@ var platforms = [{
 	deviceName: 'iPhone 7 Simulator'
 }];
 
-var url = `http://${process.env.SAUCE_USERNAME}:${process.env.SAUCE_ACCESS_KEY}@ondemand.saucelabs.com:80/wd/hub`;
+var url = 'http://localhost:3000/test/test.html?hidepassed';
 
 SauceLabs({
-	urls: [url],
+	urls: [{ name: "can-util", url : url }],
 	platforms: platforms
 });
