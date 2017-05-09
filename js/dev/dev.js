@@ -14,6 +14,34 @@ module.exports = {
 	warnTimeout: 5000,
 	logLevel: 0,
 	/**
+	 * @function can-util/js/dev/dev.stringify stringify
+	 * @parent can-util/js/dev/dev
+	 * @description
+	 *
+	 * JSON stringifies a value, but unlike JSON, will output properties with
+	 * a value of `undefined` (e.g. `{ "prop": undefined }`, not `{}`).
+	 *
+	 * ```
+	 * var dev = require('can-util/js/dev/dev');
+	 * var query = { where: undefined };
+	 * 
+	 * dev.warn('No records found: ' + dev.stringify(query));
+	 * ```
+	 *
+	 * @signature `dev.stringify(value)`
+	 * @param {Any} value A value to stringify.
+	 * @return {String} A stringified representation of the passed in value.
+	 */
+	stringify: function(value) {
+		var flagUndefined = function flagUndefined(key, value) {
+			return value === undefined ?
+				 "/* void(undefined) */" : value;
+		};
+		
+		return JSON.stringify(value, flagUndefined, "  ").replace(
+			/"\/\* void\(undefined\) \*\/"/g, "undefined");
+	},
+	/**
 	 * @function can-util/js/dev/dev.warn warn
 	 * @parent can-util/js/dev/dev
 	 * @description
