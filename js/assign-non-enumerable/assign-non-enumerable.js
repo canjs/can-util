@@ -1,3 +1,5 @@
+var setNotEnumerable = require("../set-not-enumerable/set-not-enumerable");
+
 /**
  * @module {function} can-util/js/assign-non-enumerable/assign-non-enumerable assign-non-enumerable
  * @parent can-util/js
@@ -26,11 +28,7 @@
 
 module.exports = function (d, s) {
 	for (var prop in s) {
-		Object.defineProperty(d, prop,{
-			enumerable: false,
-			writable: true,
-			value: s[prop]
-		});
+		setNotEnumerable(d, prop, s[prop]);
 	}
 	return d;
 };
