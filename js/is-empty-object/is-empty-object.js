@@ -1,7 +1,9 @@
+'use strict';
+
 /* jshint unused: false */
 
 /**
- * @module {function} can-util/js/is-empty-object/is-empty-object isEmptyObject
+ * @module {function} can-util/js/is-empty-object/is-empty-object is-empty-object
  * @parent can-util/js
  * @signature `isEmptyObject(obj)`
  *

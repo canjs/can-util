@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var isArrayLike = require('./is-array-like');
 
@@ -18,4 +20,13 @@ QUnit.test("Object with a .length property", function(){
 	};
 
 	ok(isArrayLike(obj));
+});
+
+QUnit.test("function should be false", function(){
+	var func = function(){};
+	ok( !isArrayLike( func ) );
+});
+
+QUnit.test("0 should be false", function(){
+	ok( !isArrayLike( 0 ) );
 });

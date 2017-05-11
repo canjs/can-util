@@ -23,7 +23,9 @@
 		"global": true,
 		"Promise": true,
 		"Symbol": true,
-		"ActiveXObject": true
+		"ActiveXObject": true,
+		"KeyboardEvent": true,
+		"PointerEvent": true
 	},
 	"strict": false,
 	"curly": true,

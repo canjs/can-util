@@ -1,10 +1,12 @@
-var canEvent = require("can-event");
+'use strict';
+
 var domAttr = require('../attr/attr');
 var domEvents = require('../events/events');
 var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
+var mutate = require("../mutate/mutate");
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
-var types = require("../../js/types/types");
+var types = require("can-types");
 
 
 QUnit = require('steal-qunit');
@@ -128,6 +130,11 @@ test("Map special attributes", function () {
 	domAttr.set(div, "textcontent", "my-content");
 	equal(div.textContent, "my-content", "Map textcontent to textContent");
 
+	document.getElementById("qunit-fixture").removeChild(div);
+	div = document.createElement("input");
+	div.type = "text";
+	document.getElementById("qunit-fixture").appendChild(div);
+
 	domAttr.set(div, "readonly");
 	equal(div.readOnly, true, "Map readonly to readOnly");
 
@@ -161,6 +168,13 @@ test('set class attribute via className or setAttribute for svg (#2015)', functi
 
 	domAttr.set(svg, 'class', obj);
 	equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
+});
+
+test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function() {
+	var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+
+	domAttr.set(use, "xlink:href", "svgUri");
+	equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
 });
 
 test("attr.special addEventListener allows custom binding", function(){
@@ -203,7 +217,9 @@ test("attr.special addEventListener allows custom binding", function(){
 test("'selected' is bindable on an <option>", function(){
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
+	option1.value = "one";
 	var option2 = document.createElement("option");
+	option2.value = "two";
 	select.appendChild(option1);
 	select.appendChild(option2);
 
@@ -212,7 +228,7 @@ test("'selected' is bindable on an <option>", function(){
 	});
 
 	option2.selected = true;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(domAttr.get(option1, "selected"), false, "option1 is not selected");
 	equal(domAttr.get(option2, "selected"), true, "option2 is selected");
@@ -237,19 +253,19 @@ test("get, set, and addEventListener on values", function(){
 	deepEqual(domAttr.get(select, "values"), [], "None selected to start");
 
 	option1.selected = true;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(valuesCount, 1, "values event");
 	deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
 
 	option2.selected = true;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(valuesCount, 2, "values event");
 	deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
 
 	option1.selected = option2.selected = false;
-	canEvent.trigger.call(select, "change");
+	domDispatch.call(select, "change");
 
 	equal(valuesCount, 3, "values event");
 	deepEqual(domAttr.get(select, "values"), [], "none selected");
@@ -274,7 +290,7 @@ test("get, set, and addEventListener on innerHTML", function(){
 	equal(domAttr.get(div, "innerHTML"), "<span></span>", "got innerhtml");
 
 	domAttr.set(div, "innerHTML", "<p>hello</p>");
-	canEvent.trigger.call(div, "change");
+	domDispatch.call(div, "change");
 	equal(count, 1, "innerHTML event");
 
 	equal(domAttr.get(div, "innerHTML"), "<p>hello</p>", "got innerhtml");
@@ -422,6 +438,74 @@ test("Multiselect values is updated on any children added/removed", function(){
 	}
 });
 
+test("Select options within optgroups should be set via `value` properly", function() {
+	function tag (tag, value) {
+		var el = document.createElement(tag);
+		if (value) {
+			el.value = value;
+		}
+		return el;
+	}
+
+	var select = tag('select');
+	var optgroup1 = tag('optgroup');
+	var option11 = tag('option', 'list1-item1');
+	option11.selected = true; // initial selection
+	var option12 = tag('option', 'list1-item2');
+	var optgroup2 = tag('optgroup');
+	var option21 = tag('option', 'list2-item1');
+	var option22 = tag('option', 'list2-item2');
+
+	select.appendChild(optgroup1);
+	select.appendChild(optgroup2);
+	optgroup1.appendChild(option11);
+	optgroup1.appendChild(option12);
+	optgroup2.appendChild(option21);
+	optgroup2.appendChild(option22);
+
+	equal(domAttr.get(select, 'value'), 'list1-item1', 'initial value');
+
+	domAttr.set(select, 'value', 'list2-item2');
+	equal(domAttr.get(select, 'value'), 'list2-item2', 'updated value');
+	equal(option11.selected, false, 'initial option is not selected');
+	equal(option22.selected, true, 'second option is selected');
+});
+
+test("Select options within optgroups should be set via `values` properly", function() {
+	function tag (tag, value) {
+		var el = document.createElement(tag);
+		if (value) {
+			el.value = value;
+		}
+		return el;
+	}
+
+	var select = tag('select');
+	select.multiple = true;
+	var optgroup1 = tag('optgroup');
+	var option11 = tag('option', 'list1-item1');
+	option11.selected = true; // initial selection
+	var option12 = tag('option', 'list1-item2');
+	var optgroup2 = tag('optgroup');
+	var option21 = tag('option', 'list2-item1');
+	var option22 = tag('option', 'list2-item2');
+
+	select.appendChild(optgroup1);
+	select.appendChild(optgroup2);
+	optgroup1.appendChild(option11);
+	optgroup1.appendChild(option12);
+	optgroup2.appendChild(option21);
+	optgroup2.appendChild(option22);
+
+	deepEqual(domAttr.get(select, 'values'), ['list1-item1'], 'initial value');
+
+	domAttr.set(select, 'values', ['list1-item2', 'list2-item2']);
+	deepEqual(domAttr.get(select, 'values'), ['list1-item2', 'list2-item2'], 'updated value');
+	equal(option11.selected, false, 'initial option is not selected');
+	equal(option12.selected, true, 'second option is selected');
+	equal(option22.selected, true, 'third option is selected');
+});
+
 test("Setting a value that will be appended later", function(){
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
@@ -530,6 +614,22 @@ test("attr.special.focused calls after previous events", function(){
 	equal(domAttr.get(input, "focused"), false, "not focused yet");
 });
 
+test("attr.special.focused binds on inserted if element is detached", 2, function(){
+	var input = document.createElement("input");
+	input.type = "text";
+	var ta = document.getElementById("qunit-fixture");
+
+	stop();
+	domAttr.set(input, "focused", true);
+	equal(domAttr.get(input, "focused"), false, "not focused yet");
+	domEvents.addEventListener.call(input, "inserted", function() {
+		equal(domAttr.get(input, "focused"), true, "it is now focused");
+		start();		
+	});
+	mutate.appendChild.call(ta, input);
+
+});
+
 test("handles removing multiple event handlers", function () {
 	var handler1 = function() {};
 	var handler2 = function() {};
@@ -628,3 +728,88 @@ if(window.eventsBubble) {
 		next();
 	});
 }
+
+test("Binding to selected updates the selectedness of options", function(){
+	expect(3);
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.selected = false;
+	option1.value = "one";
+	select.appendChild(option1);
+
+	var option2 = document.createElement("option");
+	option2.value = "two";
+	select.appendChild(option2);
+
+	domEvents.addEventListener.call(option1, "selected", function(){
+		ok(true, "this was called");
+	});
+
+	domAttr.set(option1, "selected", true);
+
+	option2.selected = true;
+	domDispatch.call(select, "change");
+
+	equal(option2.selected, true);
+	equal(option1.selected, false);
+});
+
+test("Select's value is preserved when inserted into the document", function(){
+	stop();
+	var select = document.createElement("select");
+	var option1 = document.createElement("option");
+	option1.value = "one";
+	select.appendChild(option1);
+
+	domAttr.set(select, "value", null);
+
+	equal(select.selectedIndex, -1, "was set to -1");
+
+	var ta = document.getElementById("qunit-fixture");
+	mutate.appendChild.call(ta, select);
+
+	setTimeout(function(){
+		equal(select.selectedIndex, -1, "still is -1");
+		start();
+	}, 50);
+
+});
+
+test('multi-select does not dispatch a values change event if its selected options are unchanged (#105)', function() {
+	var div = document.createElement('div');
+	div.innerHTML = '<select multiple><option selected>2</option><option selected>1</option><option>3</option></select>';
+
+	var select = div.firstChild;
+	document.body.appendChild(div);
+	// the multi-select is in the DOM with values of ['2', '1']
+
+	var valuesChanges = 0;
+	domEvents.addEventListener.call(select, 'values', function(){
+		valuesChanges++;
+	});
+
+	domAttr.set(select, 'values', ['1', '2']);
+	select.innerHTML = '<option selected>1</option><option selected>2</option><option>3</option>';
+	// we manipulate the multi-select, but don't change its selected options ['1', '2"]
+
+	QUnit.stop();
+
+	setTimeout(function() {
+		QUnit.strictEqual(valuesChanges, 0, 'we do not dispatch a change event');
+		document.body.removeChild(div);
+		QUnit.start();
+	}, 50);
+});
+
+test('setting checked to undefined should result in false for checkboxes (#184)', function(){
+	var input = document.createElement('input');
+	input.type = 'checkbox';
+
+	domAttr.set(input, 'checked', undefined);
+	QUnit.equal(input.checked, false, 'Should set checked to false');
+
+	domAttr.set(input, 'checked', true);
+	QUnit.equal(input.checked, true, 'Should become true');
+	domAttr.set(input, 'checked', undefined);
+	QUnit.equal(input.checked, false, 'Should become false again');
+});

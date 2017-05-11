@@ -1,3 +1,5 @@
+'use strict';
+
 var isFunction = require('../is-function/is-function');
 var global = require("../global/global")();
 

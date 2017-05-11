@@ -1,3 +1,5 @@
+'use strict';
+
 var isArray = require('../is-array/is-array');
 var isFunction = require('../is-function/is-function');
 var isPlainObject = require('../is-plain-object/is-plain-object');
@@ -16,6 +18,7 @@ function deepAssign() {
 
 	// extend jQuery itself if only one argument is passed
 	if (length === i) {
+		/*jshint validthis:true*/
 		target = this;
 		--i;
 	}

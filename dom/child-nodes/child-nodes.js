@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * @module {function} can-util/dom/child-nodes/child-nodes childNodes
+ * @module {function} can-util/dom/child-nodes/child-nodes child-nodes
  * @parent can-util/dom
  * @signature `childNodes(node)`
  *

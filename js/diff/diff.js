@@ -1,14 +1,20 @@
+'use strict';
+
 var slice = [].slice;
 // a b c
 // a b c d
 // [[2,0, d]]
+
+var defaultIdentity = function(a, b){ return a === b; };
+
 /**
  * @module {function} can-util/js/diff/diff diff
  * @parent can-util/js
- * @signature `diff(oldList, newList)`
+ * @signature `diff( oldList, newList, [identity] )`
  * 
  * @param  {ArrayLike} oldList the array to diff from
  * @param  {ArrayLike} newList the array to diff to
+ * @param  {function} identity an optional identity function for comparing elements
  * @return {Array}     a list of Patch objects representing the differences
  *
  * Returns the difference between two ArrayLike objects (that have nonnegative
@@ -24,9 +30,26 @@ var slice = [].slice;
  *
  * console.log(diff([1], [1, 2])); // -> [{index: 1, deleteCount: 0, insert: [2]}]
  * console.log(diff([1, 2], [1])); // -> [{index: 1, deleteCount: 1, insert: []}]
+ * 
+ * // with an optional identity function:
+ * diff(
+ *     [{id:1},{id:2}],
+ *     [{id:1},{id:3}],
+ *     (a,b) => a.id === b.id
+ * ); // -> [{index: 1, deleteCount: 1, insert: [{id:3}]}]
  * ```
  */
-module.exports = exports = function(oldList, newList){
+
+// TODO: update for a better type reference. E.g.:
+//    @typdef {function(*,*)} can-util/diff/diff/typedefs.identity identify(a, b)
+//
+//    @param {*} a This is something.
+//    @param {can-util/diff/diff/typedefs.identity} identity(a, b)
+//    @option {*} a
+
+module.exports = exports = function(oldList, newList, identity){
+	identity = identity || defaultIdentity;
+	
 	var oldIndex = 0,
 		newIndex =  0,
 		oldLength = oldList.length,
@@ -37,7 +60,7 @@ module.exports = exports = function(oldList, newList){
 		var oldItem = oldList[oldIndex],
 			newItem = newList[newIndex];
 
-		if( oldItem === newItem ) {
+		if( identity( oldItem, newItem ) ) {
 			oldIndex++;
 			newIndex++;
 			continue;
@@ -45,7 +68,7 @@ module.exports = exports = function(oldList, newList){
 		// look for single insert, does the next newList item equal the current oldList.
 		// 1 2 3
 		// 1 2 4 3
-		if(  newIndex+1 < newLength && newList[newIndex+1] === oldItem) {
+		if(  newIndex+1 < newLength && identity( oldItem, newList[newIndex+1] ) ) {
 			patches.push({index: newIndex, deleteCount: 0, insert: [ newList[newIndex] ]});
 			oldIndex++;
 			newIndex += 2;
@@ -54,7 +77,7 @@ module.exports = exports = function(oldList, newList){
 		// look for single removal, does the next item in the oldList equal the current newList item.
 		// 1 2 3
 		// 1 3
-		else if( oldIndex+1 < oldLength  && oldList[oldIndex+1] === newItem ) {
+		else if( oldIndex+1 < oldLength  && identity( oldList[oldIndex+1], newItem ) ) {
 			patches.push({index: newIndex, deleteCount: 1, insert: []});
 			oldIndex += 2;
 			newIndex++;

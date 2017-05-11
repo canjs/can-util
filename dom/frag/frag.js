@@ -1,3 +1,5 @@
+'use strict';
+
 var getDocument = require('../document/document');
 var fragment = require('../fragment/fragment');
 var each = require('../../js/each/each');
@@ -21,6 +23,8 @@ Convert a String, HTMLElement, documentFragment, or contentArray into a document
 ## Use
 
 ContentArrays can be used to combine multiple HTMLElements into a single document fragment.  For example:
+
+    var frag = require("can-util/dom/frag/frag");
 
     var p = document.createElement("p");
     p.innerHTML = "Welcome to <b>CanJS</b>";

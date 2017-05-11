@@ -1,3 +1,5 @@
+'use strict';
+
 // # can/util/attr.js
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
@@ -6,13 +8,20 @@ var getDocument = require("../document/document");
 var global = require("../../js/global/global")();
 var isOfGlobalDocument = require("../is-of-global-document/is-of-global-document");
 var setData = require("../data/data");
+var domContains = require("../contains/contains");
 var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var each = require("../../js/each/each");
-var types = require("../../js/types/types");
+var types = require("can-types");
+var diff = require('../../js/diff/diff');
 
 require("../events/attributes/attributes");
+require("../events/inserted/inserted");
+
+var namespaces = {
+	'xlink': 'http://www.w3.org/1999/xlink'
+};
 
 var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 	// Used to convert values to strings.
@@ -78,23 +87,74 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			}
 		}
 	},
-	setChildOptions = function(el, value){
-		if(value != null) {
-			var child = el.firstChild,
-				hasSelected = false;
-			while(child) {
-				if(child.nodeName === "OPTION") {
-					if(value === child.value) {
-						hasSelected = child.selected = true;
-						break;
-					}
+	_findOptionToSelect = function (parent, value) {
+		var child = parent.firstChild;
+		while (child) {
+			if (child.nodeName === 'OPTION' && value === child.value) {
+				return child;
+			}
+			if (child.nodeName === 'OPTGROUP') {
+				var groupChild = _findOptionToSelect(child, value);
+				if (groupChild) {
+					return groupChild;
 				}
-				child = child.nextSibling;
 			}
-			if(!hasSelected) {
-				el.selectedIndex = -1;
-			}
+			child = child.nextSibling;
 		}
+	},
+	setChildOptions = function(el, value){
+		var option;
+		if (value != null) {
+			option = _findOptionToSelect(el, value);
+		}
+		if (option) {
+			option.selected = true;
+		} else {
+			el.selectedIndex = -1;
+		}
+	},
+	forEachOption = function (parent, fn) {
+		var child = parent.firstChild;
+		while (child) {
+			if (child.nodeName === 'OPTION') {
+				fn(child);
+			}
+			if (child.nodeName === 'OPTGROUP') {
+				forEachOption(child, fn);
+			}
+			child = child.nextSibling;
+		}
+	},
+	collectSelectedOptions = function (parent) {
+		var selectedValues = [];
+		forEachOption(parent, function (option) {
+			if (option.selected) {
+				selectedValues.push(option.value);
+			}
+		});
+		return selectedValues;
+	},
+	markSelectedOptions = function (parent, values) {
+		forEachOption(parent, function (option) {
+			option.selected = values.indexOf(option.value) !== -1;
+		});
+	},
+	// Create a handler, only once, that will set the child options any time
+	// the select's value changes.
+	setChildOptionsOnChange = function(select, aEL){
+		var handler = setData.get.call(select, "attrSetChildOptions");
+		if(handler) {
+			return Function.prototype;
+		}
+		handler = function(){
+			setChildOptions(select, select.value);
+		};
+		setData.set.call(select, "attrSetChildOptions", handler);
+		aEL.call(select, "change", handler);
+		return function(rEL){
+			setData.clean.call(select, "attrSetChildOptions");
+			rEL.call(select, "change", handler);
+		};
 	},
 	attr = {
 		special: {
@@ -103,7 +163,11 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return this.checked;
 				},
 				set: function(val){
-					var notFalse = !!val || val === undefined || val === "";
+					// - `set( truthy )` => TRUE
+					// - `set( "" )`     => TRUE
+					// - `set()`         => TRUE
+					// - `set(undefined)` => false.
+					var notFalse = !!val || val === "" || arguments.length === 0;
 					this.checked = notFalse;
 					if(notFalse && this.type === "radio") {
 						this.defaultChecked = true;
@@ -142,16 +206,30 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return this === document.activeElement;
 				},
 				set: function(val){
-					var cur = attr.get(this, "focused");
-					if(cur !== val) {
-						var element = this;
-						types.queueTask([function(){
-							if(val) {
-								element.focus();
-							} else {
-								element.blur();
-							}
-						}, this, []]);
+					var cur = attr.get(this, 'focused');
+					var docEl = this.ownerDocument.documentElement;
+					var element = this;
+					function focusTask() {
+						if (val) {
+							element.focus();
+						} else {
+							element.blur();
+						}                            		
+					}
+					if (cur !== val) {
+						if (!domContains.call(docEl, element)) {
+							var initialSetHandler = function () {
+								domEvents.removeEventListener.call(element, 'inserted', initialSetHandler);
+								focusTask();
+							};
+							domEvents.addEventListener.call(element, 'inserted', initialSetHandler);
+						} else {
+							types.queueTask([
+								focusTask,
+								this,
+								[]
+							]);
+						}
 					}
 					return !!val;
 				},
@@ -190,27 +268,15 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				}
 			}),
 			required: booleanProp("required"),
-			readonly: {
-				get: function(){
-					return this.readOnly;
-				},
-				set: function(val){
-					if(val || val == null || typeof val === "string") {
-						val = true;
-					} else {
-						val = false;
-					}
-
-					this.readOnly = val;
-					return val;
-				}
-			},
+			readonly: booleanProp("readOnly"),
 			selected: {
 				get: function(){
 					return this.selected;
 				},
 				set: function(val){
-					return this.selected = !!val;
+					val = !!val;
+					setData.set.call(this, "lastSetValue", val);
+					return this.selected = val;
 				},
 				addEventListener: function(eventName, handler, aEL){
 					var option = this;
@@ -218,16 +284,20 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					var lastVal = option.selected;
 					var localHandler = function(changeEvent){
 						var curVal = option.selected;
+						lastVal = setData.get.call(option, "lastSetValue") || lastVal;
 						if(curVal !== lastVal) {
 							lastVal = curVal;
 
 							domDispatch.call(option, eventName);
 						}
 					};
+
+					var removeChangeHandler = setChildOptionsOnChange(select, aEL);
 					domEvents.addEventListener.call(select, "change", localHandler);
 					aEL.call(option, eventName, handler);
 
 					return function(rEL){
+						removeChangeHandler(rEL);
 						domEvents.removeEventListener.call(select, "change", localHandler);
 						rEL.call(option, eventName, handler);
 					};
@@ -289,6 +359,19 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						setData.set.call(this, "attrValueLastVal", value);
 						//If it's null then special case
 						setChildOptions(this, value === null ? value : this.value);
+
+						// If not in the document reset the value when inserted.
+						var docEl = this.ownerDocument.documentElement;
+						if(!domContains.call(docEl, this)) {
+							var select = this;
+							var initialSetHandler = function(){
+								domEvents.removeEventListener.call(select, "inserted", initialSetHandler);
+								setChildOptions(select, value === null ? value : select.value);
+							};
+							domEvents.addEventListener.call(this, "inserted", initialSetHandler);
+						}
+
+						// MO handler is only set up **ONCE**
 						setupMO(this, function(){
 							var value = setData.get.call(this, "attrValueLastVal");
 							attr.set(this, "value", value);
@@ -303,32 +386,39 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			},
 			values: {
 				get: function(){
-					var values = [];
-					var child = this.firstChild;
-					while(child) {
-						if(child.nodeName === "OPTION" && child.selected) {
-							values.push(child.value);
-						}
-						child = child.nextSibling;
-					}
-					setData.set.call(this, "valuesLastVal", values);
-					return values;
+					return collectSelectedOptions(this);
 				},
 				set: function(values){
 					values = values || [];
-					var child = this.firstChild;
-					while(child) {
-						if(child.nodeName === "OPTION") {
-							child.selected = values.indexOf(child.value) !== -1;
-						}
-						child = child.nextSibling;
-					}
 
-					setData.set.call(this, "valuesLastVal", values);
+					// set new DOM state
+					markSelectedOptions(this, values);
+
+					// store new DOM state
+					setData.set.call(this, "stickyValues", attr.get(this,"values") );
+
+					// MO handler is only set up **ONCE**
+					// TODO: should this be moved into addEventListener?
 					setupMO(this, function(){
-						var lastVal = setData.get.call(this, "valuesLastVal");
-						attr.set(this, "values", lastVal);
-						domDispatch.call(this, "values");
+
+						// Get the previous sticky state
+						var previousValues = setData.get.call(this,
+							"stickyValues");
+
+						// Set DOM to previous sticky state
+						attr.set(this, "values", previousValues);
+
+						// Get the new result after trying to maintain the sticky state
+						var currentValues = setData.get.call(this,
+							"stickyValues");
+
+						// If there are changes, trigger a `values` event.
+						var changes = diff(previousValues.slice().sort(),
+							currentValues.slice().sort());
+
+						if (changes.length) {
+							domDispatch.call(this, "values");
+						}
 					});
 
 					return values;
@@ -381,7 +471,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			// call its setter, and if so use the setter.
 			// Otherwise fallback to setAttribute.
 			if(typeof setter === "function" && test.call(el)) {
-				newValue = setter.call(el, val);
+				// To distinguish calls with explicit undefined, e.g.:
+				// - `attr.set(el, "checked")`
+				// - `attr.set(el, "checked", undefined)`
+				if (arguments.length === 2){
+					newValue = setter.call(el);
+				} else {
+					newValue = setter.call(el, val);
+				}
 			} else {
 				attr.setAttribute(el, attrName, val);
 			}
@@ -405,7 +502,8 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 					return function(el, attrName, val){
 						var first = attrName.charAt(0),
 							cachedNode,
-							node;
+							node,
+							attr;
 						if((first === "{" || first === "(" || first === "*") && el.setAttributeNode) {
 							cachedNode = invalidNodes[attrName];
 							if(!cachedNode) {
@@ -416,7 +514,14 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 							node.value = val;
 							el.setAttributeNode(node);
 						} else {
-							el.setAttribute(attrName, val);
+							attr = attrName.split(':');
+
+							if(attr.length !== 1) {
+								el.setAttributeNS(namespaces[attr[0]], attrName, val);
+							}
+							else {
+								el.setAttribute(attrName, val);
+							}
 						}
 					};
 				}

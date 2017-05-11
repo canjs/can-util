@@ -22,7 +22,6 @@
  *
  * @return {Object} Returns the `target` argument.
  */
-
 module.exports = function (d, s) {
 	for (var prop in s) {
 		d[prop] = s[prop];

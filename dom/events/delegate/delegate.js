@@ -1,3 +1,5 @@
+'use strict';
+
 var domEvents = require("../events");
 var domData = require("../../data/data");
 var domMatches = require("../../matches/matches");
@@ -6,7 +8,7 @@ var isEmptyObject = require("../../../js/is-empty-object/is-empty-object");
 
 var dataName = "delegateEvents";
 
-// Some events do not bubble, so delegarting them requires registering the handler in the
+// Some events do not bubble, so delegating them requires registering the handler in the
 // capturing phase.
 // http://www.quirksmode.org/blog/archives/2008/04/delegating_the.html
 var useCapture = function(eventType) {

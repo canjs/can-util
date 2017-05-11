@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * @module {function} can-util/js/global/global global
  * @parent can-util/js
@@ -23,14 +25,23 @@
 
 /* global self */
 /* global WorkerGlobalScope */
-module.exports = function(){
+var GLOBAL;
+module.exports = function(setGlobal){
 	// Web Worker
-	return (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) ? self :
+	if(setGlobal !== undefined) {
+		GLOBAL = setGlobal;
+	}
+	if(GLOBAL) {
+		return GLOBAL;
+	} else {
+		return GLOBAL = (typeof WorkerGlobalScope !== 'undefined' && self instanceof WorkerGlobalScope) ? self :
 
-		// Node.js
-		typeof process === "object" &&
-		{}.toString.call(process) === "[object process]" ? global :
+			// Node.js
+			typeof process === "object" &&
+			{}.toString.call(process) === "[object process]" ? global :
 
-		// Browser window
-		window;
+			// Browser window
+			window;
+	}
+
 };

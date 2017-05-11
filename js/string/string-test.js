@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var string = require('./string');
 
@@ -39,10 +41,10 @@ QUnit.test('string.sub with null values', function () {
 });
 
 QUnit.test('string.sub double', function () {
-	equal(string.sub('{b} {d}', [{
+	equal(string.sub('{b} {d}', {
 		b: 'c',
 		d: 'e'
-	}]), 'c e');
+	}), 'c e');
 });
 
 QUnit.test('String.underscore', function () {
@@ -74,43 +76,6 @@ QUnit.test('string.getObject Single root', function () {
 	// not exists
 	result = string.getObject('baz', root);
 	equal(result, undefined, 'got \'undefined\'');
-	// # With remove
-	// exists
-	root = {
-		foo: 'bar'
-	};
-	result = string.getObject('foo', root, false);
-	equal(result, 'bar', 'got \'bar\'');
-	deepEqual(root, {}, 'root is empty');
-	// not exists
-	root = {
-		foo: 'bar'
-	};
-	result = string.getObject('baz', root, false);
-	equal(result, undefined, 'got \'undefined\'');
-	deepEqual(root, {
-		foo: 'bar'
-	}, 'root is same');
-	// # With add
-	// exists
-	root = {
-		foo: 'bar'
-	};
-	result = string.getObject('foo', root, true);
-	equal(result, 'bar', 'got \'bar\'');
-	deepEqual(root, {
-		foo: 'bar'
-	}, 'root is same');
-	// not exists
-	root = {
-		foo: 'bar'
-	};
-	result = string.getObject('baz', root, true);
-	deepEqual(result, {}, 'got \'{}\'');
-	deepEqual(root, {
-		foo: 'bar',
-		baz: {}
-	}, 'added \'baz: {}\' into root');
 });
 
 QUnit.test('string.getObject Multiple root', function () {
@@ -136,119 +101,6 @@ QUnit.test('string.getObject Multiple root', function () {
 	// not exists anywhere
 	result = string.getObject('c', roots);
 	equal(result, undefined, 'got \'undefined\'');
-	// # With remove
-	// exists in first root
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('a', roots, false);
-	equal(result, 1, 'got \'1\'');
-	deepEqual(root1, {}, 'root is empty');
-	deepEqual(root2, {
-		b: 2
-	}, 'root is same');
-	// exists in second root
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('b', roots, false);
-	equal(result, 2, 'got \'2\'');
-	deepEqual(root1, {
-		a: 1
-	}, 'root is same');
-	deepEqual(root2, {}, 'root is empty');
-	// not exists anywhere
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('c', roots, false);
-	equal(result, undefined, 'got \'undefined\'');
-	deepEqual(root1, {
-		a: 1
-	}, 'root is same');
-	deepEqual(root2, {
-		b: 2
-	}, 'root is same');
-	// # With add
-	// exists in first root
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('a', roots, true);
-	equal(result, 1, 'got \'1\'');
-	deepEqual(root1, {
-		a: 1
-	}, 'root is same');
-	deepEqual(root2, {
-		b: 2
-	}, 'root is same');
-	// exists in second root
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('b', roots, true);
-	equal(result, 2, 'got \'2\'');
-	deepEqual(root1, {
-		a: 1
-	}, 'root is same');
-	deepEqual(root2, {
-		b: 2
-	}, 'root is same');
-	// not exists anywhere
-	root1 = {
-		a: 1
-	};
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('c', roots, true);
-	deepEqual(result, {}, 'got \'{}\'');
-	deepEqual(root1, {
-		a: 1,
-		c: {}
-	}, 'added \'c: {}\' into first root');
-	deepEqual(root2, {
-		b: 2
-	}, 'root is same');
 	// # One of roots is not an object
 	// exists in second root
 	root1 = undefined;
@@ -261,34 +113,6 @@ QUnit.test('string.getObject Multiple root', function () {
 	];
 	result = string.getObject('b', roots);
 	equal(result, 2, 'got \'2\'');
-	// exists in second root and remove
-	root1 = undefined;
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('b', roots, false);
-	equal(result, 2, 'got \'2\'');
-	equal(root1, undefined, 'got \'undefined\'');
-	deepEqual(root2, {}, 'deleted \'b\' from root');
-	// not exists in any root and add
-	root1 = undefined;
-	root2 = {
-		b: 2
-	};
-	roots = [
-		root1,
-		root2
-	];
-	result = string.getObject('a', roots, true);
-	equal(result, undefined, 'got \'undefined\'');
-	equal(root1, undefined, 'root is same');
-	deepEqual(root2, {
-		b: 2
-	}, 'root is same');
 });
 
 QUnit.test('string.getObject Deep objects', function () {
@@ -306,59 +130,6 @@ QUnit.test('string.getObject Deep objects', function () {
 	// not exists
 	result = string.getObject('foo.world', root);
 	equal(result, undefined, 'got \'undefined\'');
-	// # With remove
-	// exists
-	root = {
-		foo: {
-			bar: 'baz'
-		}
-	};
-	result = string.getObject('foo.bar', root, false);
-	equal(result, 'baz', 'got \'baz\'');
-	deepEqual(root, {
-		foo: {}
-	}, 'deep object is empty');
-	// not exists
-	root = {
-		foo: {
-			bar: 'baz'
-		}
-	};
-	result = string.getObject('foo.world', root, false);
-	equal(result, undefined, 'got \'undefined\'');
-	deepEqual(root, {
-		foo: {
-			bar: 'baz'
-		}
-	}, 'root is same');
-	// # With add
-	// exists
-	root = {
-		foo: {
-			bar: 'baz'
-		}
-	};
-	result = string.getObject('foo.bar', root, true);
-	equal(result, 'baz', 'got \'baz\'');
-	deepEqual(root, {
-		foo: {
-			bar: 'baz'
-		}
-	}, 'root is same');
-	// not exists
-	root = {
-		foo: {
-			bar: 'baz'
-		}
-	};
-	result = string.getObject('foo.world', root, true);
-	deepEqual(result, {}, 'got \'{}\'');
-	deepEqual(root, {
-		foo: {
-			bar: 'baz',
-			world: {}
-		}
-	}, 'added \'world: {}\' into deep object');
 });
 
 QUnit.test('string.esc', function () {

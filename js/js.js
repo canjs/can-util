@@ -1,12 +1,10 @@
-/**
- * @module {{}} can-util/js js
- * @parent can-util
- * @description Utilities for manipulating JavaScript data structures.
- */
+'use strict';
+
+
 
 module.exports = {
 	assign: require('./assign/assign'),
-	cid: require('./cid/cid'),
+	cid: require('can-cid'),
 	deepAssign: require('./deep-assign/deep-assign'),
 	dev: require('./dev/dev'),
 	diff: require('./diff/diff'),
@@ -26,7 +24,8 @@ module.exports = {
 	joinURIs: require('./join-uris/join-uris'),
 	last: require('./last/last'),
 	makeArray: require('./make-array/make-array'),
+	omit: require('./omit/omit'),
 	setImmediate: require('./set-immediate/set-immediate'),
 	string: require('./string/string'),
-	types: require('./types/types')
+	types: require('can-types')
 };

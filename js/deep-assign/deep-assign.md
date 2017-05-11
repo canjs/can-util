@@ -1,4 +1,4 @@
-@module {function} can-util/js/deep-assign/deep-assign deepAssign
+@module {function} can-util/js/deep-assign/deep-assign deep-assign
 @parent can-util/js
 @signature `deepAssign(target, [ ... sources ])`
 

@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * @module {function} can-util/js/make-promise/make-promise makePromise
+ * @module {function} can-util/js/make-promise/make-promise make-promise
  * @parent can-util/js
  * @signature `makePromise(obj)`
  *

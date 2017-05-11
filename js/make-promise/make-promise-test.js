@@ -1,3 +1,5 @@
+'use strict';
+
 var QUnit = require('../../test/qunit');
 var isPromise = require('../is-promise/is-promise');
 var makePromise = require('./make-promise');

@@ -1,17 +1,19 @@
+'use strict';
+
 // # can/util/inserted
 // Used to alert interested parties of when an element is inserted into the DOM.
 // Given a list of elements, check if the first is in the DOM, and if so triggers the `inserted` event on all elements and their descendants.
 
 var makeArray = require("../../js/make-array/make-array");
 var setImmediate = require("../../js/set-immediate/set-immediate");
-var CID = require("../../js/cid/cid");
+var CID = require("can-cid");
 
 var getMutationObserver = require("../mutation-observer/mutation-observer");
 var childNodes = require("../child-nodes/child-nodes");
 var domContains = require("../contains/contains");
 var domDispatch = require("../dispatch/dispatch");
 var DOCUMENT = require("../document/document");
-
+var domData = require("../data/data");
 
 var mutatedElements;
 var checks = {
@@ -41,6 +43,9 @@ var fireOn = function(elems, root, check, event, dispatched) {
 			dispatched[cid] = true;
 			children = makeArray(elem.getElementsByTagName("*"));
 			domDispatch.call(elem, event, [], false);
+			if (event === "removed") {
+				domData.delete.call(elem);
+			}
 
 			for (var j = 0, child;
 				(child = children[j]) !== undefined; j++) {
@@ -48,6 +53,10 @@ var fireOn = function(elems, root, check, event, dispatched) {
 				cid = CID(child);
 				if(!dispatched[cid]) {
 					domDispatch.call(child, event, [], false);
+					// jshint maxdepth:5
+					if (event === "removed") {
+						domData.delete.call(child);
+					}
 					dispatched[cid] = true;
 				}
 			}
@@ -61,7 +70,7 @@ var fireMutations = function(){
 
 	var firstElement = mutations[0][1][0];
 	var doc = DOCUMENT() || firstElement.ownerDocument || firstElement;
-	var root = doc.contains ? doc : doc.body;
+	var root = doc.contains ? doc : doc.documentElement;
 	var dispatched = {inserted: {}, removed: {}};
 	mutations.forEach(function(mutation){
 		fireOn(mutation[1], root, checks[mutation[0]], mutation[0], dispatched[mutation[0]]);
@@ -72,7 +81,7 @@ var mutated = function(elements, type) {
 		// make sure this element is in the page (mutated called before something is removed)
 		var firstElement = elements[0];
 		var doc = DOCUMENT() || firstElement.ownerDocument || firstElement;
-		var root = doc.contains ? doc : doc.body;
+		var root = doc.contains ? doc : doc.documentElement;
 		if( checks.inserted(root, firstElement) ) {
 
 			// if it is, schedule a mutation fire

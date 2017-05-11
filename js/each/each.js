@@ -1,8 +1,10 @@
+'use strict';
+
 /* jshint maxdepth:7*/
 var isArrayLike = require('../is-array-like/is-array-like');
 var has = Object.prototype.hasOwnProperty;
 var isIterable = require("../is-iterable/is-iterable");
-var types = require("../types/types");
+var types = require("can-types");
 
 function each(elements, callback, context) {
 	var i = 0,

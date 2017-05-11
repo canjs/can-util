@@ -1,5 +1,7 @@
+'use strict';
+
 /**
- * @module {function} can-util/js/is-browser-window/is-browser-window isBrowserWindow
+ * @module {function} can-util/js/is-browser-window/is-browser-window is-browser-window
  * @parent can-util/js
  * @signature `isBrowserWindow()`
  *
