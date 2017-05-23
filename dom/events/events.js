@@ -68,18 +68,21 @@ module.exports = {
 		return;
 	}
 
+	var testEventName = 'fix_synthetic_events_on_disabled_test';
 	var input = document.createElement("input");
 	input.disabled = true;
 	var timer = setTimeout(function() {
 		fixSyntheticEventsOnDisabled = true;
 	}, 50);
-	module.exports.addEventListener.call(input, 'foo', function(){
+	var onTest = function onTest (){
 		clearTimeout(timer);
-	});
+		module.exports.removeEventListener.call(input, testEventName, onTest);
+	};
+	module.exports.addEventListener.call(input, testEventName, onTest);
 	try {
-		module.exports.dispatch.call(input, 'foo', [], false);
+		module.exports.dispatch.call(input, testEventName, [], false);
 	} catch(e) {
-		clearTimeout(timer);
+		onTest();
 		fixSyntheticEventsOnDisabled = true;
 	}
 })();
