@@ -30,10 +30,10 @@ module.exports = {
 		return (this.nodeName && (this.nodeType === 1 || this.nodeType === 9)) || this === window;
 	},
 	dispatch: function(event, args, bubbles){
-		var doc = _document();
 		var ret;
 		var dispatchingOnDisabled = fixSyntheticEventsOnDisabled && isDispatchingOnDisabled(this, event);
 
+		var doc = this.ownerDocument || _document();
 		var ev = doc.createEvent('HTMLEvents');
 		var isString = typeof event === "string";
 
