@@ -14,6 +14,9 @@ function makeKeyboardEvent() {
 		event = new KeyboardEvent("keyup", {
 			key: "Enter"
 		});
+		Object.defineProperty(event, "type", {
+			value: "keyup"
+		});
 		return event;
 	} catch (e) {
 		event = document.createEvent("KeyboardEvent");
