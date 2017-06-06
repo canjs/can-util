@@ -11,6 +11,13 @@ var isArrayLike = require('../is-array-like/is-array-like');
  * @return {Array}     a JavaScript array object with the same elements as the passed-in ArrayLike
  *
  * makeArray takes any array-like object (can-list, NodeList, etc.) and converts it to a JavaScript array
+ * 
+ * ```
+ * var makeArray = require("can-util/js/make-array/make-array");
+ * 
+ * makeArray({0: "a", length: 1}); //-> ["a"]
+ * 
+ * ```
  */
 function makeArray(element) {
 	var ret = [];

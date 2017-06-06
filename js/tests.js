@@ -1,6 +1,7 @@
 'use strict';
 
 require('./assign/assign-test');
+require('./assign-non-enumerable/assign-non-enumerable-test');
 require('./base-url/base-url-test');
 require('./cid-map/cid-map-test');
 require('./cid-set/cid-set-test');

@@ -18,6 +18,8 @@ exports.logLevel = 0;
  * Adds a warning message to the console.
  *
  * ```
+ * var canLog = require("can-util/js/log/log");
+ * 
  * canLog.warn("something evil");
  * ```
  *
@@ -45,6 +47,8 @@ exports.warn = function(out) {
  * Adds a message to the console.
  *
  * ```
+ * var canLog = require("can-util/js/log/log");
+ * 
  * canLog.log("hi");
  * ```
  *
@@ -70,6 +74,8 @@ exports.log = function(out) {
  * Adds an error message to the console.
  *
  * ```
+ * var canLog = require("can-util/js/log/log");
+ * 
  * canLog.error(new Error("Oh no!"));
  * ```
  *
