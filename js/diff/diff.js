@@ -7,11 +7,42 @@ var slice = [].slice;
 
 var defaultIdentity = function(a, b){ return a === b; };
 
+function reverseDiff(oldDiffStopIndex, newDiffStopIndex, oldList, newList, identity) {
+	var oldIndex = oldList.length - 1,
+		newIndex =  newList.length - 1;
+
+	while( oldIndex > oldDiffStopIndex && newIndex > newDiffStopIndex) {
+		var oldItem = oldList[oldIndex],
+			newItem = newList[newIndex];
+
+		if( identity( oldItem, newItem ) ) {
+			oldIndex--;
+			newIndex--;
+			continue;
+		} else {
+			// use newIndex because it reflects any deletions
+			return [{
+				index: newDiffStopIndex,
+			 	deleteCount: (oldIndex-oldDiffStopIndex+1),
+			 	insert: slice.call(newList, newDiffStopIndex,newIndex+1)
+			}];
+		}
+	}
+	// if we've reached of either the new or old list
+	// we simply return
+	return [{
+		index: newDiffStopIndex,
+		deleteCount: (oldIndex-oldDiffStopIndex+1),
+		insert: slice.call(newList, newDiffStopIndex,newIndex+1)
+	}];
+
+}
+
 /**
  * @module {function} can-util/js/diff/diff diff
  * @parent can-util/js
  * @signature `diff( oldList, newList, [identity] )`
- * 
+ *
  * @param  {ArrayLike} oldList the array to diff from
  * @param  {ArrayLike} newList the array to diff to
  * @param  {function} identity an optional identity function for comparing elements
@@ -19,7 +50,7 @@ var defaultIdentity = function(a, b){ return a === b; };
  *
  * Returns the difference between two ArrayLike objects (that have nonnegative
  * integer keys and the `length` property) as an array of patch objects.
- * 
+ *
  * A patch object returned by this function has the following properties:
  * - **index**:  the index of newList where the patch begins
  * - **deleteCount**: the number of items deleted from that index in newList
@@ -30,7 +61,7 @@ var defaultIdentity = function(a, b){ return a === b; };
  *
  * console.log(diff([1], [1, 2])); // -> [{index: 1, deleteCount: 0, insert: [2]}]
  * console.log(diff([1, 2], [1])); // -> [{index: 1, deleteCount: 1, insert: []}]
- * 
+ *
  * // with an optional identity function:
  * diff(
  *     [{id:1},{id:2}],
@@ -49,7 +80,7 @@ var defaultIdentity = function(a, b){ return a === b; };
 
 module.exports = exports = function(oldList, newList, identity){
 	identity = identity || defaultIdentity;
-	
+
 	var oldIndex = 0,
 		newIndex =  0,
 		oldLength = oldList.length,
@@ -87,10 +118,13 @@ module.exports = exports = function(oldList, newList, identity){
 		// 1 2 3
 		// 1 2 5 6 7
 		else {
-			patches.push(
-				{index: newIndex,
-				 deleteCount: oldLength-oldIndex,
-				 insert: slice.call(newList, newIndex) } );
+			// iterate backwards to `newIndex`
+			// "a", "b", "c", "d", "e"
+			// "a", "x", "y", "z", "e"
+			// -> {}
+			patches.push.apply(patches, reverseDiff(oldIndex, newIndex , oldList, newList, identity) );
+
+
 			return patches;
 		}
 	}
@@ -106,6 +140,9 @@ module.exports = exports = function(oldList, newList, identity){
 
 	return patches;
 };
+
+
+
 
 // a b c
 // a d e b c
