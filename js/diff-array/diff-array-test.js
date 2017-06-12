@@ -32,16 +32,21 @@ QUnit.test("basics", function(){
 		insert: []
 	}],"remove one in the middle");
 
-	patches = diffArray(["a","b","z","f","x"],["a","b","f","w","z"]);
-	deepEqual(patches, [{
-		index: 2,
-		insert: [],
-		deleteCount: 1
-	},{
-		index: 3,
-		deleteCount: 1,
-		insert: ["w","z"]
-	}]);
+	patches = diffArray(
+		["a","b","z","f","x"],
+		["a","b","f","w","z"]);
+	// delete 1 at 2
+	// delete 1 at 3, insert 2
+	deepEqual(patches, [
+		{
+			index: 2,
+			deleteCount: 1,
+			insert: []
+		},{
+			index: 3,
+			deleteCount: 1,
+			insert: ["w","z"]
+		}], "can delete one");
 
 	patches = diffArray(["a","b","b"],["c","a","b"]);
 	deepEqual(patches, [{
@@ -55,9 +60,9 @@ QUnit.test("basics", function(){
 	}]);
 
 	// a, b, c, d, e, f, g
-	// a, c, d, e, f, g
-	// a, c, e, f, g
-	// a, c, e, g
+	// a, X, c, d, e, f, g
+	// a, X, c, X, e, f, g
+	// a, X, c, X, e, X, g
 	patches = diffArray(["a","b","c","d","e","f","g"],["a","c","e","g"]);
 	deepEqual(patches, [{
 		index: 1,
@@ -73,5 +78,43 @@ QUnit.test("basics", function(){
 		deleteCount: 1,
 		insert: []
 	}]);
+
+});
+
+QUnit.test("handle swaps at the end (#193)", function(){
+
+	var patches = diffArray(
+		["a", "b", "c", "d", "e"],
+		["a", "x", "y", "z", "e"]);
+
+	deepEqual(patches,[
+		{
+			index: 1,
+			deleteCount: 3,
+			insert: ["x","y","z"]
+		}
+	],"handle reverse patch");
+
+});
+
+
+QUnit.test("handle swaps at the end after a delete (#193)", function(){
+
+	var patches = diffArray(
+		["a", "b", "c", "d", "e"],
+		["a", "x", "b", "y", "z", "e"]);
+
+	deepEqual(patches,[
+		{
+			index: 1,
+			deleteCount: 0,
+			insert: ["x"]
+		},
+		{
+			index: 3,
+			deleteCount: 2,
+			insert: ["y","z"]
+		}
+	],"handle reverse patch");
 
 });
