@@ -80,6 +80,7 @@
     "can-event-radiochange": "^0.1.1",
     "can-namespace": "1.0.0",
     "can-param": "^1.0.0",
+    "can-reflect": "^1.0.0-pre.1",
     "can-types": "^1.0.1"
   },
   "license": "MIT"
