@@ -38,3 +38,8 @@ QUnit.test("Numbers", function(){
 QUnit.test("NaN", function(){
 	QUnit.equal(isPlainObject(NaN), false, "NaN is not a plain object");
 });
+
+QUnit.test("non-Object constructor", function() {
+	var Constructor = function() {};
+	QUnit.equal(isPlainObject(new Constructor()), false, "constructed object is not a plain object");
+});
