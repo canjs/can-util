@@ -2,7 +2,7 @@
 
 var QUnit = require('../../test/qunit');
 var each  = require('./each');
-var types = require('can-types');
+var canSymbol = require("can-symbol");
 
 QUnit.module('can-util/js/each');
 
@@ -34,7 +34,7 @@ test('#1989 - isArrayLike needs to check for object type', function() {
 
 test("objects that implement iterators work", function() {
 	var Ctr = function(){};
-	Ctr.prototype[types.iterator] = function(){
+	Ctr.prototype[canSymbol.iterator || canSymbol.for("iterator")] = function(){
 		return {
 			i: 0,
 			next: function(){
