@@ -27,7 +27,8 @@ var canDev = require('../../../js/dev/dev');
  */
 
  //!steal-remove-start
- canDev.warn('dom/events/radiochange/radiochange is deprecated; please use can-event-radiochange instead: https://github.com/canjs/can-event-radiochange');
+ canDev.warn('dom/events/radiochange/radiochange is deprecated; please use can-event-dom-radiochange instead: https://github.com/canjs/can-event-dom-radiochange');
  //!steal-remove-end
 
-require('can-event-radiochange/override').override(events);
+var addRadioChange = require('can-event-dom-radiochange/compat');
+addRadioChange(events);
