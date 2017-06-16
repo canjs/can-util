@@ -54,7 +54,7 @@ function startObserving (target) {
 		attributes: true,
 		attributeOldValue: true
 	});
-	domData.set.call(target, "canAttributesObserver", observer);
+	domData.set.call(target, attributesObserverKey, observer);
 }
 
 function stopObserving (target) {
@@ -64,7 +64,7 @@ function stopObserving (target) {
 
 	domData.clean.call(target, attributesFlagKey);
 
-	var observer = domData.get.call(target, "canAttributesObserver");
+	var observer = domData.get.call(target, attributesObserverKey);
 	if (observer && observer.disconnect) {
 		observer.disconnect();
 	}
