@@ -12,7 +12,7 @@ function isPlainObject(obj) {
 	// Must be an Object.
 	// Because of IE, we also have to check the presence of the constructor property.
 	// Make sure that DOM nodes and window objects don't pass through, as well
-	if (!obj || typeof obj !== 'object' || obj.nodeType || isWindow(obj) || obj.constructor && obj.constructor.name !== "Object") {
+	if (!obj || typeof obj !== 'object' || obj.nodeType || isWindow(obj) || obj.constructor && obj.constructor.shortName) {
 		return false;
 	}
 	try {

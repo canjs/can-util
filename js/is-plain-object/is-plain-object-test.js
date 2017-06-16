@@ -2,6 +2,7 @@
 
 var QUnit = require('../../test/qunit');
 var isPlainObject = require('./is-plain-object');
+var DefineMap = require('can-define/map/map');
 
 QUnit.module("can-util/js/is-plain-object");
 
@@ -40,6 +41,7 @@ QUnit.test("NaN", function(){
 });
 
 QUnit.test("non-Object constructor", function() {
-	var Constructor = function() {};
-	QUnit.equal(isPlainObject(new Constructor()), false, "constructed object is not a plain object");
+	var Constructor = DefineMap.extend();
+	QUnit.ok(!isPlainObject(new DefineMap()), "instance of DefineMap is not a plain object");
+	QUnit.ok(!isPlainObject(new Constructor()), "instance of extended DefineMap is not a plain object");
 });
