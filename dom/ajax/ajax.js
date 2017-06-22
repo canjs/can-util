@@ -70,6 +70,11 @@ var makeXhr = function () {
 	return function () { };
 };
 
+var contentTypes = {
+	json: "application/json",
+	form: "application/x-www-form-urlencoded"
+};
+
 var _xhrResp = function (xhr, options) {
 	switch (options.dataType || xhr.getResponseHeader("Content-Type").split(";")[0]) {
 		case "text/xml":
@@ -107,6 +112,12 @@ module.exports = namespace.ajax = function (o) {
 		data: null,
 		dataType: "json"
 	}, o);
+
+	// Set the default contentType
+	if(!o.contentType) {
+		o.contentType = o.type.toUpperCase() === "GET" ?
+			contentTypes.form : contentTypes.json;
+	}
 
 	//how jquery handles check for cross domain
 	if(o.crossDomain == null){
@@ -159,24 +170,29 @@ module.exports = namespace.ajax = function (o) {
 		}
 	};
 	var url = o.url, data = null, type = o.type.toUpperCase();
+	var isJsonContentType = o.contentType === contentTypes.json;
 	var isPost = type === "POST" || type === "PUT";
 	if (!isPost && o.data) {
-		url += "?" + param(o.data);
+		url += "?" + (isJsonContentType ? JSON.stringify(o.data) : param(o.data));
 	}
 	xhr.open(type, url);
 
 	// For CORS to send a "simple" request (to avoid a preflight check), the following methods are allowed: GET/POST/HEAD,
 	// see https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS#Simple_requests
+	
 	var isSimpleCors = o.crossDomain && ['GET', 'POST', 'HEAD'].indexOf(type) !== -1;
 
 	if (isPost) {
-		var isJson = o.dataType.indexOf("json") >= 0;
-		data = (isJson && !isSimpleCors) ?
+		data = (isJsonContentType && !isSimpleCors) ?
 			(typeof o.data === "object" ? JSON.stringify(o.data) : o.data):
 			param(o.data);
 
 		// CORS simple: `Content-Type` has to be `application/x-www-form-urlencoded`:
-		xhr.setRequestHeader("Content-Type", (isJson && !isSimpleCors) ? "application/json" : "application/x-www-form-urlencoded");
+		var setContentType = (isJsonContentType && !isSimpleCors) ?
+			"application/json" : "application/x-www-form-urlencoded";
+		xhr.setRequestHeader("Content-Type", setContentType);
+	} else {
+		xhr.setRequestHeader("Content-Type", o.contentType);
 	}
 
 	// CORS simple: no custom headers, so we don't add `X-Requested-With` header:
