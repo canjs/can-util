@@ -114,7 +114,7 @@ var originalRemove = events.removeEventListener;
 events.addEventListener = function(eventName, handler) {
 	if(eventName === attributesEventType) {
 		startObserving(this);
-		addListener(handler);
+		addListener(this, handler);
 	}
 	return originalAdd.apply(this, arguments);
 };
