@@ -25,7 +25,7 @@ var originalAdd = events.addEventListener,
  * function attributesHandler() {
  * 	console.log("attributes event fired");
  * }
- * 
+ *
  * events.addEventListener.call(el, "attributes", attributesHandler, false);
  *
  * events.removeEventListener.call(el, "attributes", attributesHandler);
@@ -35,19 +35,22 @@ events.addEventListener = function(eventName){
 	if(eventName === "attributes") {
 		var MutationObserver = getMutationObserver();
 		if( isOfGlobalDocument(this) && MutationObserver ) {
-			var self = this;
-			var observer = new MutationObserver(function (mutations) {
-				mutations.forEach(function (mutation) {
-					var copy = assign({}, mutation);
-					domDispatch.call(self, copy, [], false);
-				});
+			var existingObserver = domData.get.call(this, "canAttributesObserver");
+			if (!existingObserver) {
+				var self = this;
+				var observer = new MutationObserver(function (mutations) {
+					mutations.forEach(function (mutation) {
+						var copy = assign({}, mutation);
+						domDispatch.call(self, copy, [], false);
+					});
 
-			});
-			observer.observe(this, {
-				attributes: true,
-				attributeOldValue: true
-			});
-			domData.set.call(this, "canAttributesObserver", observer);
+				});
+				observer.observe(this, {
+					attributes: true,
+					attributeOldValue: true
+				});
+				domData.set.call(this, "canAttributesObserver", observer);
+			}
 		} else {
 			domData.set.call(this, "canHasAttributesBindings", true);
 		}
