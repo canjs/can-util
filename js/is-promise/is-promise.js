@@ -1,6 +1,6 @@
 'use strict';
 
-var types = require('can-types');
+var canReflect = require('can-reflect');
 /**
  * @module {function} can-util/js/is-promise/is-promise is-promise
  * @parent can-util/js
@@ -23,5 +23,5 @@ var types = require('can-types');
  * @return {Boolean} True if the object is a Promise.
  */
 module.exports = function(obj) {
-	return types.isPromise(obj);
+	return canReflect.isPromise(obj);
 };

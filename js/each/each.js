@@ -4,7 +4,7 @@
 var isArrayLike = require('../is-array-like/is-array-like');
 var has = Object.prototype.hasOwnProperty;
 var isIterable = require("../is-iterable/is-iterable");
-var types = require("can-types");
+var canSymbol = require("can-symbol");
 
 function each(elements, callback, context) {
 	var i = 0,
@@ -23,7 +23,7 @@ function each(elements, callback, context) {
 		}
 		// Works in anything that implements Symbol.iterator
 		else if(isIterable(elements)) {
-			var iter = elements[types.iterator]();
+			var iter = elements[canSymbol.iterator || canSymbol.for("iterator")]();
 			var res, value;
 
 			while(!(res = iter.next()).done) {

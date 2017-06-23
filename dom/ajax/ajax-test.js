@@ -3,6 +3,9 @@
 var ajax = require('can-util/dom/ajax/ajax');
 var namespace = require("can-namespace");
 var makeMap = require('can-util/js/make-map/make-map');
+var GLOBAL = require("../../js/global/global");
+var parseURI = require('../../js/parse-uri/parse-uri');
+
 
 QUnit = require('steal-qunit');
 
@@ -107,6 +110,171 @@ QUnit.asyncTest("ignores case of type parameter for a post request (#100)", func
 	});
 });
 
+QUnit.asyncTest("url encodes GET requests when no contentType", function(){
+	var restore = makeFixture(function () {
+		var o = {};
+		this.open = function (type, url) {
+			o.url = url;
+		};
+
+		this.send = function (data) {
+			o.data = data;
+			this.readyState = 4;
+			this.status = 200;
+			this.responseText = JSON.stringify(o);
+			this.onreadystatechange();
+		};
+
+		this.setRequestHeader = function (header, value) {
+			if (header === "Content-Type") {
+				o[header] = value;
+			}
+		};
+	});
+
+	ajax({
+		type: "get",
+		url: "http://anotherdomain.com/foo",
+		data: { foo: "bar" }
+	}).then(function(value){
+		QUnit.equal(value["Content-Type"], "application/x-www-form-urlencoded");
+		QUnit.equal(value.data, undefined, "No data provided because it's a GET");
+		QUnit.equal(value.url, "http://anotherdomain.com/foo?foo=bar");
+	}, function (reason) {
+		QUnit.notOk(reason, "request failed with reason = ", reason);
+	})
+	.then(function(){
+		restore();
+		start();
+	});
+});
+
+QUnit.asyncTest("Stringifies GET requests when contentType=application/json", function(){
+	var restore = makeFixture(function () {
+		var o = {};
+		this.open = function (type, url) {
+			o.url = url;
+		};
+
+		this.send = function (data) {
+			o.data = data;
+			this.readyState = 4;
+			this.status = 200;
+			this.responseText = JSON.stringify(o);
+			this.onreadystatechange();
+		};
+
+		this.setRequestHeader = function (header, value) {
+			if (header === "Content-Type") {
+				o[header] = value;
+			}
+		};
+	});
+
+	ajax({
+		type: "get",
+		url: "http://anotherdomain.com/foo",
+		data: { foo: "bar" },
+		contentType: "application/json"
+	}).then(function(value){
+		QUnit.equal(value["Content-Type"], "application/json");
+		QUnit.equal(value.data, undefined, "No data provided because it's a GET");
+		QUnit.equal(value.url, 'http://anotherdomain.com/foo?{"foo":"bar"}');
+	}, function (reason) {
+		QUnit.notOk(reason, "request failed with reason = ", reason);
+	})
+	.then(function(){
+		restore();
+		start();
+	});
+
+});
+
+QUnit.asyncTest("Stringifies POST requests when there is no contentType", function(){
+	var restore = makeFixture(function () {
+		var o = {};
+		this.open = function (type, url) {
+			o.url = url;
+		};
+
+		this.send = function (data) {
+			o.data = data;
+			this.readyState = 4;
+			this.status = 200;
+			this.responseText = JSON.stringify(o);
+			this.onreadystatechange();
+		};
+
+		this.setRequestHeader = function (header, value) {
+			if (header === "Content-Type") {
+				o[header] = value;
+			}
+		};
+	});
+
+	var origin = parseURI(GLOBAL().location.href);
+	var url = origin.protocol + origin.authority + "/foo";
+
+	ajax({
+		type: "post",
+		url: url,
+		data: { foo: "bar" }
+	}).then(function(value){
+		QUnit.equal(value["Content-Type"], "application/json");
+		QUnit.equal(value.data, '{"foo":"bar"}', "Data was stringified");
+		QUnit.equal(value.url, url);
+	}, function (reason) {
+		QUnit.notOk(reason, "request failed with reason = ", reason);
+	})
+	.then(function(){
+		restore();
+		start();
+	});
+
+});
+
+QUnit.asyncTest("url encodes POST requests when contentType=application/x-www-form-urlencoded", function(){
+	// test that contentType is application/blah
+	var restore = makeFixture(function () {
+		var o = {};
+		this.open = function (type, url) {
+			o.url = url;
+		};
+
+		this.send = function (data) {
+			o.data = data;
+			this.readyState = 4;
+			this.status = 200;
+			this.responseText = JSON.stringify(o);
+			this.onreadystatechange();
+		};
+
+		this.setRequestHeader = function (header, value) {
+			if (header === "Content-Type") {
+				o[header] = value;
+			}
+		};
+	});
+
+	ajax({
+		type: "post",
+		url: "http://anotherdomain.com/foo",
+		data: { foo: "bar" },
+		contentType: "application/x-www-form-urlencoded"
+	}).then(function(value){
+		QUnit.equal(value["Content-Type"], "application/x-www-form-urlencoded");
+		QUnit.equal(value.data, 'foo=bar', "Data was url encoded");
+		QUnit.equal(value.url, 'http://anotherdomain.com/foo');
+	}, function (reason) {
+		QUnit.notOk(reason, "request failed with reason = ", reason);
+	})
+	.then(function(){
+		restore();
+		start();
+	});
+
+});
+
 if(typeof XDomainRequest === 'undefined') {
 	QUnit.asyncTest("cross domain post request should change data to form data (#90)", function () {
 		ajax({
@@ -119,7 +287,7 @@ if(typeof XDomainRequest === 'undefined') {
 			start();
 		});
 	});
-	
+
 	// Test simple GET CORS:
 	QUnit.asyncTest("GET CORS should be a simple request - without a preflight (#187)", function () {
 
@@ -145,10 +313,10 @@ if(typeof XDomainRequest === 'undefined') {
 			};
 		
 			this.setRequestHeader = function (header, value) {
-				if (header === "Content-Type" && !isSimpleHeader(value)){
+				if (header === "Content-Type" && !isSimpleContentType(value)){
 					isSimpleRequest = false;
 				}
-				if (isSimpleContentType(header)){
+				if (isSimpleRequest && !isSimpleHeader(header)){
 					isSimpleRequest = false;
 				}
 				response[header] = value;

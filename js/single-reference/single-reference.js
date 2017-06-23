@@ -1,9 +1,12 @@
-// can-util/js/single-reference/single-reference
-var CID = require("../cid/get-cid");
-
+var canReflect = require('can-reflect/reflections/get-set/get-set');
+var CID = require("can-cid");
 
 var singleReference;
 
+function getKeyName(key, extraKey) {
+	var keyName = extraKey ? CID(key) + ":" + extraKey : CID(key);
+	return keyName || key;
+}
 
 // weak maps are slow
 /* if(typeof WeakMap !== "undefined") {
@@ -22,22 +25,21 @@ var singleReference;
 		references: globalMap
 	};
 } else {*/
-  singleReference = {
-      // obj is a function ... we need to place `value` on it so we can retreive it
-      // we can't use a global map
-      set: function(obj, key, value){
-         // check if it has a single reference map
-         var keyName = CID(key);
-         obj[keyName] = value;
-      },
+	singleReference = {
+		// obj is a function ... we need to place `value` on it so we can retreive it
+		// we can't use a global map
+		set: function(obj, key, value, extraKey){
+			// check if it has a single reference map
+			canReflect.set(obj, getKeyName(key, extraKey), value);
+		},
 
-      getAndDelete: function(obj, key){
-         var cid = CID(key);
-         var value = obj[cid];
-         delete obj[cid];
-         return value;
-      }
-  };
-//}
+		getAndDelete: function(obj, key, extraKey){
+			var keyName = getKeyName(key, extraKey);
+			var value = canReflect.get(obj, keyName);
+			canReflect.delete(obj, keyName);
+			return value;
+		}
+	};
+/*}*/
 
 module.exports = singleReference;
