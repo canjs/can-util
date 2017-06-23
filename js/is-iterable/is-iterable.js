@@ -1,7 +1,7 @@
 'use strict';
 
-var types = require("can-types");
+var canSymbol = require("can-symbol");
 
 module.exports = function(obj) {
-	return obj && !!obj[types.iterator];
+	return obj && !!obj[canSymbol.iterator || canSymbol.for("iterator")];
 };
