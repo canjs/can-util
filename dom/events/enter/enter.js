@@ -1,8 +1,7 @@
 'use strict';
 
-var domEvents = require("../events");
-var singleReference = require("../../../js/single-reference/single-reference");
-var CID = require("../../../js/cid/get-cid");
+var events = require("../events");
+var canDev = require('../../../js/dev/dev');
 
 /**
  * @module {events} can-util/dom/events/enter/enter enter
@@ -27,27 +26,9 @@ var CID = require("../../../js/cid/get-cid");
  *
  */
 
-var origAddEvt = domEvents.addEventListener;
-domEvents.addEventListener = function(eventName, handler){
-   if(eventName === "enter") {
-       var boundHandler = function(ev){
-           if (ev.keyCode === 13 || ev.key === "Enter") {
-               return handler.call(this, ev);
-           }
-       };
-       singleReference.set(handler, CID(this) + eventName, boundHandler);
-       origAddEvt.call(this, "keyup", boundHandler);
-   } else {
-       origAddEvt.apply(this, arguments);
-   }
-};
+ //!steal-remove-start
+ canDev.warn('dom/events/enter/enter is deprecated; please use can-event-dom-enter instead: https://github.com/canjs/can-event-dom-enter');
+ //!steal-remove-end
 
-var origRemoveEvt = domEvents.removeEventListener;
-domEvents.removeEventListener = function(eventName, handler){
-   if(eventName === "enter") {
-       var relatedHandler = singleReference.getAndDelete(handler, CID(this) + eventName);
-       origRemoveEvt.call(this, "keyup", relatedHandler);
-   } else {
-       origRemoveEvt.apply(this, arguments);
-   }
-};
+var addEnter = require('can-event-dom-enter/compat');
+addEnter(events);
