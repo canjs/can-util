@@ -22,7 +22,6 @@
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
     "document": "bit-docs",
-    "develop": "done-serve --static --develop --port 8080",
     "http-server": "http-server -p 3000 --silent",
     "ci": "npm run build && npm run test && node test/test-sauce-labs.js"
   },
@@ -37,9 +36,6 @@
     "bit-docs": "0.0.7",
     "can-define": "^1.2.0-pre.8",
     "can-vdom": "^3.1.0-pre.1",
-    "done-serve": "^1.0.0",
-    "donejs-cli": "^1.0.0",
-    "generator-donejs": "^1.0.0",
     "http-server": "^0.10.0",
     "jshint": "^2.9.1",
     "mocha": "^3.0.2",
