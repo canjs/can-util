@@ -4,12 +4,14 @@ var _document = require("../document/document");
 var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
 var isPlainObject = require("../../js/is-plain-object/is-plain-object");
 var fixSyntheticEventsOnDisabled = false;
+var dev = require('can-util/js/dev/dev');
 
 function isDispatchingOnDisabled(element, ev) {
 	var isInsertedOrRemoved = isPlainObject(ev) ? (ev.type === 'inserted' || ev.type === 'removed') : (ev === 'inserted' || ev === 'removed');
 	var isDisabled = !!element.disabled;
 	return isInsertedOrRemoved && isDisabled;
 }
+
 /**
  * @module {{}} can-util/dom/events/events events
  * @parent can-util/dom
@@ -47,6 +49,17 @@ module.exports = {
 				}
 			}
 		}
+
+		if(this.disabled === true) {
+			//!steal-remove-start
+			dev.warn(
+				"can-util/dom/events::dispatch: Dispatching a synthetic event on a disabled is " +
+				"problematic in FireFox and Internet Exprorer. We recommend avoiding this if at " +
+				"all possible. see https://github.com/canjs/can-util/issues/294"
+			);
+			//!steal-remove-end
+		}
+
 		ev.args = args;
 		if(dispatchingOnDisabled) {
 			this.disabled = false;

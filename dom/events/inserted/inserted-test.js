@@ -4,6 +4,7 @@ require('can-util/dom/events/inserted/');
 var domEvents = require('can-util/dom/events/');
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/');
 var domMutate = require("can-util/dom/mutate/");
+var dev = require('can-util/js/dev/');
 
 QUnit = require('steal-qunit');
 
@@ -29,23 +30,31 @@ function runTest(name, MUT_OBS) {
 
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});
-	
-	asyncTest("basic disabled insertion", function () {
-		expect(1);
-		var input = document.createElement("input");
-		input.disabled = true;
 
-		domEvents.addEventListener.call(input,"inserted", function(){
-			ok(true, "called back");
-			start();
-		});
+	if (System.env.indexOf('production') < 0) {
+		asyncTest("basic disabled insertion", function () {
+			var oldlog = dev.warn;
+			var message = 'can-util/dom/events::dispatch';
 
-		// With no mutation observer this test will not pass without a setTimeout
-		// There is a setTimeout, 0 in the non-mutation observer code path
-		setTimeout(function(){
+			var thisTest = QUnit.config.current;
+			dev.warn = function(text) {
+				if(QUnit.config.current === thisTest) {
+					equal(text.slice(0, message.length), message, 'Got expected warning.');
+					start();
+
+					dev.warn = oldlog;
+				}
+			};
+
+			expect(1);
+			var input = document.createElement("input");
+			input.disabled = true;
+
+			domEvents.addEventListener.call(input,"inserted", function(){});
 			domMutate.appendChild.call(document.getElementById("qunit-fixture"), input);
-		}, 50);
-	});
+		});
+	}
+
 	asyncTest("parent then child inserted - appendChild", function () {
 		expect(1);
 		var div = document.createElement("div");
