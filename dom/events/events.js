@@ -4,7 +4,7 @@ var _document = require("../document/document");
 var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
 var isPlainObject = require("../../js/is-plain-object/is-plain-object");
 var fixSyntheticEventsOnDisabled = false;
-var dev = require('can-util/js/dev/dev');
+var dev = require('../../js/dev/dev');
 
 function isDispatchingOnDisabled(element, ev) {
 	var isInsertedOrRemoved = isPlainObject(ev) ? (ev.type === 'inserted' || ev.type === 'removed') : (ev === 'inserted' || ev === 'removed');

@@ -4,7 +4,7 @@ require('can-util/dom/events/inserted/');
 var domEvents = require('can-util/dom/events/');
 var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/');
 var domMutate = require("can-util/dom/mutate/");
-var dev = require('can-util/js/dev/');
+var dev = require('can-util/js/dev/dev');
 
 QUnit = require('steal-qunit');
 
