@@ -50,7 +50,8 @@ module.exports = {
 			}
 		}
 
-		if(this.disabled === true) {
+		// ignore events from feature detection below
+		if(this.disabled === true && ev.type !== 'fix_synthetic_events_on_disabled_test') {
 			//!steal-remove-start
 			dev.warn(
 				"can-util/dom/events::dispatch: Dispatching a synthetic event on a disabled is " +
