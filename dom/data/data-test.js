@@ -10,6 +10,7 @@ var QUnit = require("steal-qunit");
 
 var document = getDocument();
 
+
 QUnit.module("can-util/dom/data", {
 	beforeEach: function() {
 		this.fixture = document.getElementById("qunit-fixture");
@@ -31,10 +32,16 @@ test("domData should be cleaned up if element is removed from DOM", function(ass
 
 	mutate.removeChild.call(this.fixture, div);
 
-	setTimeout(function() {
-		QUnit.deepEqual(domDataCore._data, origData, "domData._data returned to initial state");
-		done();
-	}, 10);
+	var checkResetChanges = function(){
+		var newData = assign({}, domDataCore._data);
+		if(diff(origData, newData).length === 0) {
+			QUnit.deepEqual(domDataCore._data, origData, "domData._data returned to initial state");
+			done();
+		} else {
+			setTimeout(checkResetChanges,10);
+		}
+	};
+	checkResetChanges();
 });
 
 test("domData should be cleaned up if multiple elements are removed from DOM", function(assert) {
