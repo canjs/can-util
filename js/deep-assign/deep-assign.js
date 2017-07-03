@@ -1,6 +1,5 @@
 'use strict';
 
-var isArray = require('../is-array/is-array');
 var isFunction = require('../is-function/is-function');
 var isPlainObject = require('../is-plain-object/is-plain-object');
 
@@ -37,10 +36,10 @@ function deepAssign() {
 				}
 
 				// Recurse if we're merging plain objects or arrays
-				if (copy && (isPlainObject(copy) || (copyIsArray = isArray(copy)))) {
+				if (copy && (isPlainObject(copy) || (copyIsArray = Array.isArray(copy)))) {
 					if (copyIsArray) {
 						copyIsArray = false;
-						clone = src && isArray(src) ? src : [];
+						clone = src && Array.isArray(src) ? src : [];
 
 					} else {
 						clone = src && isPlainObject(src) ? src : {};
