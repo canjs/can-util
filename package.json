@@ -40,7 +40,7 @@
     "mocha": "^3.0.2",
     "mocha-qunit-ui": "^0.1.2",
     "saucelabs": "^1.4.0",
-    "steal": "^1.0.4",
+    "steal": "^1.5.5",
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.0.0",
     "test-saucelabs": "0.0.1",
