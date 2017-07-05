@@ -1,4 +1,3 @@
-var canReflect = require('can-reflect/reflections/get-set/get-set');
 var CID = require("can-cid");
 
 var singleReference;
