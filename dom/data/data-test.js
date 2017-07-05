@@ -32,13 +32,20 @@ test("domData should be cleaned up if element is removed from DOM", function(ass
 
 	mutate.removeChild.call(this.fixture, div);
 
+	var maxTime = Date.now() + 1.5 * 60 * 1000;
 	var checkResetChanges = function(){
 		var newData = assign({}, domDataCore._data);
 		if(diff(origData, newData).length === 0) {
-			QUnit.deepEqual(domDataCore._data, origData, "domData._data returned to initial state");
+			QUnit.ok(true, "domData._data returned to initial state");
 			done();
 		} else {
-			setTimeout(checkResetChanges,10);
+			if (Date.now() > maxTime) {
+				QUnit.ok(false, "domData._data not returned to initial state");
+				done();
+			}
+			else {
+				setTimeout(checkResetChanges, 10);
+			}
 		}
 	};
 	checkResetChanges();
