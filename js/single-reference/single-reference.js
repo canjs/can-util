@@ -30,13 +30,13 @@ function getKeyName(key, extraKey) {
 		// we can't use a global map
 		set: function(obj, key, value, extraKey){
 			// check if it has a single reference map
-			canReflect.set(obj, getKeyName(key, extraKey), value);
+			obj[getKeyName(key, extraKey)] = value;
 		},
 
 		getAndDelete: function(obj, key, extraKey){
 			var keyName = getKeyName(key, extraKey);
-			var value = canReflect.get(obj, keyName);
-			canReflect.delete(obj, keyName);
+			var value = obj[keyName];
+			delete obj[keyName];
 			return value;
 		}
 	};
