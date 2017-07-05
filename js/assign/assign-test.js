@@ -1,3 +1,5 @@
+'use strict';
+
 var assign = require('./assign');
 var QUnit = require('../../test/qunit');
 
