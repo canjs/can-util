@@ -214,7 +214,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 							element.focus();
 						} else {
 							element.blur();
-						}                            		
+						}
 					}
 					if (cur !== val) {
 						if (!domContains.call(docEl, element)) {
@@ -516,7 +516,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 						} else {
 							attr = attrName.split(':');
 
-							if(attr.length !== 1) {
+							if(attr.length !== 1 && namespaces[attr[0]]) {
 								el.setAttributeNS(namespaces[attr[0]], attrName, val);
 							}
 							else {
