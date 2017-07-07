@@ -624,7 +624,7 @@ test("attr.special.focused binds on inserted if element is detached", 2, functio
 	equal(domAttr.get(input, "focused"), false, "not focused yet");
 	domEvents.addEventListener.call(input, "inserted", function() {
 		equal(domAttr.get(input, "focused"), true, "it is now focused");
-		start();		
+		start();
 	});
 	mutate.appendChild.call(ta, input);
 
@@ -812,4 +812,11 @@ test('setting checked to undefined should result in false for checkboxes (#184)'
 	QUnit.equal(input.checked, true, 'Should become true');
 	domAttr.set(input, 'checked', undefined);
 	QUnit.equal(input.checked, false, 'Should become false again');
+});
+
+test("set attribute with namespaces (#309)", function(){
+	var div = document.createElement('div');
+
+	domAttr.set(div, 'foo:bar', 'value');
+	QUnit.equal(domAttr.get(div,'foo:bar'), 'value');
 });
