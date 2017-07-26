@@ -6,8 +6,13 @@ var hasWarned = false;
 /**
  * @module {function} can-util/js/is-string/is-string is-string
  * @parent can-util/js
- * @description Determines if the provided argument is a string.
  * @signature `isString(obj)`
+ *
+ * **Deprecated**:
+ * This method is will be removed in can-util 4.0.
+ * Use `typeof obj === 'string'` instead of `isString(obj)`.
+ *
+ * Determines if the provided argument is a string.
  *
  * ```js
  * var isString = require("can-util/js/is-string/is-string");
