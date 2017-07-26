@@ -1,0 +1,13 @@
+/*can-util@3.9.7#dom/is-of-global-document/is-of-global-document*/
+define([
+    'require',
+    'exports',
+    'module',
+    '../document/document'
+], function (require, exports, module) {
+    'use strict';
+    var getDocument = require('../document/document');
+    module.exports = function (el) {
+        return (el.ownerDocument || el) === getDocument();
+    };
+});
