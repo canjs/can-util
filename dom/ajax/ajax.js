@@ -33,7 +33,7 @@ var param = require("can-param");
  *    @param {Object} ajaxOptions Configuration options for the AJAX request.
  *      - __url__ `{String}` The requested url.
  *      - __type__ `{String}` The method of the request. Ex: `GET`, `PUT`, `POST`, etc. Capitalization is ignored. _Default is `GET`_.
- *      - __data__ `{Object}` The data of the request. If data needs to be urlencoded (e.g. for GET requests or for CORS) it is serialized with [can-util/js/param].
+ *      - __data__ `{Object}` The data of the request. If data needs to be urlencoded (e.g. for GET requests or for CORS) it is serialized with [can-param].
  *      - __dataType__ `{String}` Type of data. _Default is `json`_.
  *      - __crossDomain__ `{Boolean}` If you wish to force a crossDomain request (such as JSONP) on the same domain, set the value of crossDomain to true. This allows, for example, server-side redirection to another domain. Default: `false` for same-domain requests, `true` for cross-domain requests.
  *
