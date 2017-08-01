@@ -19,8 +19,8 @@ var useCapture = function(eventType) {
  * @module {events} can-util/dom/events/delegate/delegate delegateEvents
  * @parent can-util/dom/events/events
  *
- * Add delegate listeners to DOM events.  Delegated listeners use a selector on an 
- * ancestor element to determine when to fire the event for an item.  This can help 
+ * Add delegate listeners to DOM events.  Delegated listeners use a selector on an
+ * ancestor element to determine when to fire the event for an item.  This can help
  * cases where large numbers of similar DOM nodes are added into a DOM subtree, since
  * event handlers do not have to be attached to each new node.
  *
@@ -35,7 +35,7 @@ var useCapture = function(eventType) {
  * function delegateEventsHandler() {
  * 	console.log("delegate event fired");
  * }
- * 
+ *
  * events.addDelegateListener.call(el, "click", ".foo", delegateEventsHandler, false);
  *
  * events.removeDelegateListener.call(el, "click", ".foo", delegateEventsHandler);
@@ -142,7 +142,7 @@ domEvents.addDelegateListener = function(eventType, selector, handler) {
  * @param {String} selector  A CSS selector that matches a delegate selector added for this event type
  * @param {function(event)} handler   The function bound as handler when the listener was added
  *
- * Remove a delegated event added by in [can-util/dom/delegate/delegate.addDelegateListener addDelegateListener] 
+ * Remove a delegated event added by in [can-util/dom/delegate/delegate.addDelegateListener addDelegateListener]
  */
 domEvents.removeDelegateListener = function(eventType, selector, handler) {
 	var events = domData.get.call(this, dataName);

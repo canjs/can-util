@@ -5,7 +5,8 @@ var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var DOCUMENT = require("../document/document");
 var makeDocument = require("can-vdom/make-document/make-document");
 
-QUnit = require('steal-qunit');
+var hasBubblingEvents = require('../../test/helpers').hasBubblingEvents;
+var QUnit = require('../../test/qunit');
 
 QUnit.module("can-util/dom/mutate");
 
@@ -75,7 +76,7 @@ test("removing the body causes removed events", function () {
 	*/
 });
 
-if(window.eventsBubble) {
+if (hasBubblingEvents()) {
 	test("inserting into a different document fires inserted", function(){
 		var enableMO = disableMO();
 
@@ -86,14 +87,12 @@ if(window.eventsBubble) {
 		var div = document.createElement("div");
 		div.addEventListener("inserted", function(){
 			ok(true, "called");
-		});
-		mutate.appendChild.call(doc.body, div);
-
-		stop();
-		setTimeout(function(){
 			enableMO();
 			DOCUMENT(oldDoc);
 			start();
-		}, 10);
+		});
+
+		mutate.appendChild.call(doc.body, div);
+		stop();
 	});
 }

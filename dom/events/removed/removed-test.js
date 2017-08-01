@@ -1,12 +1,12 @@
 'use strict';
 
-require('can-util/dom/events/removed/');
-var each = require('can-util/js/each/');
-var domEvents = require('can-util/dom/events/');
-var getMutationObserver = require('can-util/dom/mutation-observer/');
-var domMutate = require("can-util/dom/mutate/");
+require('./removed');
+var each = require('../../../js/each/each');
+var domEvents = require('../events');
+var getMutationObserver = require('../../mutation-observer/mutation-observer');
+var domMutate = require("../../mutate/mutate");
 
-QUnit = require('steal-qunit');
+var QUnit = require('../../../test/qunit');
 
 var events = [];
 var addEvent = function(el, event, handler){
@@ -18,6 +18,7 @@ var addEvent = function(el, event, handler){
 	});
 };
 var removeEvents = function() {
+	console.log('TEARDOWN');
 	if(events.length) {
 		each(events, function(ev) {
 			domEvents.removeEventListener.call(ev.el, ev.event, ev.handler);
@@ -25,6 +26,7 @@ var removeEvents = function() {
 	}
 	events = [];
 };
+
 
 QUnit.module("can-util/dom/events/removed", {
 	teardown: removeEvents
@@ -74,7 +76,7 @@ if(_MutationObserver) {
 		var span = document.createElement("span");
 		div.appendChild(span);
 
-		
+
 		domEvents.addEventListener.call(span,"removed", function(){
 			ok(true, "called back");
 			start();
@@ -92,7 +94,7 @@ if(_MutationObserver) {
 		div.appendChild(span);
 		div.appendChild(p);
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
-		
+
 		addEvent(p, "removed", function(){
 			ok(false, "called removed");
 		});

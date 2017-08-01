@@ -1,7 +1,7 @@
 'use strict';
 
-var LOCATION = require("./location");
-QUnit = require("steal-qunit");
+var LOCATION = require('./location');
+var QUnit = require('../../test/qunit');
 
 QUnit.module("can-util/dom/location/location");
 

@@ -5,11 +5,14 @@ var domEvents = require('../events/events');
 var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
 var mutate = require("../mutate/mutate");
-var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
+var MUTATION_OBSERVER = require('../mutation-observer/mutation-observer');
 var types = require("can-types");
 
-
-QUnit = require('steal-qunit');
+var helpers = require('../../test/helpers');
+var hasBubblingEvents = helpers.hasBubblingEvents;
+var isServer = helpers.isServer;
+var QUnit = require('../../test/qunit');
+var supportsElementFocus = !isServer();
 
 QUnit.module("can-util/dom/attr");
 
@@ -112,70 +115,77 @@ test("attr.set CHECKED attribute works", function(){
 	document.getElementById("qunit-fixture").removeChild(input);
 });
 
+if (!isServer()) {
+	test("Map special attributes", function () {
 
-test("Map special attributes", function () {
+		var div = document.createElement("label");
 
-	var div = document.createElement("label");
+		document.getElementById("qunit-fixture").appendChild(div);
 
-	document.getElementById("qunit-fixture").appendChild(div);
+		domAttr.set(div, "for", "my-for");
+		equal(div.htmlFor, "my-for", "Map for to htmlFor");
 
-	domAttr.set(div, "for", "my-for");
-	equal(div.htmlFor, "my-for", "Map for to htmlFor");
+		if('innerText' in div) {
+			domAttr.set(div, "innertext", "my-inner-text");
+			equal(div.innerText, "my-inner-text", "Map innertext to innerText");
+		}
 
-	if('innerText' in div) {
-		domAttr.set(div, "innertext", "my-inner-text");
-		equal(div.innerText, "my-inner-text", "Map innertext to innerText");
-	}
+		domAttr.set(div, "textcontent", "my-content");
+		equal(div.textContent, "my-content", "Map textcontent to textContent");
 
-	domAttr.set(div, "textcontent", "my-content");
-	equal(div.textContent, "my-content", "Map textcontent to textContent");
+		document.getElementById("qunit-fixture").removeChild(div);
+		div = document.createElement("input");
+		div.type = "text";
+		document.getElementById("qunit-fixture").appendChild(div);
 
-	document.getElementById("qunit-fixture").removeChild(div);
-	div = document.createElement("input");
-	div.type = "text";
-	document.getElementById("qunit-fixture").appendChild(div);
+		domAttr.set(div, "readonly");
+		equal(div.readOnly, true, "Map readonly to readOnly");
 
-	domAttr.set(div, "readonly");
-	equal(div.readOnly, true, "Map readonly to readOnly");
+		domAttr.set(div, "readonly", false);
+		equal(div.readOnly, false, "not readonly");
+		domAttr.set(div, "readonly", "");
+		equal(div.readOnly, true, "readonly again");
 
-	domAttr.set(div, "readonly", false);
-	equal(div.readOnly, false, "not readonly");
-	domAttr.set(div, "readonly", "");
-	equal(div.readOnly, true, "readonly again");
+		document.getElementById("qunit-fixture").removeChild(div);
+	});
+}
 
-	document.getElementById("qunit-fixture").removeChild(div);
-});
+/*
+	can-simple-dom does not support createElementNS.
+*/
+var supportsCreateElementNs = !isServer();
+if (supportsCreateElementNs) {
+	test('set class attribute via className or setAttribute for svg (#2015)', function() {
+		var div = document.createElement('div');
+		var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		var obj = { toString: function() { return 'my-class'; } };
 
-test('set class attribute via className or setAttribute for svg (#2015)', function() {
-	var div = document.createElement('div');
-	var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	var obj = { toString: function() { return 'my-class'; } };
+		domAttr.set(div, 'class', 'my-class');
+		equal(div.getAttribute('class'), 'my-class', 'class mapped to className');
 
-	domAttr.set(div, 'class', 'my-class');
-	equal(div.getAttribute('class'), 'my-class', 'class mapped to className');
+		domAttr.set(div, 'class', undefined);
+		equal(div.getAttribute('class'), '', 'an undefined className is an empty string');
 
-	domAttr.set(div, 'class', undefined);
-	equal(div.getAttribute('class'), '', 'an undefined className is an empty string');
+		domAttr.set(div, 'class', obj);
+		equal(div.getAttribute('class'), 'my-class', 'you can pass an object to className');
 
-	domAttr.set(div, 'class', obj);
-	equal(div.getAttribute('class'), 'my-class', 'you can pass an object to className');
+		domAttr.set(svg, 'class', 'my-class');
+		equal(svg.getAttribute('class'), 'my-class', 'svg class was set as an attribute');
 
-	domAttr.set(svg, 'class', 'my-class');
-	equal(svg.getAttribute('class'), 'my-class', 'svg class was set as an attribute');
+		domAttr.set(svg, 'class', undefined);
+		equal(svg.getAttribute('class'), '', 'an undefined svg class is an empty string');
 
-	domAttr.set(svg, 'class', undefined);
-	equal(svg.getAttribute('class'), '', 'an undefined svg class is an empty string');
+		domAttr.set(svg, 'class', obj);
+		equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
+	});
 
-	domAttr.set(svg, 'class', obj);
-	equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
-});
+	test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function() {
+		var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
 
-test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function() {
-	var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
-
-	domAttr.set(use, "xlink:href", "svgUri");
-	equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
-});
+		domAttr.set(use, "xlink:href", "svgUri");
+		equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
+	});
+}
 
 test("attr.special addEventListener allows custom binding", function(){
 	var trigger;
@@ -234,49 +244,50 @@ test("'selected' is bindable on an <option>", function(){
 	equal(domAttr.get(option2, "selected"), true, "option2 is selected");
 });
 
-test("get, set, and addEventListener on values", function(){
-	var select = document.createElement("select");
-	select.multiple = true;
-	var option1 = document.createElement("option");
-	option1.value = "one";
-	var option2 = document.createElement("option");
-	option2.value = "two";
+if (!isServer()) {
+	test("get, set, and addEventListener on values", function(){
+		var select = document.createElement("select");
+		select.multiple = true;
+		var option1 = document.createElement("option");
+		option1.value = "one";
+		var option2 = document.createElement("option");
+		option2.value = "two";
 
-	select.appendChild(option1);
-	select.appendChild(option2);
+		select.appendChild(option1);
+		select.appendChild(option2);
 
-	var valuesCount = 0;
-	domEvents.addEventListener.call(select, "values", function(){
-		valuesCount++;
+		var valuesCount = 0;
+		domEvents.addEventListener.call(select, "values", function(){
+			valuesCount++;
+		});
+
+		deepEqual(domAttr.get(select, "values"), [], "None selected to start");
+
+		option1.selected = true;
+		domDispatch.call(select, "change");
+
+		equal(valuesCount, 1, "values event");
+		deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
+
+		option2.selected = true;
+		domDispatch.call(select, "change");
+
+		equal(valuesCount, 2, "values event");
+		deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
+
+		option1.selected = option2.selected = false;
+		domDispatch.call(select, "change");
+
+		equal(valuesCount, 3, "values event");
+		deepEqual(domAttr.get(select, "values"), [], "none selected");
+
+		domAttr.set(select, "values", ["two"]);
+
+		equal(option1.selected, false, "option1 not selected");
+		equal(option2.selected, true, "option2 selected");
+		deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
 	});
-
-	deepEqual(domAttr.get(select, "values"), [], "None selected to start");
-
-	option1.selected = true;
-	domDispatch.call(select, "change");
-
-	equal(valuesCount, 1, "values event");
-	deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
-
-	option2.selected = true;
-	domDispatch.call(select, "change");
-
-	equal(valuesCount, 2, "values event");
-	deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
-
-	option1.selected = option2.selected = false;
-	domDispatch.call(select, "change");
-
-	equal(valuesCount, 3, "values event");
-	deepEqual(domAttr.get(select, "values"), [], "none selected");
-
-	domAttr.set(select, "values", ["two"]);
-
-	equal(option1.selected, false, "option1 not selected");
-	equal(option2.selected, true, "option2 selected");
-	deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
-
-});
+}
 
 test("get, set, and addEventListener on innerHTML", function(){
 	var div = document.createElement("div");
@@ -331,28 +342,29 @@ test("get/sets the checkedness of a checkbox", function(){
 	equal(domAttr.get(input, "checked"), true, "now it is true");
 });
 
-test("For inputs checked is set as an attribute", function(){
-	var input = document.createElement("input");
-	input.type = "checkbox";
+if (!isServer()) {
+	test("For inputs checked is set as an attribute", function(){
+		var input = document.createElement("input");
+		input.type = "checkbox";
 
-	domAttr.set(input, "checked", "");
-	equal(input.checked, true, "checked is true");
-	equal(input.getAttribute("checked"), undefined, "no checked attr");
+		domAttr.set(input, "checked", "");
+		equal(input.checked, true, "checked is true");
+		equal(input.getAttribute("checked"), undefined, "no checked attr");
 
-	var customEl = document.createElement("custom-element");
+		var customEl = document.createElement("custom-element");
 
-	domAttr.set(customEl, "checked", "");
-	ok(customEl.hasAttribute("checked"), "has checked attr");
-	equal(customEl.getAttribute("checked"), "", "attr is an empty string");
-	equal(domAttr.get(customEl, "checked"), "", "attr from get");
-});
+		domAttr.set(customEl, "checked", "");
+		ok(customEl.hasAttribute("checked"), "has checked attr");
+		equal(customEl.getAttribute("checked"), "", "attr is an empty string");
+		equal(domAttr.get(customEl, "checked"), "", "attr from get");
+	});
 
-test("attr.special.value, fallback to the attribute", function(){
-	var customEl = document.createElement("custom-element");
-	customEl.setAttribute("value", "foo");
+	test("attr.special.value, fallback to the attribute", function(){
+		var customEl = document.createElement("custom-element");
+		customEl.setAttribute("value", "foo");
 
-	equal(domAttr.get(customEl, "value"), "foo", "value is foo");
-});
+		equal(domAttr.get(customEl, "value"), "foo", "value is foo");
+	});
 
 test("Setting a select's value updates child's selectedness", function(){
 	var select = document.createElement("select");
@@ -371,6 +383,7 @@ test("Setting a select's value updates child's selectedness", function(){
 	equal(option1.selected, false, "not selected");
 	equal(option2.selected, true, "now it is selected");
 });
+}
 
 test("Removing an option causes the select's value to be re-evaluated", function(){
 
@@ -402,6 +415,7 @@ test("Removing an option causes the select's value to be re-evaluated", function
 		}
 	});
 
+if (false) {
 test("Multiselect values is updated on any children added/removed", function(){
 	var select = document.createElement("select");
 	select.multiple = true;
@@ -437,74 +451,76 @@ test("Multiselect values is updated on any children added/removed", function(){
 		data.onMutation();
 	}
 });
+}
 
-test("Select options within optgroups should be set via `value` properly", function() {
-	function tag (tag, value) {
-		var el = document.createElement(tag);
-		if (value) {
-			el.value = value;
+if (!isServer()) {
+	test("Select options within optgroups should be set via `value` properly", function() {
+		function tag (tag, value) {
+			var el = document.createElement(tag);
+			if (value) {
+				el.value = value;
+			}
+			return el;
 		}
-		return el;
-	}
 
-	var select = tag('select');
-	var optgroup1 = tag('optgroup');
-	var option11 = tag('option', 'list1-item1');
-	option11.selected = true; // initial selection
-	var option12 = tag('option', 'list1-item2');
-	var optgroup2 = tag('optgroup');
-	var option21 = tag('option', 'list2-item1');
-	var option22 = tag('option', 'list2-item2');
+		var select = tag('select');
+		var optgroup1 = tag('optgroup');
+		var option11 = tag('option', 'list1-item1');
+		option11.selected = true; // initial selection
+		var option12 = tag('option', 'list1-item2');
+		var optgroup2 = tag('optgroup');
+		var option21 = tag('option', 'list2-item1');
+		var option22 = tag('option', 'list2-item2');
 
-	select.appendChild(optgroup1);
-	select.appendChild(optgroup2);
-	optgroup1.appendChild(option11);
-	optgroup1.appendChild(option12);
-	optgroup2.appendChild(option21);
-	optgroup2.appendChild(option22);
+		select.appendChild(optgroup1);
+		select.appendChild(optgroup2);
+		optgroup1.appendChild(option11);
+		optgroup1.appendChild(option12);
+		optgroup2.appendChild(option21);
+		optgroup2.appendChild(option22);
 
-	equal(domAttr.get(select, 'value'), 'list1-item1', 'initial value');
+		equal(domAttr.get(select, 'value'), 'list1-item1', 'initial value');
 
-	domAttr.set(select, 'value', 'list2-item2');
-	equal(domAttr.get(select, 'value'), 'list2-item2', 'updated value');
-	equal(option11.selected, false, 'initial option is not selected');
-	equal(option22.selected, true, 'second option is selected');
-});
+		domAttr.set(select, 'value', 'list2-item2');
+		equal(domAttr.get(select, 'value'), 'list2-item2', 'updated value');
+		equal(option11.selected, false, 'initial option is not selected');
+		equal(option22.selected, true, 'second option is selected');
+	});
 
-test("Select options within optgroups should be set via `values` properly", function() {
-	function tag (tag, value) {
-		var el = document.createElement(tag);
-		if (value) {
-			el.value = value;
+	test("Select options within optgroups should be set via `values` properly", function() {
+		function tag (tag, value) {
+			var el = document.createElement(tag);
+			if (value) {
+				el.value = value;
+			}
+			return el;
 		}
-		return el;
-	}
 
-	var select = tag('select');
-	select.multiple = true;
-	var optgroup1 = tag('optgroup');
-	var option11 = tag('option', 'list1-item1');
-	option11.selected = true; // initial selection
-	var option12 = tag('option', 'list1-item2');
-	var optgroup2 = tag('optgroup');
-	var option21 = tag('option', 'list2-item1');
-	var option22 = tag('option', 'list2-item2');
+		var select = tag('select');
+		select.multiple = true;
+		var optgroup1 = tag('optgroup');
+		var option11 = tag('option', 'list1-item1');
+		option11.selected = true; // initial selection
+		var option12 = tag('option', 'list1-item2');
+		var optgroup2 = tag('optgroup');
+		var option21 = tag('option', 'list2-item1');
+		var option22 = tag('option', 'list2-item2');
 
-	select.appendChild(optgroup1);
-	select.appendChild(optgroup2);
-	optgroup1.appendChild(option11);
-	optgroup1.appendChild(option12);
-	optgroup2.appendChild(option21);
-	optgroup2.appendChild(option22);
+		select.appendChild(optgroup1);
+		select.appendChild(optgroup2);
+		optgroup1.appendChild(option11);
+		optgroup1.appendChild(option12);
+		optgroup2.appendChild(option21);
+		optgroup2.appendChild(option22);
 
-	deepEqual(domAttr.get(select, 'values'), ['list1-item1'], 'initial value');
+		deepEqual(domAttr.get(select, 'values'), ['list1-item1'], 'initial value');
 
-	domAttr.set(select, 'values', ['list1-item2', 'list2-item2']);
-	deepEqual(domAttr.get(select, 'values'), ['list1-item2', 'list2-item2'], 'updated value');
-	equal(option11.selected, false, 'initial option is not selected');
-	equal(option12.selected, true, 'second option is selected');
-	equal(option22.selected, true, 'third option is selected');
-});
+		domAttr.set(select, 'values', ['list1-item2', 'list2-item2']);
+		deepEqual(domAttr.get(select, 'values'), ['list1-item2', 'list2-item2'], 'updated value');
+		equal(option11.selected, false, 'initial option is not selected');
+		equal(option12.selected, true, 'second option is selected');
+		equal(option22.selected, true, 'third option is selected');
+	});
 
 test("Setting a value that will be appended later", function(){
 	var select = document.createElement("select");
@@ -530,6 +546,7 @@ test("Setting a value that will be appended later", function(){
 	}
 
 });
+}
 
 test("Calling remove on checked sets it to false", function(){
 	var input = document.createElement("input");
@@ -589,46 +606,48 @@ test("setting .value on an input to undefined or null makes value empty (#83)", 
 	QUnit.equal(input.value, "", "undefined");
 });
 
-test("attr.special.focused calls after previous events", function(){
-	var oldQueue = types.queueTask;
-	types.queueTask = function(task){
+if (supportsElementFocus) {
+	test("attr.special.focused calls after previous events", function(){
+		var oldQueue = types.queueTask;
+		types.queueTask = function(task){
+			setTimeout(function(){
+				task[0].apply(task[1], task[2]);
+			}, 5);
+		};
+
+		var input = document.createElement("input");
+		input.type = "text";
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(input);
+
+		stop();
+
+		domAttr.set(input, "focused", true);
 		setTimeout(function(){
-			task[0].apply(task[1], task[2]);
-		}, 5);
-	};
+			equal(domAttr.get(input, "focused"), true, "it is now focused");
+			types.queueTask = oldQueue;
+			start();
+		}, 10);
 
-	var input = document.createElement("input");
-	input.type = "text";
-	var ta = document.getElementById("qunit-fixture");
-	ta.appendChild(input);
-
-	stop();
-
-	domAttr.set(input, "focused", true);
-	setTimeout(function(){
-		equal(domAttr.get(input, "focused"), true, "it is now focused");
-		types.queueTask = oldQueue;
-		start();
-	}, 10);
-
-	equal(domAttr.get(input, "focused"), false, "not focused yet");
-});
-
-test("attr.special.focused binds on inserted if element is detached", 2, function(){
-	var input = document.createElement("input");
-	input.type = "text";
-	var ta = document.getElementById("qunit-fixture");
-
-	stop();
-	domAttr.set(input, "focused", true);
-	equal(domAttr.get(input, "focused"), false, "not focused yet");
-	domEvents.addEventListener.call(input, "inserted", function() {
-		equal(domAttr.get(input, "focused"), true, "it is now focused");
-		start();
+		equal(domAttr.get(input, "focused"), false, "not focused yet");
 	});
-	mutate.appendChild.call(ta, input);
 
-});
+	test("attr.special.focused binds on inserted if element is detached", 2, function(){
+		var input = document.createElement("input");
+		input.type = "text";
+		var ta = document.getElementById("qunit-fixture");
+
+		stop();
+		domAttr.set(input, "focused", true);
+		equal(domAttr.get(input, "focused"), false, "not focused yet");
+		domEvents.addEventListener.call(input, "inserted", function() {
+			equal(domAttr.get(input, "focused"), true, "it is now focused");
+			start();
+		});
+		mutate.appendChild.call(ta, input);
+
+	});
+}
 
 test("handles removing multiple event handlers", function () {
 	var handler1 = function() {};
@@ -663,13 +682,12 @@ test("handles removing multiple event handlers without MUTATION_OBSERVER", funct
 	MUTATION_OBSERVER(MO);
 });
 
-if(window.eventsBubble) {
+if (hasBubblingEvents() && supportsElementFocus) {
 	test('get, set, and addEventListener on focused', function(){
 		var input = document.createElement("input");
 		var ta = document.getElementById("qunit-fixture");
 		var test;
 		var focusedCount = 0;
-
 
 		ta.appendChild(input);
 

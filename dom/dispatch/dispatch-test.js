@@ -1,10 +1,9 @@
 'use strict';
 
-var domDispatch = require('can-util/dom/dispatch/');
-var domEvents = require('can-util/dom/events/');
+var domDispatch = require('./dispatch');
+var domEvents = require('../events/events');
 
-
-QUnit = require('steal-qunit');
+var QUnit = require('../../test/qunit');
 
 QUnit.module("can-util/dom/dispatch");
 
