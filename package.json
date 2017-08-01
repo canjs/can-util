@@ -1,6 +1,6 @@
 {
   "name": "can-util",
-  "version": "3.9.8",
+  "version": "3.10.0-pre.0",
   "description": "Common utilities for CanJS projects",
   "homepage": "http://canjs.com",
   "author": {
