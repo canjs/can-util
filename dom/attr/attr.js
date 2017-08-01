@@ -496,32 +496,13 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				try {
 					doc.createAttribute("{}");
 				} catch(e) {
-					var invalidNodes = {},
-						attributeDummy = document.createElement('div');
-
 					return function(el, attrName, val){
-						var first = attrName.charAt(0),
-							cachedNode,
-							node,
-							attr;
-						if((first === "{" || first === "(" || first === "*") && el.setAttributeNode) {
-							cachedNode = invalidNodes[attrName];
-							if(!cachedNode) {
-								attributeDummy.innerHTML = '<div ' + attrName + '=""></div>';
-								cachedNode = invalidNodes[attrName] = attributeDummy.childNodes[0].attributes[0];
-							}
-							node = cachedNode.cloneNode();
-							node.value = val;
-							el.setAttributeNode(node);
-						} else {
-							attr = attrName.split(':');
+						var attr = attrName.split(':');
 
-							if(attr.length !== 1 && namespaces[attr[0]]) {
-								el.setAttributeNS(namespaces[attr[0]], attrName, val);
-							}
-							else {
-								el.setAttribute(attrName, val);
-							}
+						if(attr.length !== 1 && namespaces[attr[0]]) {
+							el.setAttributeNS(namespaces[attr[0]], attrName, val);
+						} else {
+							el.setAttribute(attrName, val);
 						}
 					};
 				}
