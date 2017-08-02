@@ -12,7 +12,6 @@ var helpers = require('../../test/helpers');
 var hasBubblingEvents = helpers.hasBubblingEvents;
 var isServer = helpers.isServer;
 var unit = require('../../test/qunit');
-var supportsElementFocus = !isServer();
 
 unit.module("can-util/dom/attr");
 
@@ -599,7 +598,7 @@ unit.test("setting .value on an input to undefined or null makes value empty (#8
 	assert.equal(input.value, "", "undefined");
 });
 
-if (supportsElementFocus) {
+if (hasBubblingEvents() && !isServer()) {
 	unit.test("attr.special.focused calls after previous events", function (assert) {
 		var oldQueue = types.queueTask;
 		types.queueTask = function(task){
@@ -676,7 +675,7 @@ unit.test("handles removing multiple event handlers without MUTATION_OBSERVER", 
 	MUTATION_OBSERVER(MO);
 });
 
-if (hasBubblingEvents() && supportsElementFocus) {
+if (hasBubblingEvents() && !isServer()) {
 	unit.test('get, set, and addEventListener on focused', function (assert) {
 		var done = assert.async();
 		var input = document.createElement("input");

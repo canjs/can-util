@@ -6,10 +6,9 @@ var DOCUMENT = require("../document/document");
 var makeDocument = require("can-vdom/make-document/make-document");
 
 var hasBubblingEvents = require('../../test/helpers').hasBubblingEvents;
-var QUnit = require('../../test/qunit');
-var unit = QUnit;
+var unit = require('../../test/qunit');
 
-QUnit.module("can-util/dom/mutate");
+unit.module("can-util/dom/mutate");
 
 function disableMO(){
 	var old = MUTATION_OBSERVER();
