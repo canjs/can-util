@@ -2,32 +2,28 @@
 
 var domDispatch = require('./dispatch');
 var domEvents = require('../events/events');
+var unit = require('../../test/qunit');
 
-var QUnit = require('../../test/qunit');
+unit.module("can-util/dom/dispatch");
 
-QUnit.module("can-util/dom/dispatch");
-
-test("basic synthetic events", function () {
+unit.test("basic synthetic events", function (assert) {
 	var div = document.createElement("div");
 
 	domEvents.addEventListener.call(div,"foo", function(){
-		ok(true, "called back");
+		assert.ok(true, "called back");
 	});
 
 	domDispatch.call(div,"foo");
-
 });
 
-test("more complex synthetic events", function () {
+unit.test("more complex synthetic events", function (assert) {
 	var div = document.createElement("div");
 	var arr = [];
 
 	domEvents.addEventListener.call(div,"attributes", function(ev){
-		ok(true, "called back");
-		equal(ev.something, arr, "got data");
+		assert.ok(true, "called back");
+		assert.equal(ev.something, arr, "got data");
 	});
 
-
 	domDispatch.call(div,{type: "attributes", something: arr}, ["a"]);
-
 });

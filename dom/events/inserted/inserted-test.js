@@ -7,11 +7,11 @@ var domMutate = require("../../mutate/mutate");
 var dev = require('../../../js/dev/dev');
 
 var isProduction = require('../../../test/helpers').isProduction;
-var QUnit = require('../../../test/qunit');
+var unit = require('../../../test/qunit');
 
 function runTest(name, MUT_OBS) {
 	var oldMutObs;
-	QUnit.module(name, {
+	unit.module(name, {
 		setup: function(){
 			oldMutObs = MUTATION_OBSERVER();
 			MUTATION_OBSERVER(MUT_OBS);
@@ -21,27 +21,28 @@ function runTest(name, MUT_OBS) {
 		}
 	});
 
-	asyncTest("basic insertion", function () {
+	unit.test('basic insertion', function (assert) {
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		domEvents.addEventListener.call(div,"inserted", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});
 
 	if (!isProduction()) {
-		test("basic disabled insertion", function (assert) {
-			expect(1);
+		unit.test('basic disabled insertion', function (assert) {
+			assert.expect(1);
 
 			var done = assert.async();
 			var oldlog = dev.warn;
 			dev.warn = function (text) {
 				dev.warn = oldlog;
 				var message = 'can-util/dom/events::dispatch';
-				equal(text.slice(0, message.length), message, 'Got expected warning.');
+				assert.equal(text.slice(0, message.length), message, 'Got expected warning.');
 				done();
 			};
 
@@ -53,22 +54,24 @@ function runTest(name, MUT_OBS) {
 		});
 	}
 
-	asyncTest("parent then child inserted - appendChild", function () {
-		expect(1);
+	unit.test('parent then child inserted - appendChild', function (assert) {
+		assert.expect(1);
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		var span = document.createElement("span");
 
 		domEvents.addEventListener.call(span,"inserted", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 		domMutate.appendChild.call(div, span);
 	});
 
-	asyncTest("parent then child inserted in callback - appendChild", function () {
-		expect(1);
+	unit.test('parent then child inserted in callback - appendChild', function (assert) {
+		assert.expect(1);
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		var span = document.createElement("span");
@@ -77,8 +80,8 @@ function runTest(name, MUT_OBS) {
 			domMutate.appendChild.call(div, span);
 		});
 		domEvents.addEventListener.call(span,"inserted", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});

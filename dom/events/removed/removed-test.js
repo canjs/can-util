@@ -6,7 +6,7 @@ var domEvents = require('../events');
 var getMutationObserver = require('../../mutation-observer/mutation-observer');
 var domMutate = require("../../mutate/mutate");
 
-var QUnit = require('../../../test/qunit');
+var unit = require('../../../test/qunit');
 
 var events = [];
 var addEvent = function(el, event, handler){
@@ -18,7 +18,6 @@ var addEvent = function(el, event, handler){
 	});
 };
 var removeEvents = function() {
-	console.log('TEARDOWN');
 	if(events.length) {
 		each(events, function(ev) {
 			domEvents.removeEventListener.call(ev.el, ev.event, ev.handler);
@@ -34,60 +33,65 @@ QUnit.module("can-util/dom/events/removed", {
 
 var _MutationObserver = getMutationObserver();
 if(_MutationObserver) {
-	asyncTest("with mutation observer - basic removal - removeChild", function () {
+	unit.test('with mutation observer - basic removal - removeChild', function (assert) {
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		domEvents.addEventListener.call(div,"removed", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 
 		document.getElementById("qunit-fixture").appendChild(div);
 		document.getElementById("qunit-fixture").removeChild(div);
 	});
 
-	asyncTest("with mutation observer - disabled removal - removeChild", function () {
+	unit.test('with mutation observer - disabled removal - removeChild', function (assert) {
+		var done = assert.async();
 		var input = document.createElement("removed");
 		input.disabled = true;
 
 		domEvents.addEventListener.call(input,"removed", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 
 		document.getElementById("qunit-fixture").appendChild(input);
 		document.getElementById("qunit-fixture").removeChild(input);
 	});
 
-	asyncTest("with mutation observer - basic removal - replaceChild", function () {
+	unit.test('with mutation observer - basic removal - replaceChild', function (assert) {
+		var done = assert.async();
 		var div = document.createElement("div");
 		var div2 = document.createElement("div");
 
 		domEvents.addEventListener.call(div,"removed", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 		document.getElementById("qunit-fixture").appendChild(div);
 		document.getElementById("qunit-fixture").replaceChild(div2,div);
 	});
 
-	asyncTest("with mutation observer - nested removal - removeChild", function () {
+	unit.test('with mutation observer - nested removal - removeChild', function (assert) {
+		var done = assert.async();
 		var div = document.createElement("div");
 		var span = document.createElement("span");
 		div.appendChild(span);
 
 
 		domEvents.addEventListener.call(span,"removed", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 
 		document.getElementById("qunit-fixture").appendChild(div);
 		document.getElementById("qunit-fixture").removeChild(div);
 	});
 
-	asyncTest("with mutation observer - move", function () {
-		expect(0);
+	unit.test('with mutation observer - move', function (assert) {
+		var done = assert.async();
+		assert.expect(0);
 		var div = document.createElement("div");
 		var span = document.createElement("span");
 		var p = document.createElement("p");
@@ -96,14 +100,15 @@ if(_MutationObserver) {
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 
 		addEvent(p, "removed", function(){
-			ok(false, "called removed");
+			assert.ok(false, "called removed");
 		});
 
 		div.insertBefore(p, span);
-		start();
+		done();
 	});
 
-	asyncTest("with mutation observer - move and remove (#146)", function () {
+	unit.test('with mutation observer - move and remove (#146)', function (assert) {
+		var done = assert.async();
 		var fixture = document.getElementById("qunit-fixture");
 		var div = document.createElement("div");
 		var span = document.createElement("span");
@@ -116,24 +121,25 @@ if(_MutationObserver) {
 		domMutate.appendChild.call(fixture, div2);
 
 		addEvent(p, "removed", function(){
-			ok(false, "called removed");
+			assert.ok(false, "called removed");
 		});
 
 		addEvent(div2, "removed", function(){
-			ok(true, "div removed");
-			start();
+			assert.ok(true, "div removed");
+			done();
 		});
 
 		div.insertBefore(p, span);
 		domMutate.removeChild.call(fixture, div2);
 	});
 
-	asyncTest("with mutation observer - remaining event handlers fire after one is removed (#236)", function () {
+	unit.test('with mutation observer - remaining event handlers fire after one is removed (#236)', function (assert) {
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		domEvents.addEventListener.call(div,"removed", function (){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 
 		function removeTwo () {}
@@ -145,47 +151,50 @@ if(_MutationObserver) {
 	});
 }
 
-asyncTest("basic removal without mutation observer - removeChild", function(){
+unit.test('basic removal without mutation observer - removeChild', function (assert) {
+	var done = assert.async();
 	getMutationObserver(null);
 
 	var div = document.createElement("div");
 
 	domEvents.addEventListener.call(div,"removed", function(){
-		ok(true, "called back");
+		assert.ok(true, "called back");
 		getMutationObserver(_MutationObserver);
-		start();
+		done();
 	});
 
 	domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	domMutate.removeChild.call(document.getElementById("qunit-fixture"), div);
 });
 
-asyncTest("disabled removal without mutation observer - removeChild", function(){
+unit.test('disabled removal without mutation observer - removeChild', function (assert) {
+	var done = assert.async();
 	getMutationObserver(null);
 
 	var input = document.createElement("input");
 	input.disabled = true;
 
 	domEvents.addEventListener.call(input,"removed", function(){
-		ok(true, "called back");
+		assert.ok(true, "called back");
 		getMutationObserver(_MutationObserver);
-		start();
+		done();
 	});
 
 	domMutate.appendChild.call(document.getElementById("qunit-fixture"), input);
 	domMutate.removeChild.call(document.getElementById("qunit-fixture"), input);
 });
 
-asyncTest("basic insertion without mutation observer - replaceChild", function(){
+unit.test('basic insertion without mutation observer - replaceChild', function (assert) {
+	var done = assert.async();
 	getMutationObserver(null);
 
 	var div = document.createElement("div");
 	var div2 = document.createElement("div");
 
 	domEvents.addEventListener.call(div,"removed", function(){
-		ok(true, "called back");
+		assert.ok(true, "called back");
 		getMutationObserver(_MutationObserver);
-		start();
+		done();
 	});
 
 	domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);

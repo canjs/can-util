@@ -1,8 +1,9 @@
 
-var isMochaQUnitUI = typeof QUnit !== 'undefined'
-if (!isMochaQUnitUI) {
-	module.exports = require('steal-qunit');
-} else {
+var testType = typeof process !== 'undefined' && process.env.TEST;
+var isMochaQUnitUI = testType === 'mocha';
+var isQunit = testType === 'qunit';
+
+if (isMochaQUnitUI) {
 	// mocha-qunit-ui does not support async
 	QUnit.assert.async = function () {
 		QUnit.stop();
@@ -16,4 +17,8 @@ if (!isMochaQUnitUI) {
 
 	QUnit.test = test;
 	module.exports =  QUnit;
+} else if (isQunit) {
+	module.exports = require('qunitjs');
+} else {
+	module.exports = require('steal-qunit');
 }

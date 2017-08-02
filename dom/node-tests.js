@@ -31,6 +31,6 @@ require('./data/data-test');
 require('./dispatch/dispatch-test');
 require('./events/delegate/delegate-test');
 require('./events/inserted/inserted-test');
-// require('./events/removed/removed-test'); // conflicts with attr tests
+require('./events/removed/removed-test'); // conflicts with attr tests
 require('./matches/matches-test');
 require('./location/location-test');

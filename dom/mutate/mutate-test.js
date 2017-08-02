@@ -7,6 +7,7 @@ var makeDocument = require("can-vdom/make-document/make-document");
 
 var hasBubblingEvents = require('../../test/helpers').hasBubblingEvents;
 var QUnit = require('../../test/qunit');
+var unit = QUnit;
 
 QUnit.module("can-util/dom/mutate");
 
@@ -18,7 +19,8 @@ function disableMO(){
 	};
 }
 
-test("inserting empty frag", function () {
+unit.test('inserting empty frag', function (assert) {
+	var done = assert.async();
 	var enableMO = disableMO();
 
 	var frag = document.createDocumentFragment();
@@ -26,17 +28,16 @@ test("inserting empty frag", function () {
 
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
-		ok(true, "called");
+		assert.ok(true, "called");
 	});
 	mutate.appendChild.call( document.getElementById("qunit-fixture"), div );
-	stop();
 	setTimeout(function(){
 		enableMO();
-		start();
+		done();
 	},10);
 });
 
-test("removing the body causes removed events", function () {
+unit.test('removing the body causes removed events', function (assert) {
 	var enableMO = disableMO();
 	var oldDoc = DOCUMENT();
 
@@ -47,16 +48,16 @@ test("removing the body causes removed events", function () {
 	mutate.appendChild.call(doc.body, div);
 
 	div.addEventListener("removed", function(){
-		ok(true, "called");
+		assert.ok(true, "called");
 	});
 
 	mutate.removeChild.call(doc.documentElement, doc.body);
 
-	stop();
+	var done = assert.async();
 	setTimeout(function(){
 		enableMO();
 		DOCUMENT(oldDoc);
-		start();
+		done();
 	},10);
 
 	/*
@@ -65,10 +66,10 @@ test("removing the body causes removed events", function () {
 
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
-		ok(true, "called");
+		assert.ok(true, "called");
 	});
 	mutate.appendChild.call( document.getElementById("qunit-fixture"), div );
-	stop();
+	var done = assert.async();
 	setTimeout(function(){
 		enableMO();
 		start();
@@ -77,7 +78,8 @@ test("removing the body causes removed events", function () {
 });
 
 if (hasBubblingEvents()) {
-	test("inserting into a different document fires inserted", function(){
+	unit.test('inserting into a different document fires inserted', function (assert) {
+		var done = assert.async();
 		var enableMO = disableMO();
 
 		var doc = document.implementation.createHTMLDocument('Demo');
@@ -86,13 +88,12 @@ if (hasBubblingEvents()) {
 
 		var div = document.createElement("div");
 		div.addEventListener("inserted", function(){
-			ok(true, "called");
+			assert.ok(true, "called");
 			enableMO();
 			DOCUMENT(oldDoc);
-			start();
+			done();
 		});
 
 		mutate.appendChild.call(doc.body, div);
-		stop();
 	});
 }
