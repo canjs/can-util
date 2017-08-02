@@ -1,23 +1,4 @@
 var getGlobal = require('../js/global/global');
-var domEvents = require('../dom/events/events');
-var buildFrag = require('../dom/fragment/fragment');
-
-var eventsBubble = (function() {
-	var frag = buildFrag("<div><span></span></div>");
-	var bubbles = false;
-
-	frag.firstChild.addEventListener('click', function() {
-		bubbles = true;
-	});
-
-	domEvents.dispatch.call(frag.firstChild.firstChild, 'click');
-
-	return bubbles;
-})();
-
-function hasBubblingEvents () {
-	return eventsBubble;
-}
 
 function isProduction () {
 	var root = getGlobal();
@@ -41,7 +22,6 @@ function isServer () {
 }
 
 module.exports = {
-	hasBubblingEvents: hasBubblingEvents,
 	isProduction: isProduction,
 	isServer: isServer
 };

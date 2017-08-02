@@ -9,7 +9,6 @@ var MUTATION_OBSERVER = require('../mutation-observer/mutation-observer');
 var types = require("can-types");
 
 var helpers = require('../../test/helpers');
-var hasBubblingEvents = helpers.hasBubblingEvents;
 var isServer = helpers.isServer;
 var unit = require('../../test/qunit');
 
@@ -598,7 +597,7 @@ unit.test("setting .value on an input to undefined or null makes value empty (#8
 	assert.equal(input.value, "", "undefined");
 });
 
-if (hasBubblingEvents() && !isServer()) {
+if (!isServer()) {
 	unit.test("attr.special.focused calls after previous events", function (assert) {
 		var oldQueue = types.queueTask;
 		types.queueTask = function(task){
