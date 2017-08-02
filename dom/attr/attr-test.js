@@ -675,70 +675,69 @@ unit.test("handles removing multiple event handlers without MUTATION_OBSERVER", 
 	MUTATION_OBSERVER(MO);
 });
 
-if (hasBubblingEvents() && !isServer()) {
-	unit.test('get, set, and addEventListener on focused', function (assert) {
-		var done = assert.async();
-		var input = document.createElement("input");
-		var ta = document.getElementById("qunit-fixture");
-		var test;
-		var focusedCount = 0;
+// TODO: https://github.com/canjs/can-util/issues/320
+unit.skip('get, set, and addEventListener on focused', function (assert) {
+	var done = assert.async();
+	var input = document.createElement("input");
+	var ta = document.getElementById("qunit-fixture");
+	var test;
+	var focusedCount = 0;
 
-		ta.appendChild(input);
+	ta.appendChild(input);
 
-		var tests = [
-			{
-				action: function(){
-					assert.equal( domAttr.get(input, "focused"), false, "get not focused" );
+	var tests = [
+		{
+			action: function(){
+				assert.equal( domAttr.get(input, "focused"), false, "get not focused" );
 
-					domAttr.set(input, "focused", true);
-					if(!document.hasFocus()) {
-						domDispatch.call(input, "focus");
-					}
-				},
-				test: function(){
-					assert.equal(focusedCount, 1, "focused event");
-					assert.equal( domAttr.get(input,"focused"), true, "get focused" );
+				domAttr.set(input, "focused", true);
+				if(!document.hasFocus()) {
+					domDispatch.call(input, "focus");
 				}
 			},
-			{
-				action: function(){
-					domAttr.set(input, "focused", false);
-					if(!document.hasFocus()) {
-						domDispatch.call(input, "blur");
-					}
-				},
-				test: function(){
-					assert.equal(focusedCount, 2, "focused event");
-					assert.equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
+			test: function(){
+				assert.equal(focusedCount, 1, "focused event");
+				assert.equal( domAttr.get(input,"focused"), true, "get focused" );
+			}
+		},
+		{
+			action: function(){
+				domAttr.set(input, "focused", false);
+				if(!document.hasFocus()) {
+					domDispatch.call(input, "blur");
 				}
+			},
+			test: function(){
+				assert.equal(focusedCount, 2, "focused event");
+				assert.equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
 			}
-		];
+		}
+	];
 
-		function next(){
-			test = tests.shift();
-			if(!test) {
-				done();
-				return;
-			}
-
-			// Calling the action will trigger an event below, that event will then
-			// call test.test() to make sure it works. This is b/c IE10 fires focus
-			// asynchronously.
-			test.action();
+	function next(){
+		test = tests.shift();
+		if(!test) {
+			done();
+			return;
 		}
 
-		// fired on blur and focus events
-		assert.ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
-		domEvents.addEventListener.call(input, "focused", function(){
-			focusedCount++;
+		// Calling the action will trigger an event below, that event will then
+		// call test.test() to make sure it works. This is b/c IE10 fires focus
+		// asynchronously.
+		test.action();
+	}
 
-			test.test();
-			setTimeout(next, 50);
-		});
+	// fired on blur and focus events
+	assert.ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
+	domEvents.addEventListener.call(input, "focused", function(){
+		focusedCount++;
 
-		next();
+		test.test();
+		setTimeout(next, 50);
 	});
-}
+
+	next();
+});
 
 unit.test("Binding to selected updates the selectedness of options", function (assert) {
 	assert.expect(3);
