@@ -2,21 +2,21 @@ var getGlobal = require('../js/global/global');
 var domEvents = require('../dom/events/events');
 var buildFrag = require('../dom/fragment/fragment');
 
-function bubbleDetector (didDetect, isBubbling) {
-	return function () {
-		if (!didDetect) {
-			didDetect = true;
-			var frag = buildFrag("<div><span></span></div>");
+var eventsBubble = (function() {
+	var frag = buildFrag("<div><span></span></div>");
+	var bubbles = false;
 
-			frag.firstChild.addEventListener('click', function() {
-				isBubbling = true;
-			});
+	frag.firstChild.addEventListener('click', function() {
+		bubbles = true;
+	});
 
-			domEvents.dispatch.call(frag.firstChild.firstChild, 'click');
-		}
+	domEvents.dispatch.call(frag.firstChild.firstChild, 'click');
 
-		return isBubbling;
-	}
+	return bubbles;
+})();
+
+function hasBubblingEvents () {
+	return eventsBubble;
 }
 
 function isProduction () {
@@ -36,11 +36,12 @@ function isProduction () {
 
 function isServer () {
 	var root = getGlobal();
-	return !!root.process;
+	var testType = root.process && root.process.env.TEST;
+	return testType === 'qunit';
 }
 
 module.exports = {
-	hasBubblingEvents: bubbleDetector(false, false),
+	hasBubblingEvents: hasBubblingEvents,
 	isProduction: isProduction,
 	isServer: isServer
 };
