@@ -89,11 +89,13 @@ if (hasBubblingEvents()) {
 		var div = document.createElement("div");
 		div.addEventListener("inserted", function(){
 			assert.ok(true, "called");
-			enableMO();
-			DOCUMENT(oldDoc);
-			done();
 		});
 
 		mutate.appendChild.call(doc.body, div);
+		setTimeout(function () {
+			enableMO();
+			DOCUMENT(oldDoc);
+			done();
+		}, 10);
 	});
 }
