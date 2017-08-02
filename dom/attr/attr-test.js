@@ -411,40 +411,40 @@ unit.test("Removing an option causes the select's value to be re-evaluated", fun
 		}
 	});
 
-if (false) {
-unit.test("Multiselect values is updated on any children added/removed", function (assert) {
-	var done = assert.async();
-	var select = document.createElement("select");
-	select.multiple = true;
+if (!isServer()) {
+	unit.test("Multiselect values is updated on any children added/removed", function (assert) {
+		var done = assert.async();
+		var select = document.createElement("select");
+		select.multiple = true;
 
-	var option1 = document.createElement("option");
-	option1.value = "one";
+		var option1 = document.createElement("option");
+		option1.value = "one";
 
-	var option2 = document.createElement("option");
-	option2.value = "two";
+		var option2 = document.createElement("option");
+		option2.value = "two";
 
-	var option3 = document.createElement("option");
-	option3.value = "three";
-	option3.selected = true;
+		var option3 = document.createElement("option");
+		option3.value = "three";
+		option3.selected = true;
 
-	select.appendChild(option1);
-	select.appendChild(option2);
-	select.appendChild(option3);
+		select.appendChild(option1);
+		select.appendChild(option2);
+		select.appendChild(option3);
 
-	domAttr.set(select, "values", ["one", "three"]);
-	assert.deepEqual(domAttr.get(select, "values"), ["one", "three"], "initial value is right");
+		domAttr.set(select, "values", ["one", "three"]);
+		assert.deepEqual(domAttr.get(select, "values"), ["one", "three"], "initial value is right");
 
-	domEvents.addEventListener.call(select, "values", function(){
-		assert.deepEqual(domAttr.get(select, "values"), ["three"], "new val is right");
-		done();
+		domEvents.addEventListener.call(select, "values", function(){
+			assert.deepEqual(domAttr.get(select, "values"), ["three"], "new val is right");
+			done();
+		});
+
+		select.removeChild(option1);
+		if(!MUTATION_OBSERVER()) {
+			var data = domData.get.call(select, "canBindingCallback");
+			data.onMutation();
+		}
 	});
-
-	select.removeChild(option1);
-	if(!MUTATION_OBSERVER()) {
-		var data = domData.get.call(select, "canBindingCallback");
-		data.onMutation();
-	}
-});
 }
 
 if (!isServer()) {
