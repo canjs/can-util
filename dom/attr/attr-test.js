@@ -5,44 +5,43 @@ var domEvents = require('../events/events');
 var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
 var mutate = require("../mutate/mutate");
-var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/mutation-observer');
+var MUTATION_OBSERVER = require('../mutation-observer/mutation-observer');
 var types = require("can-types");
 
+var helpers = require('../../test/helpers');
+var isServer = helpers.isServer;
+var unit = require('../../test/qunit');
 
-QUnit = require('steal-qunit');
+unit.module("can-util/dom/attr");
 
-QUnit.module("can-util/dom/attr");
-
-test("attributes event", function () {
-
+unit.test("attributes event", function (assert) {
+	var done = assert.async();
 	var div = document.createElement("div");
 
 	var attrHandler1 = function(ev) {
-		equal(ev.attributeName, "foo", "attribute name is correct");
-		equal(ev.target, div, "target");
-		equal(ev.oldValue, null, "oldValue");
+		assert.equal(ev.attributeName, "foo", "attribute name is correct");
+		assert.equal(ev.target, div, "target");
+		assert.equal(ev.oldValue, null, "oldValue");
 
-		equal(div.getAttribute(ev.attributeName), "bar");
+		assert.equal(div.getAttribute(ev.attributeName), "bar");
 		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
 	};
 	domEvents.addEventListener.call(div, "attributes", attrHandler1);
 
 	domAttr.set(div, "foo", "bar");
 
-	stop();
-
 	setTimeout(function () {
 		var attrHandler = function(ev) {
-			ok(true, "removed event handler should be called");
+			assert.ok(true, "removed event handler should be called");
 
-			equal(ev.attributeName, "foo", "attribute name is correct");
-			equal(ev.target, div, "target");
-			equal(ev.oldValue, "bar", "oldValue should be 'bar'");
+			assert.equal(ev.attributeName, "foo", "attribute name is correct");
+			assert.equal(ev.target, div, "target");
+			assert.equal(ev.oldValue, "bar", "oldValue should be 'bar'");
 
-			equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
+			assert.equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
 
 			domEvents.removeEventListener.call(div, "attributes", attrHandler);
-			start();
+			done();
 		};
 		domEvents.addEventListener.call(div, "attributes", attrHandler);
 		domAttr.remove(div, "foo");
@@ -51,39 +50,39 @@ test("attributes event", function () {
 
 });
 
-test("attr events without MUTATION_OBSERVER", 9, function(){
+unit.test("attr events without MUTATION_OBSERVER", function (assert) {
+	assert.expect(9);
+	var done = assert.async();
 	var MO = MUTATION_OBSERVER();
 	MUTATION_OBSERVER(null);
 
 	var div = document.createElement("div");
 
 	var attrHandler1 = function(ev) {
-		equal(ev.attributeName, "foo", "attribute name is correct");
-		equal(ev.target, div, "target");
-		equal(ev.oldValue, null, "oldValue");
+		assert.equal(ev.attributeName, "foo", "attribute name is correct");
+		assert.equal(ev.target, div, "target");
+		assert.equal(ev.oldValue, null, "oldValue");
 
-		equal(div.getAttribute(ev.attributeName), "bar");
+		assert.equal(div.getAttribute(ev.attributeName), "bar");
 		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
 	};
 	domEvents.addEventListener.call(div, "attributes", attrHandler1);
 
 	domAttr.set(div, "foo", "bar");
 
-	stop();
-
 	setTimeout(function () {
 		var attrHandler = function(ev) {
-			ok(true, "removed event handler should be called");
+			assert.ok(true, "removed event handler should be called");
 
-			equal(ev.attributeName, "foo", "attribute name is correct");
-			equal(ev.target, div, "target");
-			equal(ev.oldValue, "bar", "oldValue should be 'bar'");
+			assert.equal(ev.attributeName, "foo", "attribute name is correct");
+			assert.equal(ev.target, div, "target");
+			assert.equal(ev.oldValue, "bar", "oldValue should be 'bar'");
 
-			equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
+			assert.equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
 
 			domEvents.removeEventListener.call(div, "attributes", attrHandler);
 			MUTATION_OBSERVER(MO);
-			start();
+			done();
 		};
 		domEvents.addEventListener.call(div, "attributes", attrHandler);
 		domAttr.remove(div, "foo");
@@ -94,7 +93,7 @@ test("attr events without MUTATION_OBSERVER", 9, function(){
 
 
 
-test("attr.set CHECKED attribute works", function(){
+unit.test("attr.set CHECKED attribute works", function (assert) {
 
 	var input = document.createElement("input");
 	input.type = "checkbox";
@@ -102,82 +101,89 @@ test("attr.set CHECKED attribute works", function(){
 	document.getElementById("qunit-fixture").appendChild(input);
 
 	domAttr.set(input, "CHECKED");
-	equal(input.checked, true);
+	assert.equal(input.checked, true);
 
 	input.checked = false;
 
 	domAttr.set(input, "CHECKED");
 
-	equal(input.checked, true);
+	assert.equal(input.checked, true);
 	document.getElementById("qunit-fixture").removeChild(input);
 });
 
+if (!isServer()) {
+	unit.test("Map special attributes", function (assert) {
 
-test("Map special attributes", function () {
+		var div = document.createElement("label");
 
-	var div = document.createElement("label");
+		document.getElementById("qunit-fixture").appendChild(div);
 
-	document.getElementById("qunit-fixture").appendChild(div);
+		domAttr.set(div, "for", "my-for");
+		assert.equal(div.htmlFor, "my-for", "Map for to htmlFor");
 
-	domAttr.set(div, "for", "my-for");
-	equal(div.htmlFor, "my-for", "Map for to htmlFor");
+		if('innerText' in div) {
+			domAttr.set(div, "innertext", "my-inner-text");
+			assert.equal(div.innerText, "my-inner-text", "Map innertext to innerText");
+		}
 
-	if('innerText' in div) {
-		domAttr.set(div, "innertext", "my-inner-text");
-		equal(div.innerText, "my-inner-text", "Map innertext to innerText");
-	}
+		domAttr.set(div, "textcontent", "my-content");
+		assert.equal(div.textContent, "my-content", "Map textcontent to textContent");
 
-	domAttr.set(div, "textcontent", "my-content");
-	equal(div.textContent, "my-content", "Map textcontent to textContent");
+		document.getElementById("qunit-fixture").removeChild(div);
+		div = document.createElement("input");
+		div.type = "text";
+		document.getElementById("qunit-fixture").appendChild(div);
 
-	document.getElementById("qunit-fixture").removeChild(div);
-	div = document.createElement("input");
-	div.type = "text";
-	document.getElementById("qunit-fixture").appendChild(div);
+		domAttr.set(div, "readonly");
+		assert.equal(div.readOnly, true, "Map readonly to readOnly");
 
-	domAttr.set(div, "readonly");
-	equal(div.readOnly, true, "Map readonly to readOnly");
+		domAttr.set(div, "readonly", false);
+		assert.equal(div.readOnly, false, "not readonly");
+		domAttr.set(div, "readonly", "");
+		assert.equal(div.readOnly, true, "readonly again");
 
-	domAttr.set(div, "readonly", false);
-	equal(div.readOnly, false, "not readonly");
-	domAttr.set(div, "readonly", "");
-	equal(div.readOnly, true, "readonly again");
+		document.getElementById("qunit-fixture").removeChild(div);
+	});
+}
 
-	document.getElementById("qunit-fixture").removeChild(div);
-});
+/*
+	can-simple-dom does not support createElementNS.
+*/
+var supportsCreateElementNs = !isServer();
+if (supportsCreateElementNs) {
+	unit.test('set class attribute via className or setAttribute for svg (#2015)', function (assert) {
+		var div = document.createElement('div');
+		var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+		var obj = { toString: function() { return 'my-class'; } };
 
-test('set class attribute via className or setAttribute for svg (#2015)', function() {
-	var div = document.createElement('div');
-	var svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-	var obj = { toString: function() { return 'my-class'; } };
+		domAttr.set(div, 'class', 'my-class');
+		assert.equal(div.getAttribute('class'), 'my-class', 'class mapped to className');
 
-	domAttr.set(div, 'class', 'my-class');
-	equal(div.getAttribute('class'), 'my-class', 'class mapped to className');
+		domAttr.set(div, 'class', undefined);
+		assert.equal(div.getAttribute('class'), '', 'an undefined className is an empty string');
 
-	domAttr.set(div, 'class', undefined);
-	equal(div.getAttribute('class'), '', 'an undefined className is an empty string');
+		domAttr.set(div, 'class', obj);
+		assert.equal(div.getAttribute('class'), 'my-class', 'you can pass an object to className');
 
-	domAttr.set(div, 'class', obj);
-	equal(div.getAttribute('class'), 'my-class', 'you can pass an object to className');
+		domAttr.set(svg, 'class', 'my-class');
+		assert.equal(svg.getAttribute('class'), 'my-class', 'svg class was set as an attribute');
 
-	domAttr.set(svg, 'class', 'my-class');
-	equal(svg.getAttribute('class'), 'my-class', 'svg class was set as an attribute');
+		domAttr.set(svg, 'class', undefined);
+		assert.equal(svg.getAttribute('class'), '', 'an undefined svg class is an empty string');
 
-	domAttr.set(svg, 'class', undefined);
-	equal(svg.getAttribute('class'), '', 'an undefined svg class is an empty string');
+		domAttr.set(svg, 'class', obj);
+		assert.equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
+	});
 
-	domAttr.set(svg, 'class', obj);
-	equal(svg.getAttribute('class'), 'my-class', 'you can pass an object to svg class');
-});
+	unit.test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function (assert) {
+		var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
 
-test("set xlink:href attribute via setAttributeNS for svg-use (#2384)", function() {
-	var use = document.createElementNS("http://www.w3.org/2000/svg", "use");
+		domAttr.set(use, "xlink:href", "svgUri");
+		assert.equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
+	});
+}
 
-	domAttr.set(use, "xlink:href", "svgUri");
-	equal(use.getAttributeNS("http://www.w3.org/1999/xlink", "href"), "svgUri", "svg-use xlink:href was set with setAttributeNS");
-});
-
-test("attr.special addEventListener allows custom binding", function(){
+unit.test("attr.special addEventListener allows custom binding", function (assert) {
 	var trigger;
 	domAttr.special.foo = {
 		addEventListener: function(eventName, handler){
@@ -201,7 +207,7 @@ test("attr.special addEventListener allows custom binding", function(){
 	var times = 0;
 	var handler = function(){
 		times++;
-		equal(times, 1, "addEventListener called");
+		assert.equal(times, 1, "addEventListener called");
 	};
 	domEvents.addEventListener.call(div, "foo", handler);
 
@@ -214,7 +220,7 @@ test("attr.special addEventListener allows custom binding", function(){
 	delete domAttr.special.foo;
 });
 
-test("'selected' is bindable on an <option>", function(){
+unit.test("'selected' is bindable on an <option>", function (assert) {
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = "one";
@@ -224,61 +230,62 @@ test("'selected' is bindable on an <option>", function(){
 	select.appendChild(option2);
 
 	domEvents.addEventListener.call(option2, "selected", function(){
-		ok(true, "selected was called on the option");
+		assert.ok(true, "selected was called on the option");
 	});
 
 	option2.selected = true;
 	domDispatch.call(select, "change");
 
-	equal(domAttr.get(option1, "selected"), false, "option1 is not selected");
-	equal(domAttr.get(option2, "selected"), true, "option2 is selected");
+	assert.equal(domAttr.get(option1, "selected"), false, "option1 is not selected");
+	assert.equal(domAttr.get(option2, "selected"), true, "option2 is selected");
 });
 
-test("get, set, and addEventListener on values", function(){
-	var select = document.createElement("select");
-	select.multiple = true;
-	var option1 = document.createElement("option");
-	option1.value = "one";
-	var option2 = document.createElement("option");
-	option2.value = "two";
+if (!isServer()) {
+	unit.test("get, set, and addEventListener on values", function (assert) {
+		var select = document.createElement("select");
+		select.multiple = true;
+		var option1 = document.createElement("option");
+		option1.value = "one";
+		var option2 = document.createElement("option");
+		option2.value = "two";
 
-	select.appendChild(option1);
-	select.appendChild(option2);
+		select.appendChild(option1);
+		select.appendChild(option2);
 
-	var valuesCount = 0;
-	domEvents.addEventListener.call(select, "values", function(){
-		valuesCount++;
+		var valuesCount = 0;
+		domEvents.addEventListener.call(select, "values", function(){
+			valuesCount++;
+		});
+
+		assert.deepEqual(domAttr.get(select, "values"), [], "None selected to start");
+
+		option1.selected = true;
+		domDispatch.call(select, "change");
+
+		assert.equal(valuesCount, 1, "values event");
+		assert.deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
+
+		option2.selected = true;
+		domDispatch.call(select, "change");
+
+		assert.equal(valuesCount, 2, "values event");
+		assert.deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
+
+		option1.selected = option2.selected = false;
+		domDispatch.call(select, "change");
+
+		assert.equal(valuesCount, 3, "values event");
+		assert.deepEqual(domAttr.get(select, "values"), [], "none selected");
+
+		domAttr.set(select, "values", ["two"]);
+
+		assert.equal(option1.selected, false, "option1 not selected");
+		assert.equal(option2.selected, true, "option2 selected");
+		assert.deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
 	});
+}
 
-	deepEqual(domAttr.get(select, "values"), [], "None selected to start");
-
-	option1.selected = true;
-	domDispatch.call(select, "change");
-
-	equal(valuesCount, 1, "values event");
-	deepEqual(domAttr.get(select, "values"), ["one"], "First option is in values");
-
-	option2.selected = true;
-	domDispatch.call(select, "change");
-
-	equal(valuesCount, 2, "values event");
-	deepEqual(domAttr.get(select, "values"), ["one", "two"], "both selected");
-
-	option1.selected = option2.selected = false;
-	domDispatch.call(select, "change");
-
-	equal(valuesCount, 3, "values event");
-	deepEqual(domAttr.get(select, "values"), [], "none selected");
-
-	domAttr.set(select, "values", ["two"]);
-
-	equal(option1.selected, false, "option1 not selected");
-	equal(option2.selected, true, "option2 selected");
-	deepEqual(domAttr.get(select, "values"), ["two"], "two is only selected");
-
-});
-
-test("get, set, and addEventListener on innerHTML", function(){
+unit.test("get, set, and addEventListener on innerHTML", function (assert) {
 	var div = document.createElement("div");
 	div.appendChild(document.createElement("span"));
 
@@ -287,74 +294,75 @@ test("get, set, and addEventListener on innerHTML", function(){
 		count++;
 	});
 
-	equal(domAttr.get(div, "innerHTML"), "<span></span>", "got innerhtml");
+	assert.equal(domAttr.get(div, "innerHTML"), "<span></span>", "got innerhtml");
 
 	domAttr.set(div, "innerHTML", "<p>hello</p>");
 	domDispatch.call(div, "change");
-	equal(count, 1, "innerHTML event");
+	assert.equal(count, 1, "innerHTML event");
 
-	equal(domAttr.get(div, "innerHTML"), "<p>hello</p>", "got innerhtml");
+	assert.equal(domAttr.get(div, "innerHTML"), "<p>hello</p>", "got innerhtml");
 });
 
-test("get, set on 'value'", function(){
+unit.test("get, set on 'value'", function (assert) {
 	var input = document.createElement("input");
 	input.value = "foo";
 
-	equal(domAttr.get(input, "value"), "foo", "got the value");
+	assert.equal(domAttr.get(input, "value"), "foo", "got the value");
 
 	domAttr.set(input, "value", "bar");
-	equal(domAttr.get(input, "value"), "bar", "got the value");
+	assert.equal(domAttr.get(input, "value"), "bar", "got the value");
 
 	input.value = "";
-	equal(domAttr.get(input, "value"), "", "value is an empty string");
+	assert.equal(domAttr.get(input, "value"), "", "value is an empty string");
 });
 
-test("get/sets the checkedness of a checkbox", function(){
+unit.test("get/sets the checkedness of a checkbox", function (assert) {
 	var input = document.createElement("input");
 	input.type = "checkbox";
 
-	equal(domAttr.get(input, "checked"), false, "not checked");
+	assert.equal(domAttr.get(input, "checked"), false, "not checked");
 
 	domAttr.set(input, "checked", true);
-	equal(domAttr.get(input, "checked"), true, "now it is true");
+	assert.equal(domAttr.get(input, "checked"), true, "now it is true");
 
 	domAttr.set(input, "checked", false);
-	equal(domAttr.get(input, "checked"), false, "now it is false");
+	assert.equal(domAttr.get(input, "checked"), false, "now it is false");
 
 	domAttr.set(input, "checked");
-	equal(domAttr.get(input, "checked"), true, "now it is true");
+	assert.equal(domAttr.get(input, "checked"), true, "now it is true");
 
 	domAttr.set(input, "checked", 0);
-	equal(domAttr.get(input, "checked"), false, "now it is false");
+	assert.equal(domAttr.get(input, "checked"), false, "now it is false");
 
 	domAttr.set(input, "checked", "");
-	equal(domAttr.get(input, "checked"), true, "now it is true");
+	assert.equal(domAttr.get(input, "checked"), true, "now it is true");
 });
 
-test("For inputs checked is set as an attribute", function(){
-	var input = document.createElement("input");
-	input.type = "checkbox";
+if (!isServer()) {
+	unit.test("For inputs checked is set as an attribute", function (assert) {
+		var input = document.createElement("input");
+		input.type = "checkbox";
 
-	domAttr.set(input, "checked", "");
-	equal(input.checked, true, "checked is true");
-	equal(input.getAttribute("checked"), undefined, "no checked attr");
+		domAttr.set(input, "checked", "");
+		assert.equal(input.checked, true, "checked is true");
+		assert.equal(input.getAttribute("checked"), undefined, "no checked attr");
 
-	var customEl = document.createElement("custom-element");
+		var customEl = document.createElement("custom-element");
 
-	domAttr.set(customEl, "checked", "");
-	ok(customEl.hasAttribute("checked"), "has checked attr");
-	equal(customEl.getAttribute("checked"), "", "attr is an empty string");
-	equal(domAttr.get(customEl, "checked"), "", "attr from get");
-});
+		domAttr.set(customEl, "checked", "");
+		assert.ok(customEl.hasAttribute("checked"), "has checked attr");
+		assert.equal(customEl.getAttribute("checked"), "", "attr is an empty string");
+		assert.equal(domAttr.get(customEl, "checked"), "", "attr from get");
+	});
 
-test("attr.special.value, fallback to the attribute", function(){
-	var customEl = document.createElement("custom-element");
-	customEl.setAttribute("value", "foo");
+	unit.test("attr.special.value, fallback to the attribute", function (assert) {
+		var customEl = document.createElement("custom-element");
+		customEl.setAttribute("value", "foo");
 
-	equal(domAttr.get(customEl, "value"), "foo", "value is foo");
-});
+		assert.equal(domAttr.get(customEl, "value"), "foo", "value is foo");
+	});
 
-test("Setting a select's value updates child's selectedness", function(){
+unit.test("Setting a select's value updates child's selectedness", function (assert) {
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = "one";
@@ -365,15 +373,16 @@ test("Setting a select's value updates child's selectedness", function(){
 	select.appendChild(option1);
 	select.appendChild(option2);
 
-	equal(domAttr.get(select, "value"), "one", "initial value");
+	assert.equal(domAttr.get(select, "value"), "one", "initial value");
 
 	domAttr.set(select, "value", "two");
-	equal(option1.selected, false, "not selected");
-	equal(option2.selected, true, "now it is selected");
+	assert.equal(option1.selected, false, "not selected");
+	assert.equal(option2.selected, true, "now it is selected");
 });
+}
 
-test("Removing an option causes the select's value to be re-evaluated", function(){
-
+unit.test("Removing an option causes the select's value to be re-evaluated", function (assert) {
+		var done = assert.async();
 		var select = document.createElement("select");
 		var option1 = document.createElement("option");
 		option1.value = "one";
@@ -385,15 +394,14 @@ test("Removing an option causes the select's value to be re-evaluated", function
 		select.appendChild(option2);
 
 		domAttr.set(select, "value", "one");
-		equal(option1.selected, true, "selected");
-		equal(domAttr.get(select, "value"), "one", "got the value");
+		assert.equal(option1.selected, true, "selected");
+		assert.equal(domAttr.get(select, "value"), "one", "got the value");
 
 		domEvents.addEventListener.call(select, "change", function(){
-			equal(domAttr.get(select, "value"), undefined, "no value now");
-			start();
+			assert.equal(domAttr.get(select, "value"), undefined, "no value now");
+			done();
 		});
 
-		stop();
 
 		select.removeChild(option1);
 		if(!MUTATION_OBSERVER()) {
@@ -402,154 +410,154 @@ test("Removing an option causes the select's value to be re-evaluated", function
 		}
 	});
 
-test("Multiselect values is updated on any children added/removed", function(){
-	var select = document.createElement("select");
-	select.multiple = true;
+if (!isServer()) {
+	unit.test("Multiselect values is updated on any children added/removed", function (assert) {
+		var done = assert.async();
+		var select = document.createElement("select");
+		select.multiple = true;
 
-	var option1 = document.createElement("option");
-	option1.value = "one";
+		var option1 = document.createElement("option");
+		option1.value = "one";
 
-	var option2 = document.createElement("option");
-	option2.value = "two";
+		var option2 = document.createElement("option");
+		option2.value = "two";
 
-	var option3 = document.createElement("option");
-	option3.value = "three";
-	option3.selected = true;
+		var option3 = document.createElement("option");
+		option3.value = "three";
+		option3.selected = true;
 
-	select.appendChild(option1);
-	select.appendChild(option2);
-	select.appendChild(option3);
+		select.appendChild(option1);
+		select.appendChild(option2);
+		select.appendChild(option3);
 
-	domAttr.set(select, "values", ["one", "three"]);
-	deepEqual(domAttr.get(select, "values"), ["one", "three"], "initial value is right");
+		domAttr.set(select, "values", ["one", "three"]);
+		assert.deepEqual(domAttr.get(select, "values"), ["one", "three"], "initial value is right");
 
-	domEvents.addEventListener.call(select, "values", function(){
-		deepEqual(domAttr.get(select, "values"), ["three"], "new val is right");
+		domEvents.addEventListener.call(select, "values", function(){
+			assert.deepEqual(domAttr.get(select, "values"), ["three"], "new val is right");
+			done();
+		});
 
-		start();
+		select.removeChild(option1);
+		if(!MUTATION_OBSERVER()) {
+			var data = domData.get.call(select, "canBindingCallback");
+			data.onMutation();
+		}
+	});
+}
+
+if (!isServer()) {
+	unit.test("Select options within optgroups should be set via `value` properly", function (assert) {
+		function tag (tag, value) {
+			var el = document.createElement(tag);
+			if (value) {
+				el.value = value;
+			}
+			return el;
+		}
+
+		var select = tag('select');
+		var optgroup1 = tag('optgroup');
+		var option11 = tag('option', 'list1-item1');
+		option11.selected = true; // initial selection
+		var option12 = tag('option', 'list1-item2');
+		var optgroup2 = tag('optgroup');
+		var option21 = tag('option', 'list2-item1');
+		var option22 = tag('option', 'list2-item2');
+
+		select.appendChild(optgroup1);
+		select.appendChild(optgroup2);
+		optgroup1.appendChild(option11);
+		optgroup1.appendChild(option12);
+		optgroup2.appendChild(option21);
+		optgroup2.appendChild(option22);
+
+		assert.equal(domAttr.get(select, 'value'), 'list1-item1', 'initial value');
+
+		domAttr.set(select, 'value', 'list2-item2');
+		assert.equal(domAttr.get(select, 'value'), 'list2-item2', 'updated value');
+		assert.equal(option11.selected, false, 'initial option is not selected');
+		assert.equal(option22.selected, true, 'second option is selected');
 	});
 
-	stop();
-
-	select.removeChild(option1);
-	if(!MUTATION_OBSERVER()) {
-		var data = domData.get.call(select, "canBindingCallback");
-		data.onMutation();
-	}
-});
-
-test("Select options within optgroups should be set via `value` properly", function() {
-	function tag (tag, value) {
-		var el = document.createElement(tag);
-		if (value) {
-			el.value = value;
+	unit.test("Select options within optgroups should be set via `values` properly", function (assert) {
+		function tag (tag, value) {
+			var el = document.createElement(tag);
+			if (value) {
+				el.value = value;
+			}
+			return el;
 		}
-		return el;
-	}
 
-	var select = tag('select');
-	var optgroup1 = tag('optgroup');
-	var option11 = tag('option', 'list1-item1');
-	option11.selected = true; // initial selection
-	var option12 = tag('option', 'list1-item2');
-	var optgroup2 = tag('optgroup');
-	var option21 = tag('option', 'list2-item1');
-	var option22 = tag('option', 'list2-item2');
+		var select = tag('select');
+		select.multiple = true;
+		var optgroup1 = tag('optgroup');
+		var option11 = tag('option', 'list1-item1');
+		option11.selected = true; // initial selection
+		var option12 = tag('option', 'list1-item2');
+		var optgroup2 = tag('optgroup');
+		var option21 = tag('option', 'list2-item1');
+		var option22 = tag('option', 'list2-item2');
 
-	select.appendChild(optgroup1);
-	select.appendChild(optgroup2);
-	optgroup1.appendChild(option11);
-	optgroup1.appendChild(option12);
-	optgroup2.appendChild(option21);
-	optgroup2.appendChild(option22);
+		select.appendChild(optgroup1);
+		select.appendChild(optgroup2);
+		optgroup1.appendChild(option11);
+		optgroup1.appendChild(option12);
+		optgroup2.appendChild(option21);
+		optgroup2.appendChild(option22);
 
-	equal(domAttr.get(select, 'value'), 'list1-item1', 'initial value');
+		assert.deepEqual(domAttr.get(select, 'values'), ['list1-item1'], 'initial value');
 
-	domAttr.set(select, 'value', 'list2-item2');
-	equal(domAttr.get(select, 'value'), 'list2-item2', 'updated value');
-	equal(option11.selected, false, 'initial option is not selected');
-	equal(option22.selected, true, 'second option is selected');
-});
-
-test("Select options within optgroups should be set via `values` properly", function() {
-	function tag (tag, value) {
-		var el = document.createElement(tag);
-		if (value) {
-			el.value = value;
-		}
-		return el;
-	}
-
-	var select = tag('select');
-	select.multiple = true;
-	var optgroup1 = tag('optgroup');
-	var option11 = tag('option', 'list1-item1');
-	option11.selected = true; // initial selection
-	var option12 = tag('option', 'list1-item2');
-	var optgroup2 = tag('optgroup');
-	var option21 = tag('option', 'list2-item1');
-	var option22 = tag('option', 'list2-item2');
-
-	select.appendChild(optgroup1);
-	select.appendChild(optgroup2);
-	optgroup1.appendChild(option11);
-	optgroup1.appendChild(option12);
-	optgroup2.appendChild(option21);
-	optgroup2.appendChild(option22);
-
-	deepEqual(domAttr.get(select, 'values'), ['list1-item1'], 'initial value');
-
-	domAttr.set(select, 'values', ['list1-item2', 'list2-item2']);
-	deepEqual(domAttr.get(select, 'values'), ['list1-item2', 'list2-item2'], 'updated value');
-	equal(option11.selected, false, 'initial option is not selected');
-	equal(option12.selected, true, 'second option is selected');
-	equal(option22.selected, true, 'third option is selected');
-});
-
-test("Setting a value that will be appended later", function(){
-	var select = document.createElement("select");
-	var option1 = document.createElement("option");
-	option1.value = "one";
-
-	domAttr.set(select, "value", "two");
-
-	var option2 = document.createElement("option");
-	option2.value = "two";
-
-	domEvents.addEventListener.call(select, "change", function(){
-		equal(domAttr.get(select, "value"), "two", "option2 is selected");
-		start();
+		domAttr.set(select, 'values', ['list1-item2', 'list2-item2']);
+		assert.deepEqual(domAttr.get(select, 'values'), ['list1-item2', 'list2-item2'], 'updated value');
+		assert.equal(option11.selected, false, 'initial option is not selected');
+		assert.equal(option12.selected, true, 'second option is selected');
+		assert.equal(option22.selected, true, 'third option is selected');
 	});
 
-	stop();
+	unit.test("Setting a value that will be appended later", function (assert) {
+		var done = assert.async();
+		var select = document.createElement("select");
+		var option1 = document.createElement("option");
+		option1.value = "one";
 
-	select.appendChild(option2);
-	if(!MUTATION_OBSERVER()) {
-		var data = domData.get.call(select, "canBindingCallback");
-		data.onMutation();
-	}
+		domAttr.set(select, "value", "two");
 
-});
+		var option2 = document.createElement("option");
+		option2.value = "two";
 
-test("Calling remove on checked sets it to false", function(){
+		domEvents.addEventListener.call(select, "change", function(){
+			assert.equal(domAttr.get(select, "value"), "two", "option2 is selected");
+			done();
+		});
+
+		select.appendChild(option2);
+		if(!MUTATION_OBSERVER()) {
+			var data = domData.get.call(select, "canBindingCallback");
+			data.onMutation();
+		}
+	});
+}
+
+unit.test("Calling remove on checked sets it to false", function (assert) {
 	var input = document.createElement("input");
 	input.type = "checkbox";
 
 	domAttr.set(input, "checked");
-	equal(input.checked, true, "it is checked");
+	assert.equal(input.checked, true, "it is checked");
 
 	domAttr.remove(input, "checked");
-	equal(input.checked, false, "not checked");
+	assert.equal(input.checked, false, "not checked");
 });
 
-test("Boolean attrs that don't support a prop sets the attribute", function(){
+unit.test("Boolean attrs that don't support a prop sets the attribute", function (assert) {
 	var div = document.createElement("div");
 	domAttr.set(div, "disabled");
 
-	equal(domAttr.get(div, "disabled"), "", "empty string");
+	assert.equal(domAttr.get(div, "disabled"), "", "empty string");
 });
 
-test("Setting a non-string value on a select correctly selects the child", function(){
+unit.test("Setting a non-string value on a select correctly selects the child", function (assert) {
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = "1";
@@ -560,10 +568,10 @@ test("Setting a non-string value on a select correctly selects the child", funct
 	select.appendChild(option2);
 
 	domAttr.set(select, "value", 2);
-	equal(option2.selected, true, "second one is selected");
+	assert.equal(option2.selected, true, "second one is selected");
 });
 
-test("Setting null doesn't select the default value on a select", function(){
+unit.test("Setting null doesn't select the default value on a select", function (assert) {
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = '';
@@ -575,62 +583,65 @@ test("Setting null doesn't select the default value on a select", function(){
 
 	// This is really stupid
 	domAttr.set(select, "value", null);
-	equal(option1.selected, false, "option1 not selected");
-	equal(option2.selected, false, "option2 not selected");
-	equal(select.selectedIndex, -1, "no selected index, wha-wha");
+	assert.equal(option1.selected, false, "option1 not selected");
+	assert.equal(option2.selected, false, "option2 not selected");
+	assert.equal(select.selectedIndex, -1, "no selected index, wha-wha");
 });
 
-test("setting .value on an input to undefined or null makes value empty (#83)", function(){
+unit.test("setting .value on an input to undefined or null makes value empty (#83)", function (assert) {
 	var input = document.createElement("input");
 	input.value = "something";
 	domAttr.set(input, "value", null);
-	QUnit.equal(input.value, "", "null");
+	assert.equal(input.value, "", "null");
 	domAttr.set(input, "value", undefined);
-	QUnit.equal(input.value, "", "undefined");
+	assert.equal(input.value, "", "undefined");
 });
 
-test("attr.special.focused calls after previous events", function(){
-	var oldQueue = types.queueTask;
-	types.queueTask = function(task){
+if (!isServer()) {
+	unit.test("attr.special.focused calls after previous events", function (assert) {
+		var oldQueue = types.queueTask;
+		types.queueTask = function(task){
+			setTimeout(function(){
+				task[0].apply(task[1], task[2]);
+			}, 5);
+		};
+
+		var input = document.createElement("input");
+		input.type = "text";
+		var ta = document.getElementById("qunit-fixture");
+		ta.appendChild(input);
+
+		var done = assert.async();
+
+		domAttr.set(input, "focused", true);
 		setTimeout(function(){
-			task[0].apply(task[1], task[2]);
-		}, 5);
-	};
+			assert.equal(domAttr.get(input, "focused"), true, "it is now focused");
+			types.queueTask = oldQueue;
+			done();
+		}, 10);
 
-	var input = document.createElement("input");
-	input.type = "text";
-	var ta = document.getElementById("qunit-fixture");
-	ta.appendChild(input);
-
-	stop();
-
-	domAttr.set(input, "focused", true);
-	setTimeout(function(){
-		equal(domAttr.get(input, "focused"), true, "it is now focused");
-		types.queueTask = oldQueue;
-		start();
-	}, 10);
-
-	equal(domAttr.get(input, "focused"), false, "not focused yet");
-});
-
-test("attr.special.focused binds on inserted if element is detached", 2, function(){
-	var input = document.createElement("input");
-	input.type = "text";
-	var ta = document.getElementById("qunit-fixture");
-
-	stop();
-	domAttr.set(input, "focused", true);
-	equal(domAttr.get(input, "focused"), false, "not focused yet");
-	domEvents.addEventListener.call(input, "inserted", function() {
-		equal(domAttr.get(input, "focused"), true, "it is now focused");
-		start();
+		assert.equal(domAttr.get(input, "focused"), false, "not focused yet");
 	});
-	mutate.appendChild.call(ta, input);
 
-});
+	unit.test("attr.special.focused binds on inserted if element is detached", function(assert) {
+		assert.expect(2);
+		var input = document.createElement("input");
+		input.type = "text";
+		var ta = document.getElementById("qunit-fixture");
 
-test("handles removing multiple event handlers", function () {
+		var done = assert.async();
+		domAttr.set(input, "focused", true);
+		assert.equal(domAttr.get(input, "focused"), false, "not focused yet");
+		domEvents.addEventListener.call(input, "inserted", function() {
+			assert.equal(domAttr.get(input, "focused"), true, "it is now focused");
+			done();
+		});
+		mutate.appendChild.call(ta, input);
+
+	});
+}
+
+unit.test("handles removing multiple event handlers", function (assert) {
 	var handler1 = function() {};
 	var handler2 = function() {};
 
@@ -642,10 +653,10 @@ test("handles removing multiple event handlers", function () {
 	domEvents.removeEventListener.call(div, "attributes", handler1);
 	domEvents.removeEventListener.call(div, "attributes", handler2);
 
-	ok(true, 'should not throw');
+	assert.ok(true, 'should not throw');
 });
 
-test("handles removing multiple event handlers without MUTATION_OBSERVER", function () {
+unit.test("handles removing multiple event handlers without MUTATION_OBSERVER", function (assert) {
 	var MO = MUTATION_OBSERVER();
 	MUTATION_OBSERVER(null);
 	var handler1 = function() {};
@@ -659,78 +670,76 @@ test("handles removing multiple event handlers without MUTATION_OBSERVER", funct
 	domEvents.removeEventListener.call(div, "attributes", handler1);
 	domEvents.removeEventListener.call(div, "attributes", handler2);
 
-	ok(true, 'should not throw');
+	assert.ok(true, 'should not throw');
 	MUTATION_OBSERVER(MO);
 });
 
-if(window.eventsBubble) {
-	test('get, set, and addEventListener on focused', function(){
-		var input = document.createElement("input");
-		var ta = document.getElementById("qunit-fixture");
-		var test;
-		var focusedCount = 0;
+// TODO: https://github.com/canjs/can-util/issues/320
+unit.skip('get, set, and addEventListener on focused', function (assert) {
+	var done = assert.async();
+	var input = document.createElement("input");
+	var ta = document.getElementById("qunit-fixture");
+	var test;
+	var focusedCount = 0;
 
+	ta.appendChild(input);
 
-		ta.appendChild(input);
+	var tests = [
+		{
+			action: function(){
+				assert.equal( domAttr.get(input, "focused"), false, "get not focused" );
 
-		var tests = [
-			{
-				action: function(){
-					equal( domAttr.get(input, "focused"), false, "get not focused" );
-
-					domAttr.set(input, "focused", true);
-					if(!document.hasFocus()) {
-						domDispatch.call(input, "focus");
-					}
-				},
-				test: function(){
-					equal(focusedCount, 1, "focused event");
-					equal( domAttr.get(input,"focused"), true, "get focused" );
+				domAttr.set(input, "focused", true);
+				if(!document.hasFocus()) {
+					domDispatch.call(input, "focus");
 				}
 			},
-			{
-				action: function(){
-					domAttr.set(input, "focused", false);
-					if(!document.hasFocus()) {
-						domDispatch.call(input, "blur");
-					}
-				},
-				test: function(){
-					equal(focusedCount, 2, "focused event");
-					equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
+			test: function(){
+				assert.equal(focusedCount, 1, "focused event");
+				assert.equal( domAttr.get(input,"focused"), true, "get focused" );
+			}
+		},
+		{
+			action: function(){
+				domAttr.set(input, "focused", false);
+				if(!document.hasFocus()) {
+					domDispatch.call(input, "blur");
 				}
+			},
+			test: function(){
+				assert.equal(focusedCount, 2, "focused event");
+				assert.equal( domAttr.get(input,"focused"), false, "get not focused after blur" );
 			}
-		];
+		}
+	];
 
-		function next(){
-			test = tests.shift();
-			if(!test) {
-				start();
-				return;
-			}
-
-			// Calling the action will trigger an event below, that event will then
-			// call test.test() to make sure it works. This is b/c IE10 fires focus
-			// asynchronously.
-			test.action();
+	function next(){
+		test = tests.shift();
+		if(!test) {
+			done();
+			return;
 		}
 
-		// fired on blur and focus events
-		ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
-		domEvents.addEventListener.call(input, "focused", function(){
-			focusedCount++;
+		// Calling the action will trigger an event below, that event will then
+		// call test.test() to make sure it works. This is b/c IE10 fires focus
+		// asynchronously.
+		test.action();
+	}
 
-			test.test();
-			setTimeout(next, 50);
-		});
+	// fired on blur and focus events
+	assert.ok(domAttr.special.focused.addEventListener, "addEventListener implemented");
+	domEvents.addEventListener.call(input, "focused", function(){
+		focusedCount++;
 
-		stop();
-		next();
+		test.test();
+		setTimeout(next, 50);
 	});
-}
 
-test("Binding to selected updates the selectedness of options", function(){
-	expect(3);
+	next();
+});
+
+unit.test("Binding to selected updates the selectedness of options", function (assert) {
+	assert.expect(3);
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.selected = false;
@@ -742,7 +751,7 @@ test("Binding to selected updates the selectedness of options", function(){
 	select.appendChild(option2);
 
 	domEvents.addEventListener.call(option1, "selected", function(){
-		ok(true, "this was called");
+		assert.ok(true, "this was called");
 	});
 
 	domAttr.set(option1, "selected", true);
@@ -750,12 +759,12 @@ test("Binding to selected updates the selectedness of options", function(){
 	option2.selected = true;
 	domDispatch.call(select, "change");
 
-	equal(option2.selected, true);
-	equal(option1.selected, false);
+	assert.equal(option2.selected, true);
+	assert.equal(option1.selected, false);
 });
 
-test("Select's value is preserved when inserted into the document", function(){
-	stop();
+unit.test("Select's value is preserved when inserted into the document", function (assert) {
+	var done = assert.async();
 	var select = document.createElement("select");
 	var option1 = document.createElement("option");
 	option1.value = "one";
@@ -763,19 +772,20 @@ test("Select's value is preserved when inserted into the document", function(){
 
 	domAttr.set(select, "value", null);
 
-	equal(select.selectedIndex, -1, "was set to -1");
+	assert.equal(select.selectedIndex, -1, "was set to -1");
 
 	var ta = document.getElementById("qunit-fixture");
 	mutate.appendChild.call(ta, select);
 
 	setTimeout(function(){
-		equal(select.selectedIndex, -1, "still is -1");
-		start();
+		assert.equal(select.selectedIndex, -1, "still is -1");
+		done();
 	}, 50);
 
 });
 
-test('multi-select does not dispatch a values change event if its selected options are unchanged (#105)', function() {
+unit.test('multi-select does not dispatch a values change event if its selected options are unchanged (#105)', function (assert) {
+	var done = assert.async();
 	var div = document.createElement('div');
 	div.innerHTML = '<select multiple><option selected>2</option><option selected>1</option><option>3</option></select>';
 
@@ -792,31 +802,29 @@ test('multi-select does not dispatch a values change event if its selected optio
 	select.innerHTML = '<option selected>1</option><option selected>2</option><option>3</option>';
 	// we manipulate the multi-select, but don't change its selected options ['1', '2"]
 
-	QUnit.stop();
-
 	setTimeout(function() {
-		QUnit.strictEqual(valuesChanges, 0, 'we do not dispatch a change event');
+		assert.strictEqual(valuesChanges, 0, 'we do not dispatch a change event');
 		document.body.removeChild(div);
-		QUnit.start();
+		done();
 	}, 50);
 });
 
-test('setting checked to undefined should result in false for checkboxes (#184)', function(){
+unit.test('setting checked to undefined should result in false for checkboxes (#184)', function (assert) {
 	var input = document.createElement('input');
 	input.type = 'checkbox';
 
 	domAttr.set(input, 'checked', undefined);
-	QUnit.equal(input.checked, false, 'Should set checked to false');
+	assert.equal(input.checked, false, 'Should set checked to false');
 
 	domAttr.set(input, 'checked', true);
-	QUnit.equal(input.checked, true, 'Should become true');
+	assert.equal(input.checked, true, 'Should become true');
 	domAttr.set(input, 'checked', undefined);
-	QUnit.equal(input.checked, false, 'Should become false again');
+	assert.equal(input.checked, false, 'Should become false again');
 });
 
-test("set attribute with namespaces (#309)", function(){
+unit.test("set attribute with namespaces (#309)", function (assert) {
 	var div = document.createElement('div');
 
 	domAttr.set(div, 'foo:bar', 'value');
-	QUnit.equal(domAttr.get(div,'foo:bar'), 'value');
+	assert.equal(domAttr.get(div,'foo:bar'), 'value');
 });

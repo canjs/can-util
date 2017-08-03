@@ -1,15 +1,15 @@
 'use strict';
 
-var LOCATION = require("./location");
-QUnit = require("steal-qunit");
+var LOCATION = require('./location');
+var unit = require('../../test/qunit');
 
-QUnit.module("can-util/dom/location/location");
+unit.module('can-util/dom/location/location');
 
-QUnit.test("Can set a location", function(){
+unit.test('Can set a location', function (assert) {
 	var myLoc = {};
 	var oldLoc = LOCATION();
 	LOCATION(myLoc);
 
-	QUnit.equal(LOCATION(), myLoc, "It was set");
+	assert.equal(LOCATION(), myLoc, 'It was set');
 	LOCATION(oldLoc);
 });

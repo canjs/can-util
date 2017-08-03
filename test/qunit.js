@@ -1,8 +1,24 @@
-// mocha-qunit-ui adds a global QUnit. If it does not exist return steal-qunit
-if(typeof QUnit === 'undefined') {
-	module.exports = require('steal-qunit');
-} else {
-	// Those are different for mocha-qunit-ui
+
+var testType = typeof process !== 'undefined' && process.env.TEST;
+var isMochaQUnitUI = testType === 'mocha';
+var isQunit = testType === 'qunit';
+
+if (isMochaQUnitUI) {
+	// mocha-qunit-ui does not support async
+	QUnit.assert.async = function () {
+		QUnit.stop();
+		return function done (error) {
+			if (error) {
+				return QUnit.ok(false, '' + error);
+			}
+			QUnit.start();
+		};
+	};
+
 	QUnit.test = test;
 	module.exports =  QUnit;
+} else if (isQunit) {
+	module.exports = require('qunitjs');
+} else {
+	module.exports = require('steal-qunit');
 }
