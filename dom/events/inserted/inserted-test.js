@@ -1,16 +1,17 @@
 'use strict';
 
-require('can-util/dom/events/inserted/');
-var domEvents = require('can-util/dom/events/');
-var MUTATION_OBSERVER = require('can-util/dom/mutation-observer/');
-var domMutate = require("can-util/dom/mutate/");
-var dev = require('can-util/js/dev/dev');
+require('./inserted');
+var domEvents = require('../events');
+var MUTATION_OBSERVER = require('../../mutation-observer/mutation-observer');
+var domMutate = require("../../mutate/mutate");
+var dev = require('../../../js/dev/dev');
 
-QUnit = require('steal-qunit');
+var isProduction = require('../../../test/helpers').isProduction;
+var unit = require('../../../test/qunit');
 
 function runTest(name, MUT_OBS) {
 	var oldMutObs;
-	QUnit.module(name, {
+	unit.module(name, {
 		setup: function(){
 			oldMutObs = MUTATION_OBSERVER();
 			MUTATION_OBSERVER(MUT_OBS);
@@ -20,33 +21,31 @@ function runTest(name, MUT_OBS) {
 		}
 	});
 
-	asyncTest("basic insertion", function () {
+	unit.test('basic insertion', function (assert) {
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		domEvents.addEventListener.call(div,"inserted", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});
 
-	if (System.env.indexOf('production') < 0) {
-		asyncTest("basic disabled insertion", function () {
+	if (!isProduction()) {
+		unit.test('basic disabled insertion', function (assert) {
+			assert.expect(1);
+
+			var done = assert.async();
 			var oldlog = dev.warn;
-			var message = 'can-util/dom/events::dispatch';
-
-			var thisTest = QUnit.config.current;
-			dev.warn = function(text) {
-				if(QUnit.config.current === thisTest) {
-					equal(text.slice(0, message.length), message, 'Got expected warning.');
-					start();
-
-					dev.warn = oldlog;
-				}
+			dev.warn = function (text) {
+				dev.warn = oldlog;
+				var message = 'can-util/dom/events::dispatch';
+				assert.equal(text.slice(0, message.length), message, 'Got expected warning.');
+				done();
 			};
 
-			expect(1);
 			var input = document.createElement("input");
 			input.disabled = true;
 
@@ -55,22 +54,24 @@ function runTest(name, MUT_OBS) {
 		});
 	}
 
-	asyncTest("parent then child inserted - appendChild", function () {
-		expect(1);
+	unit.test('parent then child inserted - appendChild', function (assert) {
+		assert.expect(1);
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		var span = document.createElement("span");
 
 		domEvents.addEventListener.call(span,"inserted", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 		domMutate.appendChild.call(div, span);
 	});
 
-	asyncTest("parent then child inserted in callback - appendChild", function () {
-		expect(1);
+	unit.test('parent then child inserted in callback - appendChild', function (assert) {
+		assert.expect(1);
+		var done = assert.async();
 		var div = document.createElement("div");
 
 		var span = document.createElement("span");
@@ -79,8 +80,8 @@ function runTest(name, MUT_OBS) {
 			domMutate.appendChild.call(div, span);
 		});
 		domEvents.addEventListener.call(span,"inserted", function(){
-			ok(true, "called back");
-			start();
+			assert.ok(true, "called back");
+			done();
 		});
 		domMutate.appendChild.call(document.getElementById("qunit-fixture"), div);
 	});

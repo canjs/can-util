@@ -5,9 +5,9 @@ var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var DOCUMENT = require("../document/document");
 var makeDocument = require("can-vdom/make-document/make-document");
 
-QUnit = require('steal-qunit');
+var unit = require('../../test/qunit');
 
-QUnit.module("can-util/dom/mutate");
+unit.module("can-util/dom/mutate");
 
 function disableMO(){
 	var old = MUTATION_OBSERVER();
@@ -17,7 +17,8 @@ function disableMO(){
 	};
 }
 
-test("inserting empty frag", function () {
+unit.test('inserting empty frag', function (assert) {
+	var done = assert.async();
 	var enableMO = disableMO();
 
 	var frag = document.createDocumentFragment();
@@ -25,17 +26,16 @@ test("inserting empty frag", function () {
 
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
-		ok(true, "called");
+		assert.ok(true, "called");
 	});
 	mutate.appendChild.call( document.getElementById("qunit-fixture"), div );
-	stop();
 	setTimeout(function(){
 		enableMO();
-		start();
+		done();
 	},10);
 });
 
-test("removing the body causes removed events", function () {
+unit.test('removing the body causes removed events', function (assert) {
 	var enableMO = disableMO();
 	var oldDoc = DOCUMENT();
 
@@ -46,54 +46,37 @@ test("removing the body causes removed events", function () {
 	mutate.appendChild.call(doc.body, div);
 
 	div.addEventListener("removed", function(){
-		ok(true, "called");
+		assert.ok(true, "called");
 	});
 
 	mutate.removeChild.call(doc.documentElement, doc.body);
 
-	stop();
+	var done = assert.async();
 	setTimeout(function(){
 		enableMO();
 		DOCUMENT(oldDoc);
-		start();
-	},10);
+		done();
+	}, 10);
+});
 
-	/*
-	var frag = document.createDocumentFragment();
-	mutate.appendChild.call( document.getElementById("qunit-fixture"), frag );
+// TODO: https://github.com/canjs/can-util/issues/320
+unit.skip('inserting into a different document fires inserted', function (assert) {
+	var done = assert.async();
+	var enableMO = disableMO();
+
+	var doc = document.implementation.createHTMLDocument('Demo');
+	var oldDoc = DOCUMENT();
+	DOCUMENT(doc);
 
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
-		ok(true, "called");
+		assert.ok(true, "called");
 	});
-	mutate.appendChild.call( document.getElementById("qunit-fixture"), div );
-	stop();
-	setTimeout(function(){
+
+	mutate.appendChild.call(doc.body, div);
+	setTimeout(function () {
 		enableMO();
-		start();
-	},10);
-	*/
+		DOCUMENT(oldDoc);
+		done();
+	}, 10);
 });
-
-if(window.eventsBubble) {
-	test("inserting into a different document fires inserted", function(){
-		var enableMO = disableMO();
-
-		var doc = document.implementation.createHTMLDocument('Demo');
-		var oldDoc = DOCUMENT();
-		DOCUMENT(doc);
-
-		var div = document.createElement("div");
-		div.addEventListener("inserted", function(){
-			ok(true, "called");
-		});
-		mutate.appendChild.call(doc.body, div);
-
-		stop();
-		setTimeout(function(){
-			enableMO();
-			DOCUMENT(oldDoc);
-			start();
-		}, 10);
-	});
-}

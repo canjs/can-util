@@ -2,20 +2,23 @@
 
 var matches = require("./matches");
 
-QUnit = require("steal-qunit");
+var unit = require('../../test/qunit');
+var isServer = require('../../test/helpers').isServer;
 
-QUnit.module("can-util/dom/matches");
+unit.module("can-util/dom/matches");
 
-QUnit.test("basics", function(){
-	var a = document.createElement("a");
-	a.id = "foo";
-	document.getElementById('qunit-fixture').appendChild(a);
+var supportsMatchesMethod = !isServer();
+if (supportsMatchesMethod) {
+	unit.test("basics", function (assert) {
+		var a = document.createElement("a");
+		a.id = "foo";
+		document.getElementById('qunit-fixture').appendChild(a);
 
-	QUnit.ok(matches.call(a, "#foo"), "matches selector");
-});
+		assert.ok(matches.call(a, "#foo"), "matches selector");
+	});
+}
 
-QUnit.test("returns false for document", function(){
+unit.test("returns false for document", function (assert) {
 	var res = matches.call(document, "a");
-
-	QUnit.equal(res, false, "document never matches");
+	assert.equal(res, false, "document never matches");
 });
