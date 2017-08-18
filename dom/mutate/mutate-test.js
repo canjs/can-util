@@ -25,17 +25,18 @@ unit.test('inserting empty frag', function (assert) {
 	mutate.appendChild.call( document.getElementById("qunit-fixture"), frag );
 
 	var div = document.createElement("div");
-	div.addEventListener("inserted", function(){
+	div.addEventListener("inserted", function() {
 		assert.ok(true, "called");
-	});
-	mutate.appendChild.call( document.getElementById("qunit-fixture"), div );
-	setTimeout(function(){
-		enableMO();
 		done();
-	},10);
+	});
+
+	mutate.appendChild.call( document.getElementById("qunit-fixture"), div );
+
+	enableMO();
 });
 
 unit.test('removing the body causes removed events', function (assert) {
+	var done = assert.async();
 	var enableMO = disableMO();
 	var oldDoc = DOCUMENT();
 
@@ -47,16 +48,12 @@ unit.test('removing the body causes removed events', function (assert) {
 
 	div.addEventListener("removed", function(){
 		assert.ok(true, "called");
+		done();
 	});
 
 	mutate.removeChild.call(doc.documentElement, doc.body);
 
-	var done = assert.async();
-	setTimeout(function(){
-		enableMO();
-		DOCUMENT(oldDoc);
-		done();
-	}, 10);
+	enableMO();
 });
 
 // TODO: https://github.com/canjs/can-util/issues/320
@@ -71,12 +68,10 @@ unit.skip('inserting into a different document fires inserted', function (assert
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
 		assert.ok(true, "called");
+		done();
 	});
 
 	mutate.appendChild.call(doc.body, div);
-	setTimeout(function () {
-		enableMO();
-		DOCUMENT(oldDoc);
-		done();
-	}, 10);
+
+	enableMO()
 });
