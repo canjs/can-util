@@ -54,6 +54,7 @@ unit.test('removing the body causes removed events', function (assert) {
 	mutate.removeChild.call(doc.documentElement, doc.body);
 
 	enableMO();
+	DOCUMENT(oldDoc);
 });
 
 // TODO: https://github.com/canjs/can-util/issues/320
@@ -72,6 +73,7 @@ unit.skip('inserting into a different document fires inserted', function (assert
 	});
 
 	mutate.appendChild.call(doc.body, div);
-
-	enableMO()
+	
+	enableMO();
+	DOCUMENT(oldDoc);
 });
