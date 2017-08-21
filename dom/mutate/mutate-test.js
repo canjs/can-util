@@ -48,13 +48,12 @@ unit.test('removing the body causes removed events', function (assert) {
 
 	div.addEventListener("removed", function(){
 		assert.ok(true, "called");
+		enableMO();
+		DOCUMENT(oldDoc);
 		done();
 	});
 
 	mutate.removeChild.call(doc.documentElement, doc.body);
-
-	enableMO();
-	DOCUMENT(oldDoc);
 });
 
 // TODO: https://github.com/canjs/can-util/issues/320
@@ -69,11 +68,10 @@ unit.skip('inserting into a different document fires inserted', function (assert
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
 		assert.ok(true, "called");
+		enableMO();
+		DOCUMENT(oldDoc);
 		done();
 	});
 
 	mutate.appendChild.call(doc.body, div);
-	
-	enableMO();
-	DOCUMENT(oldDoc);
 });

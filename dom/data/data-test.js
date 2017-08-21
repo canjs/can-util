@@ -24,13 +24,17 @@ unit.test('domData should be cleaned up if element is removed from DOM', functio
 
 	mutate.removeChild.call(fixture, div);
 
-	var intervalID = setInterval(function() {
+	var checkRemoved = function() {
 		if (diff(Object.keys(domDataCore._data), origDataKeys).length === 0) {
 			assert.ok(true, "domData._data returned to initial state");
-			clearInterval(intervalID);
 			done();
 		}
-	}, 10);
+		else {
+			setTimeout(checkRemoved, 10);
+		}
+	};
+
+	checkRemoved();
 });
 
 unit.test('domData should be cleaned up if multiple elements are removed from DOM', function (assert) {
@@ -53,13 +57,17 @@ unit.test('domData should be cleaned up if multiple elements are removed from DO
 	mutate.removeChild.call(fixture, div);
 	mutate.removeChild.call(fixture, p);
 
-	var intervalID = setInterval(function() {
+	var checkRemoved = function() {
 		if (diff(Object.keys(domDataCore._data), origDataKeys).length === 0) {
 			assert.ok(true, "domData._data returned to initial state");
-			clearInterval(intervalID);
 			done();
 		}
-	}, 10);
+		else {
+			setTimeout(checkRemoved, 10);
+		}
+	};
+
+	checkRemoved();
 });
 
 unit.test('domData should be cleaned up if element is removed from DOM after calling setData for two different keys', function (assert) {
@@ -76,13 +84,17 @@ unit.test('domData should be cleaned up if element is removed from DOM after cal
 
 	mutate.removeChild.call(fixture, div);
 
-	var intervalID = setInterval(function() {
+	var checkRemoved = function() {
 		if (diff(Object.keys(domDataCore._data), origDataKeys).length === 0) {
 			assert.ok(true, "domData._data returned to initial state");
-			clearInterval(intervalID);
 			done();
 		}
-	}, 10);
+		else {
+			setTimeout(checkRemoved, 10);
+		}
+	};
+
+	checkRemoved();
 });
 
 unit.test('domData should be cleaned up if element is removed from DOM after calling setData twice for the same key', function (assert) {
@@ -99,11 +111,15 @@ unit.test('domData should be cleaned up if element is removed from DOM after cal
 
 	mutate.removeChild.call(fixture, div);
 
-	var intervalID = setInterval(function() {
+	var checkRemoved = function() {
 		if (diff(Object.keys(domDataCore._data), origDataKeys).length === 0) {
 			assert.ok(true, "domData._data returned to initial state");
-			clearInterval(intervalID);
 			done();
 		}
-	}, 10);
+		else {
+			setTimeout(checkRemoved, 10);
+		}
+	};
+
+	checkRemoved();
 });
