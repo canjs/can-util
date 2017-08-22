@@ -8,7 +8,7 @@
  *
  * ```js
  * var isNode = require("can-util/js/is-node/is-node");
- * var GLOBAL = require("can-util/js/global/global");
+ * var GLOBAL = require("can-globals/global/global");
  *
  * if(isNode()) {
  *   console.log(GLOBAL() === global); // -> true

@@ -1,6 +1,6 @@
 'use strict';
 
-var getDocument = require("../../document/document");
+var getDocument = require('can-globals/document/document');
 var domDataCore = require("../../data/core");
 var MUTATION_OBSERVER = require("../../mutation-observer/mutation-observer");
 var each = require("../../../js/each/each");

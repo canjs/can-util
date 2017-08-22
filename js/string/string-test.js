@@ -2,6 +2,7 @@
 
 var QUnit = require('../../test/qunit');
 var string = require('./string');
+var get = require('../get/get');
 
 QUnit.module("can-util/js/string");
 
@@ -63,7 +64,7 @@ QUnit.test('string.sub remove', function () {
 	deepEqual(obj, {});
 });
 
-QUnit.test('string.getObject Single root', function () {
+QUnit.test('get Single root', function () {
 	// ## Single root
 	var root, result;
 	// # Only get
@@ -71,14 +72,14 @@ QUnit.test('string.getObject Single root', function () {
 		foo: 'bar'
 	};
 	// exists
-	result = string.getObject('foo', root);
+	result = get(root, 'foo');
 	equal(result, 'bar', 'got \'bar\'');
 	// not exists
-	result = string.getObject('baz', root);
+	result = get(root, 'baz');
 	equal(result, undefined, 'got \'undefined\'');
 });
 
-QUnit.test('string.getObject Multiple root', function () {
+QUnit.test('get Multiple root', function () {
 	// ## Multiple roots
 	var root1, root2, roots, result;
 	// # Only get
@@ -93,13 +94,13 @@ QUnit.test('string.getObject Multiple root', function () {
 		root2
 	];
 	// exists in first root
-	result = string.getObject('a', roots);
+	result = get(roots, '0.a');
 	equal(result, 1, 'got \'1\'');
 	// exists in second root
-	result = string.getObject('b', roots);
+	result = get(roots, '1.b');
 	equal(result, 2, 'got \'2\'');
 	// not exists anywhere
-	result = string.getObject('c', roots);
+	result = get(roots, 'c');
 	equal(result, undefined, 'got \'undefined\'');
 	// # One of roots is not an object
 	// exists in second root
@@ -111,11 +112,11 @@ QUnit.test('string.getObject Multiple root', function () {
 		root1,
 		root2
 	];
-	result = string.getObject('b', roots);
+	result = get(roots, '1.b');
 	equal(result, 2, 'got \'2\'');
 });
 
-QUnit.test('string.getObject Deep objects', function () {
+QUnit.test('get Deep objects', function () {
 	// ## Deep objects
 	var root, result;
 	// # Only get
@@ -125,10 +126,10 @@ QUnit.test('string.getObject Deep objects', function () {
 		}
 	};
 	// exists
-	result = string.getObject('foo.bar', root);
+	result = get(root, 'foo.bar');
 	equal(result, 'baz', 'got \'baz\'');
 	// not exists
-	result = string.getObject('foo.world', root);
+	result = get(root, 'foo.world');
 	equal(result, undefined, 'got \'undefined\'');
 });
 

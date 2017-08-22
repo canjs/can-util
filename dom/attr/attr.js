@@ -4,8 +4,8 @@
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
 var setImmediate = require("../../js/set-immediate/set-immediate");
-var getDocument = require("../document/document");
-var global = require("../../js/global/global")();
+var getDocument = require("can-globals/document/document");
+var global = require("can-globals/global/global")();
 var isOfGlobalDocument = require("../is-of-global-document/is-of-global-document");
 var setData = require("../data/data");
 var domContains = require("../contains/contains");

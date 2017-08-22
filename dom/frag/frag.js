@@ -1,6 +1,6 @@
 'use strict';
 
-var getDocument = require('../document/document');
+var getDocument = require('can-globals/document/document');
 var fragment = require('../fragment/fragment');
 var each = require('../../js/each/each');
 var childNodes = require('../child-nodes/child-nodes');

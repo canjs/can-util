@@ -2,7 +2,7 @@
 
 var get = require('../get/get');
 var isContainer = require('../is-container/is-container');
-var canDev = require("../dev/dev");
+var canDev = require("can-util/js/dev/dev");
 var isArray = require('../is-array/is-array');
 
 // ##string.js

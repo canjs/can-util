@@ -8,7 +8,7 @@ var domData = require("../../data/data");
 var getMutationObserver = require("../../mutation-observer/mutation-observer");
 var domDispatch = require("../../dispatch/dispatch");
 var mutationDocument = require("../../mutation-observer/document/document");
-var getDocument = require("../../document/document");
+var getDocument = require('can-globals/document/document');
 var CIDMap = require("../../../js/cid-map/cid-map");
 var string = require("../../../js/string/string");
 

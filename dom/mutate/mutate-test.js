@@ -2,7 +2,7 @@
 
 var mutate = require('./mutate');
 var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
-var DOCUMENT = require("../document/document");
+var getDocument = require('can-globals/document/document');
 var makeDocument = require("can-vdom/make-document/make-document");
 
 var unit = require('../../test/qunit');
@@ -38,10 +38,10 @@ unit.test('inserting empty frag', function (assert) {
 unit.test('removing the body causes removed events', function (assert) {
 	var done = assert.async();
 	var enableMO = disableMO();
-	var oldDoc = DOCUMENT();
+	var oldDoc = getDocument();
 
 	var doc = makeDocument();
-	DOCUMENT(doc);
+	getDocument(doc);
 
 	var div = doc.createElement("div");
 	mutate.appendChild.call(doc.body, div);
@@ -49,7 +49,7 @@ unit.test('removing the body causes removed events', function (assert) {
 	div.addEventListener("removed", function(){
 		assert.ok(true, "called");
 		enableMO();
-		DOCUMENT(oldDoc);
+		getDocument(oldDoc);
 		done();
 	});
 
@@ -62,14 +62,14 @@ unit.skip('inserting into a different document fires inserted', function (assert
 	var enableMO = disableMO();
 
 	var doc = document.implementation.createHTMLDocument('Demo');
-	var oldDoc = DOCUMENT();
-	DOCUMENT(doc);
+	var oldDoc = getDocument();
+	getDocument(doc);
 
 	var div = document.createElement("div");
 	div.addEventListener("inserted", function(){
 		assert.ok(true, "called");
 		enableMO();
-		DOCUMENT(oldDoc);
+		getDocument(oldDoc);
 		done();
 	});
 

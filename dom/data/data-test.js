@@ -3,7 +3,7 @@
 var domData = require("./data");
 var domDataCore = require("./core");
 var diff = require("../../js/diff-object/diff-object");
-var getDocument = require("../document/document");
+var getDocument = require('can-globals/document/document');
 var mutate = require("../mutate/mutate");
 var unit = require('../../test/qunit');
 

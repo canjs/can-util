@@ -41,6 +41,7 @@
     "qunitjs": "^2.4.0",
     "saucelabs": "^1.4.0",
     "steal": "^1.5.5",
+    "steal-css": "^1.2.5",
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.4.1",
     "test-saucelabs": "0.0.2",
@@ -53,12 +54,16 @@
     "url": "git://github.com/canjs/can-util.git"
   },
   "dependencies": {
+    "can-ajax": "^1.0.0",
+    "can-assign": "^1.0.0",
     "can-cid": "^1.0.0",
     "can-deparam": "^1.0.0",
     "can-event-dom-enter": "^1.0.0",
     "can-event-dom-radiochange": "^1.0.0",
+    "can-globals": "^0.0.5",
     "can-namespace": "1.0.0",
     "can-param": "^1.0.0",
+    "can-parse-uri": "^1.0.0",
     "can-reflect": "^1.2.0",
     "can-symbol": "^1.0.0",
     "can-types": "^1.1.0"

@@ -1,6 +1,5 @@
 'use strict';
 
-require('./assign/assign-test');
 require('./assign-non-enumerable/assign-non-enumerable-test');
 require('./base-url/base-url-test');
 require('./cid-map/cid-map-test');
@@ -18,9 +17,7 @@ require('./diff-object/diff-object-test');
 require('./each/each-test');
 
 require('./get/get-test');
-require('./global/global-test');
 require('./import/import-test');
-require('./is-array/is-array-test');
 require('./is-array-like/is-array-like-test');
 require('./is-browser-window/is-browser-window-test');
 require('./is-container/is-container-test');
@@ -31,10 +28,8 @@ require('./is-plain-object/is-plain-object-test');
 require('./is-promise-like/is-promise-like-test');
 require('./make-promise/make-promise-test');
 require('./omit/omit-test');
-require('./is-string/is-string-test');
 require('./is-web-worker/is-web-worker-test');
 require('./join-uris/join-uris-test');
-require('./parse-uri/parse-uri-test');
 require('./last/last-test');
 require('./make-array/make-array-test');
 require('./make-map/make-map-test');
