@@ -22,7 +22,6 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
-    "document": "bit-docs",
     "http-server": "http-server -p 3000 --silent",
     "ci": "npm run build && npm run test && node test/test-sauce-labs.js"
   },
@@ -34,7 +33,6 @@
   ],
   "devDependencies": {
     "async": "^2.2.0",
-    "bit-docs": "0.0.7",
     "can-vdom": "^3.1.1",
     "http-server": "^0.10.0",
     "jshint": "^2.9.1",
@@ -53,25 +51,6 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/canjs/can-util.git"
-  },
-  "bit-docs": {
-    "dependencies": {
-      "bit-docs-glob-finder": "^0.0.5",
-      "bit-docs-dev": "^0.0.3",
-      "bit-docs-js": "^0.0.3",
-      "bit-docs-generate-readme": "^0.0.8"
-    },
-    "glob": {
-      "pattern": "**/*.{js,md}",
-      "ignore": [
-        "node_modules/**/*",
-        "**/*{-,_,}{test,qunit}{s,}.js"
-      ]
-    },
-    "readme": {
-      "apis": "./doc/apis.json"
-    },
-    "parent": "can-util"
   },
   "dependencies": {
     "can-cid": "^1.0.0",
