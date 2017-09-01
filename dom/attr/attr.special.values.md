@@ -8,7 +8,7 @@ A special property that represents the selected values in a `<select>` element, 
 Binding to `values` in your [can-stache] template is useful to get a list of the selected values:
 
 ```handlebars
-<select multiple {($values)}="colors">
+<select multiple values:bind="colors">
 	<option value="red">Red</option>
 	<option value="green">Green</option>
 	<option value="blue">Blue</option>
