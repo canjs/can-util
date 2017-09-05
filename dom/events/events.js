@@ -1,8 +1,8 @@
 'use strict';
 
-var _document = require("../document/document");
-var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
-var isPlainObject = require("../../js/is-plain-object/is-plain-object");
+var getDocument = require('can-globals/document/document');
+var isBrowserWindow = require('../../js/is-browser-window/is-browser-window');
+var isPlainObject = require('../../js/is-plain-object/is-plain-object');
 var fixSyntheticEventsOnDisabled = false;
 var dev = require('../../js/dev/dev');
 
@@ -35,7 +35,7 @@ module.exports = {
 		var ret;
 		var dispatchingOnDisabled = fixSyntheticEventsOnDisabled && isDispatchingOnDisabled(this, event);
 
-		var doc = this.ownerDocument || _document();
+		var doc = this.ownerDocument || getDocument();
 		var ev = doc.createEvent('HTMLEvents');
 		var isString = typeof event === "string";
 

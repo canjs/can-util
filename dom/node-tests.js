@@ -24,7 +24,6 @@ function cleanFixture () {
 var QUnit = require('../test/qunit');
 QUnit.testStart(cleanFixture);
 
-require('./ajax/ajax-test');
 require('./attr/attr-test');
 require('./mutate/mutate-test');
 require('./data/data-test');
@@ -33,4 +32,3 @@ require('./events/delegate/delegate-test');
 require('./events/inserted/inserted-test');
 require('./events/removed/removed-test'); // conflicts with attr tests
 require('./matches/matches-test');
-require('./location/location-test');

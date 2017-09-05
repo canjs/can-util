@@ -1,31 +1,15 @@
 'use strict';
 
-var global = require("../../js/global/global");
+var canDev = require("can-util/js/dev/dev");
 
 /**
- * @module {function} can-util/dom/location/location location
- * @parent can-util/dom
- * @signature `location(location)`
- *
- * @param {Object} location An optional location-like object
- * to set as the context's location
- *
- * Optionally sets, and returns, the location object for the context.
- *
- * ```js
- * var locationShim = { path: '/' };
- * var LOCATION = require("can-util/dom/location/location");
- * LOCATION(locationShim);
- *
- * ...
- * LOCATION().path; // -> '/'
- * ```
+ * @module can-util/js/global/global global
+ * @parent can-util/js
+ * @description Deprecated. Use [can-globals] instead.
  */
-var setLocation;
-module.exports = function(setLoc){
-	if(setLoc) {
-		setLocation = setLoc;
-	}
-	//return setDocument || global().document;
-	return setLocation || global().location;
-};
+
+ //!steal-remove-start
+ canDev.warn('js/global/global is deprecated; please use can-global instead: https://github.com/canjs/can-globals');
+ //!steal-remove-end
+
+module.exports = require('can-globals/location/location');

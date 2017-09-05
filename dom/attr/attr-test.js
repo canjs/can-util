@@ -5,7 +5,7 @@ var domEvents = require('../events/events');
 var domData = require("../data/data");
 var domDispatch = require("../dispatch/dispatch");
 var mutate = require("../mutate/mutate");
-var MUTATION_OBSERVER = require('../mutation-observer/mutation-observer');
+var getMutationObserver = require('can-globals/mutation-observer/mutation-observer');
 var types = require("can-types");
 
 var helpers = require('../../test/helpers');
@@ -53,8 +53,8 @@ unit.test("attributes event", function (assert) {
 unit.test("attr events without MUTATION_OBSERVER", function (assert) {
 	assert.expect(9);
 	var done = assert.async();
-	var MO = MUTATION_OBSERVER();
-	MUTATION_OBSERVER(null);
+	var MO = getMutationObserver();
+	getMutationObserver(null);
 
 	var div = document.createElement("div");
 
@@ -81,7 +81,7 @@ unit.test("attr events without MUTATION_OBSERVER", function (assert) {
 			assert.equal(div.getAttribute(ev.attributeName), null, "value of the attribute should be null after the remove.");
 
 			domEvents.removeEventListener.call(div, "attributes", attrHandler);
-			MUTATION_OBSERVER(MO);
+			getMutationObserver(MO);
 			done();
 		};
 		domEvents.addEventListener.call(div, "attributes", attrHandler);
@@ -404,7 +404,7 @@ unit.test("Removing an option causes the select's value to be re-evaluated", fun
 
 
 		select.removeChild(option1);
-		if(!MUTATION_OBSERVER()) {
+		if(!getMutationObserver()) {
 			var data = domData.get.call(select, "canBindingCallback");
 			data.onMutation();
 		}
@@ -439,7 +439,7 @@ if (!isServer()) {
 		});
 
 		select.removeChild(option1);
-		if(!MUTATION_OBSERVER()) {
+		if(!getMutationObserver()) {
 			var data = domData.get.call(select, "canBindingCallback");
 			data.onMutation();
 		}
@@ -532,7 +532,7 @@ if (!isServer()) {
 		});
 
 		select.appendChild(option2);
-		if(!MUTATION_OBSERVER()) {
+		if(!getMutationObserver()) {
 			var data = domData.get.call(select, "canBindingCallback");
 			data.onMutation();
 		}
@@ -657,8 +657,8 @@ unit.test("handles removing multiple event handlers", function (assert) {
 });
 
 unit.test("handles removing multiple event handlers without MUTATION_OBSERVER", function (assert) {
-	var MO = MUTATION_OBSERVER();
-	MUTATION_OBSERVER(null);
+	var MO = getMutationObserver();
+	getMutationObserver(null);
 	var handler1 = function() {};
 	var handler2 = function() {};
 
@@ -671,7 +671,7 @@ unit.test("handles removing multiple event handlers without MUTATION_OBSERVER", 
 	domEvents.removeEventListener.call(div, "attributes", handler2);
 
 	assert.ok(true, 'should not throw');
-	MUTATION_OBSERVER(MO);
+	getMutationObserver(MO);
 });
 
 // TODO: https://github.com/canjs/can-util/issues/320

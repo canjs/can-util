@@ -1,6 +1,6 @@
 'use strict';
 
-var parseURI = require('../parse-uri/parse-uri');
+var parseURI = require('can-parse-uri');
 
 module.exports = function(base, href) {
 	function removeDotSegments(input) {
