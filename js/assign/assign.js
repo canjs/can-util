@@ -22,9 +22,20 @@
  *
  * @return {Object} Returns the `target` argument.
  */
-module.exports = function (d, s) {
-	for (var prop in s) {
-		d[prop] = s[prop];
-	}
-	return d;
-};
+ module.exports = function (target, args) {
+ 	if (target === null) {
+   	throw new TypeError('The target object cannot be undefined or null');
+   }
+ 	for (var i = 1; i < arguments.length; i++) {
+ 		var supplier = arguments[i];
+
+ 		if (supplier !=null) {
+ 			for (var prop in supplier) {
+ 				if (Object.prototype.hasOwnProperty.call(supplier, prop)) {
+ 					target[prop] = supplier[prop];
+ 				}
+ 			}
+ 		}
+ 	}
+ 	return target;
+ };
