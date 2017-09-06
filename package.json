@@ -1,6 +1,6 @@
 {
   "name": "can-util",
-  "version": "3.10.2",
+  "version": "3.10.4",
   "description": "Common utilities for CanJS projects",
   "homepage": "http://canjs.com",
   "author": {
@@ -60,7 +60,7 @@
     "can-deparam": "^1.0.0",
     "can-event-dom-enter": "^1.0.0",
     "can-event-dom-radiochange": "^1.0.0",
-    "can-globals": "^0.0.5",
+    "can-globals": "^0.1.0",
     "can-namespace": "1.0.0",
     "can-param": "^1.0.0",
     "can-parse-uri": "^1.0.0",
