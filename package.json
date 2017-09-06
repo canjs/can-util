@@ -60,7 +60,7 @@
     "can-deparam": "^1.0.0",
     "can-event-dom-enter": "^1.0.0",
     "can-event-dom-radiochange": "^1.0.0",
-    "can-globals": "^0.0.5",
+    "can-globals": "^0.0.6",
     "can-namespace": "1.0.0",
     "can-param": "^1.0.0",
     "can-parse-uri": "^1.0.0",
