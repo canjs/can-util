@@ -12,6 +12,13 @@ var helpers = require('../../test/helpers');
 var isServer = helpers.isServer;
 var unit = require('../../test/qunit');
 
+//use this to skip tests that should not be run on the server
+unit.skipOnServer = unit.test;
+if (isServer) {
+	unit.skipOnServer = unit.skip;
+}
+
+
 unit.module("can-util/dom/attr");
 
 unit.test("attributes event", function (assert) {
@@ -675,7 +682,7 @@ unit.test("handles removing multiple event handlers without MUTATION_OBSERVER", 
 });
 
 // TODO: https://github.com/canjs/can-util/issues/320
-unit.skip('get, set, and addEventListener on focused', function (assert) {
+unit.skipOnServer('get, set, and addEventListener on focused', function (assert) {
 	var done = assert.async();
 	var input = document.createElement("input");
 	var ta = document.getElementById("qunit-fixture");
