@@ -11,7 +11,7 @@ var setData = require("../data/data");
 var domContains = require("../contains/contains");
 var domEvents = require("../events/events");
 var domDispatch = require("../dispatch/dispatch");
-var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
+var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
 var each = require("../../js/each/each");
 var types = require("can-types");
 var diff = require('../../js/diff/diff');
@@ -73,7 +73,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 			var onMutation = function(){
 				callback.call(el);
 			};
-			var MO = MUTATION_OBSERVER();
+			var MO = getMutationObserver();
 			if(MO) {
 				var observer = new MO(onMutation);
 				observer.observe(el, {
@@ -452,7 +452,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 		// ## attr.set
 		// Set the value an attribute on an element.
 		set: function (el, attrName, val) {
-			var usingMutationObserver = isOfGlobalDocument(el) && MUTATION_OBSERVER();
+			var usingMutationObserver = isOfGlobalDocument(el) && getMutationObserver();
 			attrName = attrName.toLowerCase();
 			var oldValue;
 			// In order to later trigger an event we need to compare the new value to the old value,
@@ -568,7 +568,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 		remove: function (el, attrName) {
 			attrName = attrName.toLowerCase();
 			var oldValue;
-			if (!MUTATION_OBSERVER()) {
+			if (!getMutationObserver()) {
 				oldValue = attr.get(el, attrName);
 			}
 
@@ -585,7 +585,7 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 				el.removeAttribute(attrName);
 			}
 
-			if (!MUTATION_OBSERVER() && oldValue != null) {
+			if (!getMutationObserver() && oldValue != null) {
 				attr.trigger(el, attrName, oldValue);
 			}
 		},
