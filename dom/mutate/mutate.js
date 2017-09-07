@@ -8,7 +8,7 @@ var makeArray = require("../../js/make-array/make-array");
 var setImmediate = require("../../js/set-immediate/set-immediate");
 var CID = require("can-cid");
 
-var getMutationObserver = require("../mutation-observer/mutation-observer");
+var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
 var childNodes = require("../child-nodes/child-nodes");
 var domContains = require("../contains/contains");
 var domDispatch = require("../dispatch/dispatch");

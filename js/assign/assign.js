@@ -1,6 +1,6 @@
 'use strict';
 
-var canDev = require("can-util/js/dev/dev");
+//var canDev = require("can-util/js/dev/dev");
 
 /**
  * @module can-util/js/assign/assign assign
@@ -9,7 +9,7 @@ var canDev = require("can-util/js/dev/dev");
  */
 
  //!steal-remove-start
- canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
+//  canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
  //!steal-remove-end
 
 module.exports = require('can-assign');
