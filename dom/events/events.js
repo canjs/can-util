@@ -55,7 +55,7 @@ module.exports = {
 			//!steal-remove-start
 			dev.warn(
 				"can-util/dom/events::dispatch: Dispatching a synthetic event on a disabled is " +
-				"problematic in FireFox and Internet Exprorer. We recommend avoiding this if at " +
+				"problematic in FireFox and Internet Explorer. We recommend avoiding this if at " +
 				"all possible. see https://github.com/canjs/can-util/issues/294"
 			);
 			//!steal-remove-end
