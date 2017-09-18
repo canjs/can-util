@@ -147,7 +147,7 @@ domEvents.addDelegateListener = function(eventType, selector, handler) {
 domEvents.removeDelegateListener = function(eventType, selector, handler) {
 	var events = domData.get.call(this, dataName);
 
-	if (events[eventType] && events[eventType][selector]) {
+	if (events && events[eventType] && events[eventType][selector]) {
 		var eventTypeEvents = events[eventType],
 			delegates = eventTypeEvents[selector],
 			i = 0;
