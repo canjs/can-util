@@ -54,9 +54,11 @@ module.exports = function(specialEventName, mutationNodesProperty){
 				domData.set.call(documentElement, specialEventName+"Data", specialEventData);
 			}
 
-			// count the number of handlers for this event
-			var count = specialEventData.nodeIdsRespondingToInsert.get(this) || 0;
-			specialEventData.nodeIdsRespondingToInsert.set(this, count + 1);
+			if(this.nodeType !== 11) {
+				// count the number of handlers for this event
+				var count = specialEventData.nodeIdsRespondingToInsert.get(this) || 0;
+				specialEventData.nodeIdsRespondingToInsert.set(this, count + 1);
+			}
 		}
 		return originalAdd.apply(this, arguments);
 
