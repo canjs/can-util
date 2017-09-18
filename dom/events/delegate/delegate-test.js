@@ -40,6 +40,16 @@ if (supportsMatchesMethod) {
 		domDispatch.call(ul.firstChild.firstChild,"click");
 	});
 
+	test("can call removeDelegateListener without having previously called addDelegateListener", 1, function(){
+		try {
+			var ul = document.createElement("ul");
+			domEvents.removeDelegateListener.call(ul, "click", "li", function(){});
+			ok(true, "Calling removeDelegateListener does not throw");
+		} catch(er) {
+			ok(false, "Calling removeDelegateListener throws");
+		}
+	});
+
 	test("focus", 2, function () {
 		stop();
 		var frag = buildFrag("<div><input type='text'></div>");
