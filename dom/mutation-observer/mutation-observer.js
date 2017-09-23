@@ -15,7 +15,9 @@ var globals = require('can-globals');
 
 module.exports = function(setMO){
 	if(setMO !== undefined) {
-		globals.setKeyValue('MutationObserver', setMO);
+		globals.setKeyValue('MutationObserver', function(){
+			return setMO;
+		});
 	}
 	return globals.getKeyValue('MutationObserver');
 };
