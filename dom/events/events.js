@@ -1,8 +1,8 @@
 'use strict';
 
-var _document = require("../document/document");
-var isBrowserWindow = require("../../js/is-browser-window/is-browser-window");
-var isPlainObject = require("../../js/is-plain-object/is-plain-object");
+var getDocument = require('can-globals/document/document');
+var isBrowserWindow = require('../../js/is-browser-window/is-browser-window');
+var isPlainObject = require('../../js/is-plain-object/is-plain-object');
 var fixSyntheticEventsOnDisabled = false;
 var dev = require('../../js/dev/dev');
 
@@ -35,7 +35,7 @@ module.exports = {
 		var ret;
 		var dispatchingOnDisabled = fixSyntheticEventsOnDisabled && isDispatchingOnDisabled(this, event);
 
-		var doc = this.ownerDocument || _document();
+		var doc = this.ownerDocument || getDocument();
 		var ev = doc.createEvent('HTMLEvents');
 		var isString = typeof event === "string";
 
@@ -55,7 +55,7 @@ module.exports = {
 			//!steal-remove-start
 			dev.warn(
 				"can-util/dom/events::dispatch: Dispatching a synthetic event on a disabled is " +
-				"problematic in FireFox and Internet Exprorer. We recommend avoiding this if at " +
+				"problematic in FireFox and Internet Explorer. We recommend avoiding this if at " +
 				"all possible. see https://github.com/canjs/can-util/issues/294"
 			);
 			//!steal-remove-end

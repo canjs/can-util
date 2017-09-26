@@ -1,8 +1,8 @@
 'use strict';
 
-var getDocument = require("../../document/document");
+var getDocument = require('can-globals/document/document');
 var domDataCore = require("../../data/core");
-var MUTATION_OBSERVER = require("../../mutation-observer/mutation-observer");
+var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
 var each = require("../../../js/each/each");
 var CIDStore = require("../../../js/cid-set/cid-set");
 var makeArray = require("../../../js/make-array/make-array");
@@ -31,7 +31,7 @@ var dispatchIfListening = function(mutatedNode, nodes, dispatched){
 
 var mutationObserverDocument = {
 	add: function(handler) {
-		var MO = MUTATION_OBSERVER();
+		var MO = getMutationObserver();
 		if (MO) {
 			var documentElement = getDocument().documentElement;
 			var globalObserverData = domDataCore.get.call(documentElement, "globalObserverData");
@@ -82,7 +82,7 @@ var makeMutationMethods = function(name) {
 				afterHandlers: [],
 				hander: null
 			};
-			if (MUTATION_OBSERVER()) {
+			if (getMutationObserver()) {
 				domDataCore.set.call(documentElement, mutationName + "MutationData", mutationData);
 			}
 		}

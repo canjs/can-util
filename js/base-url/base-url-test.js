@@ -2,8 +2,8 @@
 
 var QUnit = require('../../test/qunit');
 var getBaseUrl = require('./base-url');
-var getGlobal = require('../global/global');
-var getDomDocument = require('../../dom/document/document');
+var getGlobal = require('can-globals/global/global');
+var getDomDocument = require('can-globals/document/document');
 
 QUnit.module('can-util/js/base-url');
 

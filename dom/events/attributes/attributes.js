@@ -3,8 +3,8 @@
 var events = require("../events");
 var isOfGlobalDocument = require("../../is-of-global-document/is-of-global-document");
 var domData = require("../../data/data");
-var getMutationObserver = require("../../mutation-observer/mutation-observer");
-var assign = require("../../../js/assign/assign");
+var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
+var assign = require("can-assign");
 var domDispatch = require("../../dispatch/dispatch");
 
 var originalAdd = events.addEventListener,

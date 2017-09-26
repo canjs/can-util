@@ -1,4 +1,4 @@
-var getGlobal = require('../js/global/global');
+var getGlobal = require('can-globals/global/global');
 
 function isProduction () {
 	var root = getGlobal();

@@ -2,7 +2,7 @@
 
 require('./inserted');
 var domEvents = require('../events');
-var MUTATION_OBSERVER = require('../../mutation-observer/mutation-observer');
+var getMutationObserver = require('can-globals/mutation-observer/mutation-observer');
 var domMutate = require("../../mutate/mutate");
 var dev = require('../../../js/dev/dev');
 
@@ -13,11 +13,11 @@ function runTest(name, MUT_OBS) {
 	var oldMutObs;
 	unit.module(name, {
 		setup: function(){
-			oldMutObs = MUTATION_OBSERVER();
-			MUTATION_OBSERVER(MUT_OBS);
+			oldMutObs = getMutationObserver();
+			getMutationObserver(MUT_OBS);
 		},
 		teardown: function(){
-			MUTATION_OBSERVER(oldMutObs);
+			getMutationObserver(oldMutObs);
 		}
 	});
 
@@ -88,5 +88,5 @@ function runTest(name, MUT_OBS) {
 
 }
 
-runTest("can-util/dom/events/inserted - MutationObserver", MUTATION_OBSERVER());
+runTest("can-util/dom/events/inserted - MutationObserver", getMutationObserver());
 runTest("can-util/dom/events/inserted - no MutationObserver", null);

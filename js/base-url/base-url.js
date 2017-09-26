@@ -1,7 +1,7 @@
 'use strict';
 
-var getGlobal = require('../global/global');
-var getDomDocument = require('../../dom/document/document');
+var getGlobal = require('can-globals/global/global');
+var getDomDocument = require('can-globals/document/document');
 
 /**
  * @module {function} can-util/js/base-url/base-url base-url

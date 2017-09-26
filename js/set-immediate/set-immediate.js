@@ -1,6 +1,6 @@
 'use strict';
 
-var global = require("../global/global")();
+var global = require('can-globals/global/global')();
 
 /**
  * @module can-util/js/set-immediate/set-immediate set-immediate

@@ -5,10 +5,10 @@
 // the mutate methods.
 var events = require("../events");
 var domData = require("../../data/data");
-var getMutationObserver = require("../../mutation-observer/mutation-observer");
+var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
 var domDispatch = require("../../dispatch/dispatch");
 var mutationDocument = require("../../mutation-observer/document/document");
-var getDocument = require("../../document/document");
+var getDocument = require('can-globals/document/document');
 var CIDMap = require("../../../js/cid-map/cid-map");
 var string = require("../../../js/string/string");
 
@@ -54,9 +54,11 @@ module.exports = function(specialEventName, mutationNodesProperty){
 				domData.set.call(documentElement, specialEventName+"Data", specialEventData);
 			}
 
-			// count the number of handlers for this event
-			var count = specialEventData.nodeIdsRespondingToInsert.get(this) || 0;
-			specialEventData.nodeIdsRespondingToInsert.set(this, count + 1);
+			if(this.nodeType !== 11) {
+				// count the number of handlers for this event
+				var count = specialEventData.nodeIdsRespondingToInsert.get(this) || 0;
+				specialEventData.nodeIdsRespondingToInsert.set(this, count + 1);
+			}
 		}
 		return originalAdd.apply(this, arguments);
 

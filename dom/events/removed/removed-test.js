@@ -3,7 +3,7 @@
 require('./removed');
 var each = require('../../../js/each/each');
 var domEvents = require('../events');
-var getMutationObserver = require('../../mutation-observer/mutation-observer');
+var getMutationObserver = require('can-globals/mutation-observer/mutation-observer');
 var domMutate = require("../../mutate/mutate");
 
 var unit = require('../../../test/qunit');
