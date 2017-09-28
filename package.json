@@ -58,6 +58,7 @@
     "can-assign": "^1.0.0",
     "can-cid": "^1.0.0",
     "can-deparam": "^1.0.0",
+    "can-dom-data-state": "^0.1.0",
     "can-event-dom-enter": "^1.0.0",
     "can-event-dom-radiochange": "^1.0.0",
     "can-globals": "^0.1.0",

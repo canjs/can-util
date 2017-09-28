@@ -1,11 +1,11 @@
 'use strict';
 
 var CID = require("can-cid");
-var domDataCore = require("../../dom/data/core");
+var domDataState = require("can-dom-data-state");
 
 module.exports = function(obj){
 	if(typeof obj.nodeType === "number") {
-		return domDataCore.cid.call(obj);
+		return domDataState.cid.call(obj);
 	} else {
 		var type = typeof obj;
 		var isObject = type !== null && (type === "object" || type === "function");

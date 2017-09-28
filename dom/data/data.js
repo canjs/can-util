@@ -1,10 +1,10 @@
 'use strict';
 
-var domDataCore = require("./core");
+var domDataState = require("can-dom-data-state");
 var mutationDocument = require("../mutation-observer/document/document");
 
 var deleteNode = function() {
-	return domDataCore.delete.call(this);
+	return domDataState.delete.call(this);
 };
 
 // count of distinct elements that have domData set
@@ -38,7 +38,7 @@ module.exports = {
 	 *
 	 * Return the previously set unique identifier for the dom node.
 	 */
-	getCid: domDataCore.getCid,
+	getCid: domDataState.getCid,
 	/**
 	 * @function can-util/dom/data/data.cid domData.cid
 	 * @signature `domData.cid.call(el)`
@@ -53,14 +53,14 @@ module.exports = {
 	 * using the [can-util/dom/data/data.expando expando] property.  Return the
 	 * unique cid whether or not it is newly set
 	 */
-	cid: domDataCore.cid,
+	cid: domDataState.cid,
 	/**
 	 * @property can-util/dom/data/data.expando domData.expando
 	 * @type {String}
 	 *
 	 * The key in which elements' cids are stored
 	 */
-	expando: domDataCore.expando,
+	expando: domDataState.expando,
 	/**
 	 * @function can-util/dom/data/data.clean domData.clean
 	 * @param  {String} prop the property to remove from the element's data
@@ -74,7 +74,7 @@ module.exports = {
 	 * domData.clean.call(el, "metadata");
 	 * ```
 	 */
-	clean: domDataCore.clean,
+	clean: domDataState.clean,
 	/**
 	 * @function can-util/dom/data/data.get domData.get
 	 * @signature `domData.get.call(el, key)`
@@ -89,7 +89,7 @@ module.exports = {
 	 *
 	 * @param {String} key A string used as a unique key for storing data associated with this DOM Node.
 	 */
-	get: domDataCore.get,
+	get: domDataState.get,
 	/**
 	 * @function can-util/dom/data/data.set domData.set
 	 * @signature `domData.set.call(el, name, value)`
@@ -114,7 +114,7 @@ module.exports = {
 			mutationDocument.onAfterRemovedNodes(cleanupDomData);
 		}
 		// increment elementSetCount if set returns true
-		elementSetCount += domDataCore.set.call(this, name, value) ? 1 : 0;
+		elementSetCount += domDataState.set.call(this, name, value) ? 1 : 0;
 	},
 	/**
 	 * @function can-util/dom/data/data.delete domData.delete

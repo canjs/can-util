@@ -1,7 +1,7 @@
 'use strict';
 
 var getDocument = require('can-globals/document/document');
-var domDataCore = require("../../data/core");
+var domDataState = require("can-dom-data-state");
 var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
 var each = require("../../../js/each/each");
 var CIDStore = require("../../../js/cid-set/cid-set");
@@ -34,7 +34,7 @@ var mutationObserverDocument = {
 		var MO = getMutationObserver();
 		if (MO) {
 			var documentElement = getDocument().documentElement;
-			var globalObserverData = domDataCore.get.call(documentElement, "globalObserverData");
+			var globalObserverData = domDataState.get.call(documentElement, "globalObserverData");
 			if(!globalObserverData) {
 				var observer = new MO(function (mutations) {
 					globalObserverData.handlers.forEach(function(handler){
@@ -47,14 +47,14 @@ var mutationObserverDocument = {
 					observer: observer,
 					handlers: []
 				};
-				domDataCore.set.call(documentElement, "globalObserverData", globalObserverData);
+				domDataState.set.call(documentElement, "globalObserverData", globalObserverData);
 			}
 			globalObserverData.handlers.push(handler);
 		}
 	},
 	remove: function(handler){
 		var documentElement = getDocument().documentElement;
-		var globalObserverData = domDataCore.get.call(documentElement, "globalObserverData");
+		var globalObserverData = domDataState.get.call(documentElement, "globalObserverData");
 		if(globalObserverData) {
 			var index = globalObserverData.handlers.indexOf(handler);
 			if(index >= 0) {
@@ -62,7 +62,7 @@ var mutationObserverDocument = {
 			}
 			if(globalObserverData.handlers.length === 0 ){
 				globalObserverData.observer.disconnect();
-				domDataCore.clean.call(documentElement, "globalObserverData");
+				domDataState.clean.call(documentElement, "globalObserverData");
 			}
 		}
 	}
@@ -73,7 +73,7 @@ var makeMutationMethods = function(name) {
 
 	var getMutationData = function() {
 		var documentElement = getDocument().documentElement;
-		var mutationData = domDataCore.get.call(documentElement, mutationName + "MutationData");
+		var mutationData = domDataState.get.call(documentElement, mutationName + "MutationData");
 
 		if(!mutationData) {
 			mutationData = {
@@ -83,7 +83,7 @@ var makeMutationMethods = function(name) {
 				hander: null
 			};
 			if (getMutationObserver()) {
-				domDataCore.set.call(documentElement, mutationName + "MutationData", mutationData);
+				domDataState.set.call(documentElement, mutationName + "MutationData", mutationData);
 			}
 		}
 		return mutationData;
@@ -120,7 +120,7 @@ var makeMutationMethods = function(name) {
 		var mutationData = getMutationData();
 		if( mutationData.handlers.length === 0 && mutationData.afterHandlers.length === 0 ) {
 			this.remove(mutationData.handler);
-			domDataCore.clean.call(documentElement, mutationName + "MutationData");
+			domDataState.clean.call(documentElement, mutationName + "MutationData");
 		}
 	};
 
