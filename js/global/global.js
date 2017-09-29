@@ -9,7 +9,7 @@
  */
 
 //!steal-remove-start
-// canDev.warn('js/global/global is deprecated; please use can-global instead: https://github.com/canjs/can-globals');
+// canDev.warn('js/global/global is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
 //!steal-remove-end
 
 module.exports = require('can-globals/global/global');

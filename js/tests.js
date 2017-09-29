@@ -17,7 +17,6 @@ require('./each/each-test');
 require('./get/get-test');
 require('./import/import-test');
 require('./is-array-like/is-array-like-test');
-require('./is-browser-window/is-browser-window-test');
 require('./is-container/is-container-test');
 require('./is-empty-object/is-empty-object-test');
 require('./is-function/is-function-test');

@@ -1,7 +1,7 @@
 'use strict';
 
 var getDocument = require('can-globals/document/document');
-var isBrowserWindow = require('../../js/is-browser-window/is-browser-window');
+var isBrowserWindow = require('can-globals/is-browser-window/is-browser-window');
 var isPlainObject = require('../../js/is-plain-object/is-plain-object');
 var fixSyntheticEventsOnDisabled = false;
 var dev = require('../../js/dev/dev');

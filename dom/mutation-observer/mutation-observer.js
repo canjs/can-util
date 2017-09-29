@@ -10,7 +10,7 @@ var globals = require('can-globals');
  */
 
 //!steal-remove-start
-// canDev.warn('js/mutation-observer/mutation-observer is deprecated; please use can-global instead: https://github.com/canjs/can-globals');
+// canDev.warn('js/mutation-observer/mutation-observer is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
 //!steal-remove-end
 
 module.exports = function(setMO){
