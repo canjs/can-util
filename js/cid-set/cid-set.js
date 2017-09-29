@@ -1,45 +1,15 @@
 'use strict';
 
-var GLOBAL = require('can-globals/global/global');
-var each = require("../each/each");
-var getCID = require("../cid/get-cid");
+//var canDev = require("can-util/js/dev/dev");
 
-var CIDSet;
+/**
+ * @module can-util/js/cid-set/cid-set cid-set
+ * @parent can-util/js
+ * @description Deprecated. Use [can-cid/set/set] instead.
+ */
 
-if(GLOBAL().Set) {
-	CIDSet = GLOBAL().Set;
-} else {
-	var CIDSet = function(){
-		this.values = {};
-	};
-	CIDSet.prototype.add = function(value){
-		this.values[getCID(value)] = value;
-	};
-	CIDSet.prototype["delete"] = function(key){
-		var has = getCID(key) in this.values;
-		if(has) {
-			delete this.values[getCID(key)];
-		}
-		return has;
-	};
-	CIDSet.prototype.forEach = function(cb, thisArg) {
-		each(this.values, cb, thisArg);
-	};
-	CIDSet.prototype.has = function(value) {
-		return (getCID(value) in this.values);
-	};
-	CIDSet.prototype.clear = function(key) {
-		return this.values = {};
-	};
-	Object.defineProperty(CIDSet.prototype,"size",{
-		get: function(){
-			var size = 0;
-			each(this.values, function(){
-				size++;
-			});
-			return size;
-		}
-	});
-}
+//!steal-remove-start
+// canDev.warn('js/cid-set/cid-set is deprecated; please use can-globals instead: https://github.com/canjs/can-cid');
+//!steal-remove-end
 
-module.exports = CIDSet;
+module.exports = require('can-cid/set/set');

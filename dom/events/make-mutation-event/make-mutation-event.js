@@ -9,7 +9,7 @@ var getMutationObserver = require("can-globals/mutation-observer/mutation-observ
 var domDispatch = require("../../dispatch/dispatch");
 var mutationDocument = require("../../mutation-observer/document/document");
 var getDocument = require('can-globals/document/document');
-var CIDMap = require("../../../js/cid-map/cid-map");
+var CIDMap = require("can-cid/map/map");
 var string = require("../../../js/string/string");
 
 require("../../is-of-global-document/is-of-global-document");

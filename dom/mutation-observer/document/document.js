@@ -4,7 +4,7 @@ var getDocument = require('can-globals/document/document');
 var domDataState = require("can-dom-data-state");
 var getMutationObserver = require("can-globals/mutation-observer/mutation-observer");
 var each = require("../../../js/each/each");
-var CIDStore = require("../../../js/cid-set/cid-set");
+var CIDStore = require("can-cid/set/set");
 var makeArray = require("../../../js/make-array/make-array");
 var string = require("../../../js/string/string");
 
