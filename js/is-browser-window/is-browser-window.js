@@ -1,25 +1,15 @@
 'use strict';
 
+//var canDev = require("can-util/js/dev/dev");
+
 /**
- * @module {function} can-util/js/is-browser-window/is-browser-window is-browser-window
+ * @module can-util/js/is-browser-window/is-browser-window is-browser-window
  * @parent can-util/js
- * @signature `isBrowserWindow()`
- *
- * Returns `true` if the code is running within a Browser window. Use this function if you need special code paths for when running in a Browser window, a Web Worker, or another environment (such as Node.js).
- *
- * ```js
- * var isBrowserWindow = require("can-util/js/is-browser-window/is-browser-window");
- * var GLOBAL = require("can-util/js/global/global");
- *
- * if(isBrowserWindow()) {
- *   console.log(GLOBAL() === window); // -> true
- * }
- * ```
- *
- * @return {Boolean} True if the environment is a Browser window.
+ * @description Deprecated. Use [can-globals] instead.
  */
 
-module.exports = function(){
-	return typeof window !== "undefined" &&
-		typeof document !== "undefined" && typeof SimpleDOM === "undefined";
-};
+//!steal-remove-start
+// canDev.warn('js/is-browser-window/is-browser-window is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
+//!steal-remove-end
+
+module.exports = require('can-globals/is-browser-window/is-browser-window');
