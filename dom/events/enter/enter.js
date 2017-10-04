@@ -1,7 +1,7 @@
 'use strict';
 
 var events = require("../events");
-var canDev = require('../../../js/dev/dev');
+var canDev = require('can-log/dev/dev');
 
 /**
  * @module {events} can-util/dom/events/enter/enter enter

@@ -4,7 +4,7 @@ var getDocument = require('can-globals/document/document');
 var isBrowserWindow = require('can-globals/is-browser-window/is-browser-window');
 var isPlainObject = require('../../js/is-plain-object/is-plain-object');
 var fixSyntheticEventsOnDisabled = false;
-var dev = require('../../js/dev/dev');
+var dev = require('can-log/dev/dev');
 
 function isDispatchingOnDisabled(element, ev) {
 	var isInsertedOrRemoved = isPlainObject(ev) ? (ev.type === 'inserted' || ev.type === 'removed') : (ev === 'inserted' || ev === 'removed');

@@ -1,6 +1,6 @@
 'use strict';
 
-//var canDev = require("can-util/js/dev/dev");
+//var canDev = require("can-log/dev/dev");
 var globals = require('can-globals');
 
 /**
