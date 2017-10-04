@@ -1,6 +1,6 @@
 'use strict';
 
-var dev = require('../dev/dev');
+var dev = require('can-log/dev/dev');
 var hasWarned = false;
 
 module.exports = function(arr) {
