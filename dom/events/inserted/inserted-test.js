@@ -4,7 +4,7 @@ require('./inserted');
 var domEvents = require('../events');
 var getMutationObserver = require('can-globals/mutation-observer/mutation-observer');
 var domMutate = require("../../mutate/mutate");
-var dev = require('../../../js/dev/dev');
+var dev = require('can-log/dev/dev');
 
 var isProduction = require('../../../test/helpers').isProduction;
 var unit = require('../../../test/qunit');
