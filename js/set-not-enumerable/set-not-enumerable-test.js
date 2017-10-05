@@ -5,11 +5,11 @@ var setNotEnumerable = require('./set-not-enumerable');
 
 QUnit.module("can-util/js/set-not-enumerable");
 
-QUnit.test("basics",0, function(){
+QUnit.test("basics", function(assert){
+	assert.expect(0);
 	var obj = {};
-	setNotEnumerable(obj,"prop","val");
+	setNotEnumerable(obj, "prop", "val");
 	for(var prop in obj) {
-		ok(false, prop);
+		assert.ok(false, prop);
 	}
-
 });

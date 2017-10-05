@@ -6,7 +6,7 @@ var get  = require('./get');
 
 QUnit.module('can-util/js/get');
 
-QUnit.test('get Single root', function () {
+QUnit.test('get Single root', function (assert) {
 	// ## Single root
 	var root, result;
 	// # Only get
@@ -15,13 +15,13 @@ QUnit.test('get Single root', function () {
 	};
 	// exists
 	result = get(root, 'foo');
-	equal(result, 'bar', 'got \'bar\'');
+	assert.equal(result, 'bar', 'got \'bar\'');
 	// not exists
 	result = get(root, 'baz');
-	equal(result, undefined, 'got \'undefined\'');
+	assert.equal(result, undefined, 'got \'undefined\'');
 });
 
-QUnit.test('get Deep objects', function () {
+QUnit.test('get Deep objects', function (assert) {
 	// ## Deep objects
 	var root, result;
 	// # Only get
@@ -32,18 +32,18 @@ QUnit.test('get Deep objects', function () {
 	};
 	// exists
 	result = get(root, 'foo.bar');
-	equal(result, 'baz', 'got \'baz\'');
+	assert.equal(result, 'baz', 'got \'baz\'');
 	// not exists
 	result = get(root, 'foo.world');
-	equal(result, undefined, 'got \'undefined\'');
+	assert.equal(result, undefined, 'got \'undefined\'');
 });
 
-QUnit.test('get with numeric index', function () {
+QUnit.test('get with numeric index', function (assert) {
 	var list = [1,2,3],
 		result0 = get(list, 0);
 
-	equal(result0, 1, 'got the 1st element of the list');
+	assert.equal(result0, 1, 'got the 1st element of the list');
 	
 	var result1 = get(list, 1);
-	equal(result1, 2, 'got the 2nd element of the list');
+	assert.equal(result1, 2, 'got the 2nd element of the list');
 });

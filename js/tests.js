@@ -11,7 +11,6 @@ require('./diff-object/diff-object-test');
 
 // TODO - Depends on can.Map, can.List
 require('./each/each-test');
-
 require('./get/get-test');
 require('./import/import-test');
 require('./is-array-like/is-array-like-test');

@@ -8,19 +8,17 @@ if(!isNode) {
 	QUnit.module('can-util/js/import');
 
 	if (__dirname !== '/') {
-		QUnit.test('basic can-import works', function() {
-			stop();
-
-			load('can-util/js/import/testmodule', __dirname).then(function(data) {
-				QUnit.equal(data, 'Hello world');
+		QUnit.test('basic can-import works', function(assert) {
+			return load('can-util/js/import/testmodule', __dirname).then(function(data) {
+				assert.equal(data, 'Hello world');
 			}).then(null, function(err){
-				QUnit.ok(false, err);
-			}).then(start, start);
+				assert.ok(false, err);
+			});
 		});
 	}
 } else {
 	QUnit.module('can-util/js/import - Node', {
-		setup: function(){
+		before: function(){
 			// Create a fake System.import
 			this.oldSystem = global.System;
 			global.System = {
@@ -38,17 +36,16 @@ if(!isNode) {
 				}
 			};
 		},
-		teardown: function(){
+		after: function(){
 			global.System = this.oldSystem;
 		}
 	});
 
-	QUnit.test('basic can-import works', function() {
-		stop();
-		load('can-util/js/import/testmodule', __dirname).then(function(data) {
-			QUnit.equal(data, 'Hello world');
+	QUnit.test('basic can-import works', function(assert) {
+		return load('can-util/js/import/testmodule', __dirname).then(function(data) {
+			assert.equal(data, 'Hello world');
 		}).then(null, function(err){
-			QUnit.ok(false, err);
-		}).then(start, start);
+			assert.ok(false, err);
+		});
 	});
 }

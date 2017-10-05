@@ -5,39 +5,39 @@ var makeArray = require('./make-array');
 
 QUnit.module("can-util/js/make-array");
 
-QUnit.test("basics", function(){
+QUnit.test("basics", function(assert){
 	var res = makeArray({0: "a", length: 1});
-	QUnit.deepEqual(res,["a"]);
-	QUnit.ok(res instanceof Array);
+	assert.deepEqual(res,["a"]);
+	assert.ok(res instanceof Array);
 });
 
-QUnit.test("with Object", function () {
+QUnit.test("with Object", function (assert) {
 	var res = makeArray({
 		abc: 'xyz',
 		bar: 'foo'
 	});
-	QUnit.deepEqual(res, [{
+	assert.deepEqual(res, [{
 		abc: 'xyz',
 		bar: 'foo'
 	}]);
-	QUnit.ok(res instanceof Array);
+	assert.ok(res instanceof Array);
 });
 
-QUnit.test("with number", function () {
+QUnit.test("with number", function (assert) {
 	var res = makeArray(1);
-	QUnit.deepEqual(res, [1]);
-	QUnit.ok(res instanceof Array);
+	assert.deepEqual(res, [1]);
+	assert.ok(res instanceof Array);
 });
 
-QUnit.test("with zero", function () {
+QUnit.test("with zero", function (assert) {
 	var res = makeArray(0);
-	QUnit.deepEqual(res, [0]);
-	QUnit.ok(res instanceof Array);
+	assert.deepEqual(res, [0]);
+	assert.ok(res instanceof Array);
 });
 
-QUnit.test("with null", function () {
+QUnit.test("with null", function (assert) {
 	var res = makeArray(null);
-	QUnit.deepEqual(res, []);
-	QUnit.ok(res instanceof Array);
+	assert.deepEqual(res, []);
+	assert.ok(res instanceof Array);
 });
 

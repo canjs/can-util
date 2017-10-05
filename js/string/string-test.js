@@ -6,65 +6,65 @@ var get = require('../get/get');
 
 QUnit.module("can-util/js/string");
 
-QUnit.test('string.sub', function () {
-	equal(string.sub('a{b}', {
+QUnit.test('string.sub', function (assert) {
+	assert.equal(string.sub('a{b}', {
 		b: 'c'
 	}), 'ac');
 	var foo = {
 		b: 'c'
 	};
-	equal(string.sub('a{b}', foo, true), 'ac');
-	ok(!foo.b, 'b\'s value was removed');
+	assert.equal(string.sub('a{b}', foo, true), 'ac');
+	assert.ok(!foo.b, 'b\'s value was removed');
 });
 
-QUnit.test('string.sub with undefined values', function () {
+QUnit.test('string.sub with undefined values', function (assert) {
 	var subbed = string.sub('test{exists} plus{noexists}', {
 		exists: 'test'
 	});
-	deepEqual(subbed, null, 'Rendering with undefined values should return null');
+	assert.deepEqual(subbed, null, 'Rendering with undefined values should return null');
 	subbed = string.sub('test{exists} plus{noexists}', {
 		exists: 'test'
 	}, true);
-	deepEqual(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
+	assert.deepEqual(subbed, null, 'Rendering with undefined values should return null even when remove param is true');
 });
 
-QUnit.test('string.sub with null values', function () {
+QUnit.test('string.sub with null values', function (assert) {
 	var subbed = string.sub('test{exists} plus{noexists}', {
 		exists: 'test',
 		noexists: null
 	});
-	deepEqual(subbed, null, 'Rendering with null values should return null');
+	assert.deepEqual(subbed, null, 'Rendering with null values should return null');
 	subbed = string.sub('test{exists} plus{noexists}', {
 		exists: 'test',
 		noexists: null
 	}, true);
-	deepEqual(subbed, null, 'Rendering with null values should return null even when remove param is true');
+	assert.deepEqual(subbed, null, 'Rendering with null values should return null even when remove param is true');
 });
 
-QUnit.test('string.sub double', function () {
-	equal(string.sub('{b} {d}', {
+QUnit.test('string.sub double', function (assert) {
+	assert.equal(string.sub('{b} {d}', {
 		b: 'c',
 		d: 'e'
 	}), 'c e');
 });
 
-QUnit.test('String.underscore', function () {
-	equal(string.underscore('Foo.Bar.ZarDar'), 'foo.bar.zar_dar');
+QUnit.test('String.underscore', function (assert) {
+	assert.equal(string.underscore('Foo.Bar.ZarDar'), 'foo.bar.zar_dar');
 });
 
-QUnit.test('string.sub remove', function () {
+QUnit.test('string.sub remove', function (assert) {
 	var obj = {
 		a: 'a'
 	};
-	equal(string.sub('{a}', obj, false), 'a');
-	deepEqual(obj, {
+	assert.equal(string.sub('{a}', obj, false), 'a');
+	assert.deepEqual(obj, {
 		a: 'a'
 	});
-	equal(string.sub('{a}', obj, true), 'a');
-	deepEqual(obj, {});
+	assert.equal(string.sub('{a}', obj, true), 'a');
+	assert.deepEqual(obj, {});
 });
 
-QUnit.test('get Single root', function () {
+QUnit.test('get Single root', function (assert) {
 	// ## Single root
 	var root, result;
 	// # Only get
@@ -73,13 +73,13 @@ QUnit.test('get Single root', function () {
 	};
 	// exists
 	result = get(root, 'foo');
-	equal(result, 'bar', 'got \'bar\'');
+	assert.equal(result, 'bar', 'got \'bar\'');
 	// not exists
 	result = get(root, 'baz');
-	equal(result, undefined, 'got \'undefined\'');
+	assert.equal(result, undefined, 'got \'undefined\'');
 });
 
-QUnit.test('get Multiple root', function () {
+QUnit.test('get Multiple root', function (assert) {
 	// ## Multiple roots
 	var root1, root2, roots, result;
 	// # Only get
@@ -95,13 +95,13 @@ QUnit.test('get Multiple root', function () {
 	];
 	// exists in first root
 	result = get(roots, '0.a');
-	equal(result, 1, 'got \'1\'');
+	assert.equal(result, 1, 'got \'1\'');
 	// exists in second root
 	result = get(roots, '1.b');
-	equal(result, 2, 'got \'2\'');
+	assert.equal(result, 2, 'got \'2\'');
 	// not exists anywhere
 	result = get(roots, 'c');
-	equal(result, undefined, 'got \'undefined\'');
+	assert.equal(result, undefined, 'got \'undefined\'');
 	// # One of roots is not an object
 	// exists in second root
 	root1 = undefined;
@@ -113,10 +113,10 @@ QUnit.test('get Multiple root', function () {
 		root2
 	];
 	result = get(roots, '1.b');
-	equal(result, 2, 'got \'2\'');
+	assert.equal(result, 2, 'got \'2\'');
 });
 
-QUnit.test('get Deep objects', function () {
+QUnit.test('get Deep objects', function (assert) {
 	// ## Deep objects
 	var root, result;
 	// # Only get
@@ -127,51 +127,51 @@ QUnit.test('get Deep objects', function () {
 	};
 	// exists
 	result = get(root, 'foo.bar');
-	equal(result, 'baz', 'got \'baz\'');
+	assert.equal(result, 'baz', 'got \'baz\'');
 	// not exists
 	result = get(root, 'foo.world');
-	equal(result, undefined, 'got \'undefined\'');
+	assert.equal(result, undefined, 'got \'undefined\'');
 });
 
-QUnit.test('string.esc', function () {
+QUnit.test('string.esc', function (assert) {
 	var text = string.esc(0);
-	equal(text, '0', '0 value properly rendered');
+	assert.equal(text, '0', '0 value properly rendered');
 	text = string.esc(null);
-	deepEqual(text, '', 'null value returns empty string');
+	assert.deepEqual(text, '', 'null value returns empty string');
 	text = string.esc();
-	deepEqual(text, '', 'undefined returns empty string');
+	assert.deepEqual(text, '', 'undefined returns empty string');
 	text = string.esc(NaN);
-	deepEqual(text, '', 'NaN returns empty string');
+	assert.deepEqual(text, '', 'NaN returns empty string');
 	text = string.esc('<div>&nbsp;</div>');
-	equal(text, '&lt;div&gt;&amp;nbsp;&lt;/div&gt;', 'HTML escaped properly');
+	assert.equal(text, '&lt;div&gt;&amp;nbsp;&lt;/div&gt;', 'HTML escaped properly');
 });
 
-QUnit.test('string.camelize', function () {
+QUnit.test('string.camelize', function (assert) {
 	var text = string.camelize(0);
-	equal(text, '0', '0 value properly rendered');
+	assert.equal(text, '0', '0 value properly rendered');
 	text = string.camelize(null);
-	equal(text, '', 'null value returns empty string');
+	assert.equal(text, '', 'null value returns empty string');
 	text = string.camelize();
-	equal(text, '', 'undefined returns empty string');
+	assert.equal(text, '', 'undefined returns empty string');
 	text = string.camelize(NaN);
-	equal(text, '', 'NaN returns empty string');
+	assert.equal(text, '', 'NaN returns empty string');
 	text = string.camelize('-moz-index');
-	equal(text, 'MozIndex');
+	assert.equal(text, 'MozIndex');
 	text = string.camelize('foo-bar');
-	equal(text, 'fooBar');
+	assert.equal(text, 'fooBar');
 });
 
-QUnit.test('string.hyphenate', function () {
+QUnit.test('string.hyphenate', function (assert) {
 	var text = string.hyphenate(0);
-	equal(text, '0', '0 value properly rendered');
+	assert.equal(text, '0', '0 value properly rendered');
 	text = string.hyphenate(null);
-	equal(text, '', 'null value returns empty string');
+	assert.equal(text, '', 'null value returns empty string');
 	text = string.hyphenate();
-	equal(text, '', 'undefined returns empty string');
+	assert.equal(text, '', 'undefined returns empty string');
 	text = string.hyphenate(NaN);
-	equal(text, '', 'NaN returns empty string');
+	assert.equal(text, '', 'NaN returns empty string');
 	text = string.hyphenate('ABC');
-	equal(text, 'ABC');
+	assert.equal(text, 'ABC');
 	text = string.hyphenate('dataNode');
-	equal(text, 'data-node');
+	assert.equal(text, 'data-node');
 });

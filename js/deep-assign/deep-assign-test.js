@@ -5,10 +5,10 @@ var deepAssign = require('./deep-assign');
 
 QUnit.module("can-util/js/deep-assign");
 
-QUnit.test("basics", function(){
+QUnit.test("basics", function(assert){
 	var original = { nested: {foo: "bar"} };
 	var res = deepAssign(true, {},original );
-	deepEqual(res, {nested: {foo: "bar"}}, "they look the same");
+	assert.deepEqual(res, {nested: {foo: "bar"}}, "they look the same");
 
-	ok(res.nested !== original.nested, "different objects");
+	assert.ok(res.nested !== original.nested, "different objects");
 });

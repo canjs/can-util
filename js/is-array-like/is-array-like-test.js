@@ -5,28 +5,28 @@ var isArrayLike = require('./is-array-like');
 
 QUnit.module("can-util/js/is-array-like");
 
-QUnit.test("basics", function(){
-	ok(isArrayLike({0: 1, length: 1}));
+QUnit.test("basics", function(assert){
+	assert.ok(isArrayLike({0: 1, length: 1}));
 });
 
 
-QUnit.test("string", function(){
-	ok(isArrayLike("yes"));
+QUnit.test("string", function(assert){
+	assert.ok(isArrayLike("yes"));
 });
 
-QUnit.test("Object with a .length property", function(){
+QUnit.test("Object with a .length property", function(assert){
 	var obj = {
 		length: 0
 	};
 
-	ok(isArrayLike(obj));
+	assert.ok(isArrayLike(obj));
 });
 
-QUnit.test("function should be false", function(){
+QUnit.test("function should be false", function(assert){
 	var func = function(){};
-	ok( !isArrayLike( func ) );
+	assert.ok( !isArrayLike( func ) );
 });
 
-QUnit.test("0 should be false", function(){
-	ok( !isArrayLike( 0 ) );
+QUnit.test("0 should be false", function(assert){
+	assert.ok( !isArrayLike( 0 ) );
 });
