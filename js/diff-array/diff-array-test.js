@@ -5,20 +5,20 @@ var diffArray = require('./diff-array');
 
 QUnit.module("can-util/js/diff-array");
 
-QUnit.test("basics", function(){
+QUnit.test("basics", function(assert){
 
 	var patches = diffArray([], [1,2,3]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 0,
 		deleteCount: 0,
 		insert: [1,2,3]
 	}], "insert many at end");
 
 	patches = diffArray([1,2,3], [1,2,3]);
-	deepEqual(patches,[],"no changes");
+	assert.deepEqual(patches,[],"no changes");
 
 	patches = diffArray([1,2,3],[1,2,3,4]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 3,
 		deleteCount: 0,
 		insert: [4]
@@ -26,7 +26,7 @@ QUnit.test("basics", function(){
 
 	patches = diffArray([1,2,3,4], [1,2,4]);
 
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 2,
 		deleteCount: 1,
 		insert: []
@@ -37,7 +37,7 @@ QUnit.test("basics", function(){
 		["a","b","f","w","z"]);
 	// delete 1 at 2
 	// delete 1 at 3, insert 2
-	deepEqual(patches, [
+	assert.deepEqual(patches, [
 		{
 			index: 2,
 			deleteCount: 1,
@@ -49,7 +49,7 @@ QUnit.test("basics", function(){
 		}], "can delete one");
 
 	patches = diffArray(["a","b","b"],["c","a","b"]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 0,
 		insert: ["c"],
 		deleteCount: 0
@@ -64,7 +64,7 @@ QUnit.test("basics", function(){
 	// a, X, c, X, e, f, g
 	// a, X, c, X, e, X, g
 	patches = diffArray(["a","b","c","d","e","f","g"],["a","c","e","g"]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 1,
 		insert: [],
 		deleteCount: 1
@@ -81,13 +81,13 @@ QUnit.test("basics", function(){
 
 });
 
-QUnit.test("handle swaps at the end (#193)", function(){
+QUnit.test("handle swaps at the end (#193)", function(assert){
 
 	var patches = diffArray(
 		["a", "b", "c", "d", "e"],
 		["a", "x", "y", "z", "e"]);
 
-	deepEqual(patches,[
+	assert.deepEqual(patches,[
 		{
 			index: 1,
 			deleteCount: 3,
@@ -98,13 +98,13 @@ QUnit.test("handle swaps at the end (#193)", function(){
 });
 
 
-QUnit.test("handle swaps at the end after a delete (#193)", function(){
+QUnit.test("handle swaps at the end after a delete (#193)", function(assert){
 
 	var patches = diffArray(
 		["a", "b", "c", "d", "e"],
 		["a", "x", "b", "y", "z", "e"]);
 
-	deepEqual(patches,[
+	assert.deepEqual(patches,[
 		{
 			index: 1,
 			deleteCount: 0,

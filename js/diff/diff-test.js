@@ -5,20 +5,20 @@ var diff = require('./diff');
 
 QUnit.module("can-util/js/diff");
 
-QUnit.test("basics", function(){
+QUnit.test("basics", function(assert){
 
 	var patches = diff([], [1,2,3]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 0,
 		deleteCount: 0,
 		insert: [1,2,3]
 	}], "insert many at end");
 
 	patches = diff([1,2,3], [1,2,3]);
-	deepEqual(patches,[],"no changes");
+	assert.deepEqual(patches,[],"no changes");
 
 	patches = diff([1,2,3],[1,2,3,4]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 3,
 		deleteCount: 0,
 		insert: [4]
@@ -26,14 +26,14 @@ QUnit.test("basics", function(){
 
 	patches = diff([1,2,3,4], [1,2,4]);
 
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 2,
 		deleteCount: 1,
 		insert: []
 	}],"remove one in the middle");
 
 	patches = diff(["a","b","z","f","x"],["a","b","f","w","z"]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 2,
 		insert: [],
 		deleteCount: 1
@@ -44,7 +44,7 @@ QUnit.test("basics", function(){
 	}]);
 
 	patches = diff(["a","b","b"],["c","a","b"]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 0,
 		insert: ["c"],
 		deleteCount: 0
@@ -59,7 +59,7 @@ QUnit.test("basics", function(){
 	// a, c, e, f, g
 	// a, c, e, g
 	patches = diff(["a","b","c","d","e","f","g"],["a","c","e","g"]);
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 1,
 		insert: [],
 		deleteCount: 1
@@ -76,7 +76,7 @@ QUnit.test("basics", function(){
 
 	// identity:
 	patches = diff([{id:1},{id:2}], [{id:1},{id:1.5},{id:3}], function(a,b){ return a.id === b.id; });
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 1,
 		deleteCount: 1,
 		insert: [{id:1.5},{id:3}]
@@ -84,7 +84,7 @@ QUnit.test("basics", function(){
 	
 	// identity for a single middle insertion:
 	patches = diff([{id:1},{id:2}], [{id:1},{id:3},{id:2}], function(a,b){ return a.id === b.id; });
-	deepEqual(patches, [{
+	assert.deepEqual(patches, [{
 		index: 1,
 		deleteCount: 0,
 		insert: [{id:3}]
