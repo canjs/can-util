@@ -68,7 +68,7 @@
     "can-namespace": "1.0.0",
     "can-param": "^1.0.0",
     "can-parse-uri": "^1.0.0",
-    "can-reflect": "^1.2.0",
+    "can-reflect": "^1.4.5",
     "can-symbol": "^1.0.0",
     "can-types": "^1.1.0"
   },
