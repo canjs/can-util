@@ -1,5 +1,6 @@
 @module {Object} can-util
-@parent can-infrastructure
+@parent can-js-utilities
+@collection can-infrastructure
 @package ../package.json
 @group can-util/dom can-util/dom
 @group can-util/js can-util/js
