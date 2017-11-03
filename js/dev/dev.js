@@ -4,7 +4,7 @@
 
 /**
  * @module can-util/js/dev/dev dev
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-dev] instead.
  */
 

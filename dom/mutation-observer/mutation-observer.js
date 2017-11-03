@@ -5,7 +5,7 @@ var globals = require('can-globals');
 
 /**
  * @module can-util/js/mutation-observer/mutation-observer mutation-observer
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-globals] instead.
  */
 

@@ -5,7 +5,7 @@ var canDev = require('can-log/dev/dev');
 
 /**
  * @module {events} can-util/dom/events/enter/enter enter
- * @parent can-util/dom/events/events
+ * @parent deprecated
  *
  * Watches for when enter keys are pressed on a given element
  *

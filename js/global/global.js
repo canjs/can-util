@@ -4,7 +4,7 @@
 
 /**
  * @module can-util/js/global/global global
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-globals] instead.
  */
 

@@ -5,7 +5,7 @@ var hasWarned = false;
 
 /**
  * @module {function} can-util/js/is-string/is-string is-string
- * @parent can-util/js
+ * @parent deprecated
  * @signature `isString(obj)`
  *
  * **Deprecated**:

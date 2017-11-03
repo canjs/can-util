@@ -4,7 +4,7 @@ var canDev = require("can-log/dev/dev");
 
 /**
  * @module can-util/js/deparam/deparam deparam
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-deparam] instead.
  */
 
