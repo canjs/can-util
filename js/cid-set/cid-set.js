@@ -1,6 +1,6 @@
 'use strict';
 
-//var canDev = require("can-log/dev/dev");
+var canDev = require("can-log/dev/dev");
 
 /**
  * @module can-util/js/cid-set/cid-set cid-set
@@ -9,7 +9,7 @@
  */
 
 //!steal-remove-start
-// canDev.warn('js/cid-set/cid-set is deprecated; please use can-globals instead: https://github.com/canjs/can-cid');
+canDev.warn('js/cid-set/cid-set is deprecated; please use can-globals instead: https://github.com/canjs/can-cid');
 //!steal-remove-end
 
 module.exports = require('can-cid/set/set');
