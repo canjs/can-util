@@ -2,9 +2,9 @@
 @parent can-js-utilities
 @collection can-infrastructure
 @package ../package.json
-@group can-util/dom 0 can-util/dom
-@group can-util/js 1 can-util/js
-@group deprecated 2 Deprecated
+@group can-util/js 0 can-util/js
+@group can-util/dom 1 can-util/dom
+@group deprecated 2 deprecated
 
 Common JavaScript utilities for the rest of CanJS.
 
@@ -47,18 +47,17 @@ Common JavaScript utilities for the rest of CanJS.
 - [can-util/dom/frag/frag] - Convert a String, HTMLElement, documentFragment, or contentArray into a documentFragment.
 - [can-util/dom/mutate/mutate] - Mutate an element by appending, inserting, and removing DOM nodes. Use this so that on the server "inserted" will be fired.
 
-## Deprecated
+## deprecated
 
-- [can-util/dom/ajax/ajax] - Used to make an asynchronous HTTP (AJAX) request
-similar to [http://api.jquery.com/jQuery.ajax/jQuery.ajax].
-- [can-util/js/assign/assign] - A simplified version of [Object.assign](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/assign), which only accepts a single source argument.
+- [can-util/dom/ajax/ajax] - Deprecated. Use [can-ajax] instead.
+- [can-util/js/assign/assign] - Deprecated. Use [can-assign] instead.
 - [can-util/js/cid/cid] - Deprecated. Use [can-cid] instead.
-- [can-util/js/deparam/deparam] - Takes a string of name value pairs and returns a Object literal that represents those params.
-- [can-util/js/dev/dev] - Utilities for logging development-mode messages. Use this module for anything that should be shown to the user during development but isn't needed in production. In production these functions become noops.
-- [can-util/dom/document/document] - Optionally sets, and returns, the document object for the context.
-- [can-util/js/global/global] - Returns the global that an environment provides.   
-- [can-util/js/is-browser-window/is-browser-window] - Returns `true` if the code is running within a Browser window. Use this function if you need special code paths for when running in a Browser window, a Web Worker, or another environment (such as Node.js).
-- [can-util/js/is-string/is-string] - Determines if the provided argument is a string.
-- [can-util/js/log/log] - Utilities for logging to the console.
-- [can-util/js/param/param] - Takes an Object of name value pairs and returns a String with the parameters encoded.
+- [can-util/js/deparam/deparam] - Deprecated. Use [can-ajax] instead.
+- [can-util/js/dev/dev] - Deprecated. Use [can-log] instead.
+- [can-util/dom/document/document] - Deprecated. Use [can-globals/document/document] instead.
+- [can-util/js/global/global] - Deprecated. Use [can-globals/global/global] instead.
+- [can-util/js/is-browser-window/is-browser-window] - Deprecated. Use [can-globals/is-browser-window/is-browser-window] instead.
+- [can-util/js/is-string/is-string] - Deprecated. Use `typeof` instead.
+- [can-util/js/log/log] - Deprecated. Use [can-log] instead.
+- [can-util/js/param/param] - Deprecated. Use [can-param] instead.
 - [can-util/js/types/types] - Deprecated. Use [can-types] instead.
