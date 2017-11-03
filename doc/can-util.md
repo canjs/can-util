@@ -52,8 +52,8 @@ Common JavaScript utilities for the rest of CanJS.
 - [can-util/dom/ajax/ajax] - Deprecated. Use [can-ajax] instead.
 - [can-util/js/assign/assign] - Deprecated. Use [can-assign] instead.
 - [can-util/js/cid/cid] - Deprecated. Use [can-cid] instead.
-- [can-util/js/deparam/deparam] - Deprecated. Use [can-ajax] instead.
-- [can-util/js/dev/dev] - Deprecated. Use [can-log] instead.
+- [can-util/js/deparam/deparam] - Deprecated. Use [can-deparam] instead.
+- [can-util/js/dev/dev] - Deprecated. Use [can-log/dev/dev] instead.
 - [can-util/dom/document/document] - Deprecated. Use [can-globals/document/document] instead.
 - [can-util/js/global/global] - Deprecated. Use [can-globals/global/global] instead.
 - [can-util/js/is-browser-window/is-browser-window] - Deprecated. Use [can-globals/is-browser-window/is-browser-window] instead.
