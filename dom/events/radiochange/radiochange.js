@@ -6,7 +6,7 @@ var canDev = require('can-log/dev/dev');
 /**
  * @hide
  * @module {events} can-util/dom/events/radiochange/radiochange radiochange
- * @parent can-util/dom/events/events
+ * @parent deprecated
  *
  * Adds a listenable "radiochange" event to DOM nodes, which fires when
  * any radio input changes.

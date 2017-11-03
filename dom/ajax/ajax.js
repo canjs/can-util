@@ -3,13 +3,13 @@
 var canDev = require("can-log/dev/dev");
 
 /**
- * @module can-util/js/ajax/ajax ajax
- * @parent can-util/js
+ * @module can-util/dom/ajax/ajax ajax
+ * @parent deprecated
  * @description Deprecated. Use [can-ajax] instead.
  */
 
  //!steal-remove-start
- canDev.warn('js/ajax/ajax is deprecated; please use can-ajax instead: https://github.com/canjs/can-ajax');
+ canDev.warn('dom/ajax/ajax is deprecated; please use can-ajax instead: https://github.com/canjs/can-ajax');
  //!steal-remove-end
 
 module.exports = require('can-ajax');

@@ -4,7 +4,7 @@
 
 /**
  * @module can-util/js/log/log log
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-log] instead.
  */
 

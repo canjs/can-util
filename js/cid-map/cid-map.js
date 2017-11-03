@@ -4,7 +4,7 @@
 
 /**
  * @module can-util/js/cid-map/cid-map cid-map
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-cid/map/map] instead.
  */
 

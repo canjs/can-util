@@ -4,7 +4,7 @@ var canDev = require("can-log/dev/dev");
 
 /**
  * @module can-util/js/parse-uri/parse-uri parse-uri
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-parse-uri] instead.
  */
 

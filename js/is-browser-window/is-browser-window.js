@@ -4,7 +4,7 @@
 
 /**
  * @module can-util/js/is-browser-window/is-browser-window is-browser-window
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-globals] instead.
  */
 

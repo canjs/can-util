@@ -4,7 +4,7 @@ var canDev = require("can-log/dev/dev");
 
 /**
  * @module can-util/js/cid/cid cid
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-cid] instead.
  */
 

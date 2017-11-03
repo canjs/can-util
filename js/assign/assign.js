@@ -4,7 +4,7 @@
 
 /**
  * @module can-util/js/assign/assign assign
- * @parent can-util/js
+ * @parent deprecated
  * @description Deprecated. Use [can-assign] instead.
  */
 
