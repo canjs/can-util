@@ -643,8 +643,8 @@ if (!isServer()) {
 			assert.equal(domAttr.get(input, "focused"), true, "it is now focused");
 			done();
 		});
+		
 		mutate.appendChild.call(ta, input);
-
 	});
 }
 
