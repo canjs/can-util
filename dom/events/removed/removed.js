@@ -1,11 +1,13 @@
 'use strict';
 
-var makeMutationEvent = require("../make-mutation-event/make-mutation-event");
+var events = require('../events');
+var addRemovedEvent = require('can-dom-mutate/events/compat').removed;
+addRemovedEvent(events, 'removed');
 
 /**
  * @module {events} can-util/dom/events/removed/removed removed
  * @parent can-util/dom/events/events
- *  
+ *
  * This event fires when the bound element is detached or destroyed.
  *
  * ```js
@@ -20,4 +22,3 @@ var makeMutationEvent = require("../make-mutation-event/make-mutation-event");
  *
  * document.body.removeChild(foo); // remove event fired
  */
-makeMutationEvent("removed", "removedNodes");

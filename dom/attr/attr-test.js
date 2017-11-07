@@ -32,12 +32,7 @@ unit.test("attributes event", function (assert) {
 
 		assert.equal(div.getAttribute(ev.attributeName), "bar");
 		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
-	};
-	domEvents.addEventListener.call(div, "attributes", attrHandler1);
 
-	domAttr.set(div, "foo", "bar");
-
-	setTimeout(function () {
 		var attrHandler = function(ev) {
 			assert.ok(true, "removed event handler should be called");
 
@@ -50,11 +45,13 @@ unit.test("attributes event", function (assert) {
 			domEvents.removeEventListener.call(div, "attributes", attrHandler);
 			done();
 		};
+
 		domEvents.addEventListener.call(div, "attributes", attrHandler);
 		domAttr.remove(div, "foo");
+	};
 
-	}, 50);
-
+	domEvents.addEventListener.call(div, "attributes", attrHandler1);
+	domAttr.set(div, "foo", "bar");
 });
 
 unit.test("attr events without MUTATION_OBSERVER", function (assert) {
@@ -643,8 +640,8 @@ if (!isServer()) {
 			assert.equal(domAttr.get(input, "focused"), true, "it is now focused");
 			done();
 		});
-		mutate.appendChild.call(ta, input);
 
+		mutate.appendChild.call(ta, input);
 	});
 }
 
