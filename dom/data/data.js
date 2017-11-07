@@ -2,28 +2,39 @@
 
 var domDataState = require("can-dom-data-state");
 var mutationDocument = require("../mutation-observer/document/document");
-var assign = require("can-assign");
 
-var domData = {
-	// count of distinct elements that have domData set
-	_elementSetCount: 0
-};
+// count of distinct elements that have domData set
+var elementSetCount = 0;
 
 var deleteNode = function() {
+	// decrement count when node is deleted
+	elementSetCount -= 1;
 	return domDataState.delete.call(this);
 };
 
 var cleanupDomData = function(node) {
-	// decrement count if node was deleted
-	domData._elementSetCount -= deleteNode.call(node) ? 1 : 0;
+	
+	if(domDataState.get.call(node) !== undefined){
+		deleteNode.call(node);
+	}
 
 	// remove handler once all domData has been cleaned up
-	if (domData._elementSetCount === 0) {
+	if (elementSetCount === 0) {
 		mutationDocument.offAfterRemovedNodes(cleanupDomData);
 	}
 };
 
-assign(domData, {
+/**
+ * @module {{}} can-util/dom/data/data data
+ * @parent can-util/dom
+ * @description Allows associating data as a key/value pair for a particular
+ * DOM Node.
+ *
+ * ```js
+ * var domData = require("can-util/dom/data/data");
+ * ```
+ */
+module.exports = {
 	/**
 	 * @function can-util/dom/data/data.getCid domData.getCid
 	 * @signature `domData.getCid.call(el)`
@@ -103,11 +114,14 @@ assign(domData, {
 	set: function(name, value) {
 		// set up handler to clean up domData when elements are removed
 		// handler only needs to be set up the first time set is called
-		if (domData._elementSetCount === 0) {
+		if (elementSetCount === 0) {
 			mutationDocument.onAfterRemovedNodes(cleanupDomData);
 		}
-		// increment elementSetCount if set returns true
-		domData._elementSetCount += domDataState.set.call(this, name, value) ? 1 : 0;
+
+		// increment elementSetCount if this element was not already set
+		elementSetCount += domDataState.get.call(this) ? 0 : 1;
+
+		domDataState.set.call(this, name, value);
 	},
 	/**
 	 * @function can-util/dom/data/data.delete domData.delete
@@ -121,18 +135,9 @@ assign(domData, {
 	 * domData.delete.call(el);
 	 * ```
 	 */
-	delete: deleteNode
-
-});
-
-/**
- * @module {{}} can-util/dom/data/data data
- * @parent can-util/dom
- * @description Allows associating data as a key/value pair for a particular
- * DOM Node.
- *
- * ```js
- * var domData = require("can-util/dom/data/data");
- * ```
- */
-module.exports = domData;
+	delete: deleteNode,
+	
+	_getElementSetCount: function(){
+		return elementSetCount;
+	}
+};
