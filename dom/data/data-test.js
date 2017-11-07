@@ -124,23 +124,27 @@ unit.test('domData should be cleaned up if element is removed from DOM after cal
 	checkRemoved();
 });
 
-unit.test('domData should count active elements', function (assert){
-	var done = assert.async();
-	var div = document.createElement('div');
-	var fixture = document.getElementById('qunit-fixture');
-	var startingCount = domData._elementSetCount;
-
-	fixture.appendChild(div);
-	domData.set.call(div, 'foo', 'bar');
-
-	assert.equal(domData._elementSetCount, startingCount + 1, '_elementSetCount incremented');
-
-	fixture.removeChild(div);
-
-	// Remove event fires on next tick
-	setTimeout(function(){
-		assert.equal(domData._elementSetCount, startingCount, '_elementSetCount decrement');
-		assert.equal(domData.get.call(div, 'foo'), undefined, 'foo was deleted');
-		done();
-	}, 0);
-});
+// MutationObserver is needed for this test
+if(typeof MutationObserver !== 'undefined'){
+	unit.test('domData should count active elements', function (assert){
+		var done = assert.async();
+		var div = document.createElement('div');
+		var fixture = document.getElementById('qunit-fixture');
+		var startingCount = domData._elementSetCount;
+	
+		fixture.appendChild(div);
+		domData.set.call(div, 'foo', 'bar');
+	
+		assert.equal(domData.get.call(div, 'foo'), 'bar', 'foo was set');
+		assert.equal(domData._elementSetCount, startingCount + 1, '_elementSetCount incremented');
+	
+		fixture.removeChild(div);
+	
+		// Remove event fires on next tick
+		setTimeout(function(){
+			assert.equal(domData._elementSetCount, startingCount, '_elementSetCount decremented');
+			assert.equal(domData.get.call(div, 'foo'), undefined, 'foo was deleted');
+			done();
+		}, 0);
+	});
+}
