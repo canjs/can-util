@@ -2,35 +2,28 @@
 
 var domDataState = require("can-dom-data-state");
 var mutationDocument = require("../mutation-observer/document/document");
+var assign = require("can-assign");
+
+var domData = {
+	// count of distinct elements that have domData set
+	_elementSetCount: 0
+};
 
 var deleteNode = function() {
 	return domDataState.delete.call(this);
 };
 
-// count of distinct elements that have domData set
-var elementSetCount = 0;
-
 var cleanupDomData = function(node) {
 	// decrement count if node was deleted
-	elementSetCount -= deleteNode.call(node) ? 1 : 0;
+	domData._elementSetCount -= deleteNode.call(node) ? 1 : 0;
 
 	// remove handler once all domData has been cleaned up
-	if (elementSetCount === 0) {
+	if (domData._elementSetCount === 0) {
 		mutationDocument.offAfterRemovedNodes(cleanupDomData);
 	}
 };
 
-/**
- * @module {{}} can-util/dom/data/data data
- * @parent can-util/dom
- * @description Allows associating data as a key/value pair for a particular
- * DOM Node.
- *
- * ```js
- * var domData = require("can-util/dom/data/data");
- * ```
- */
-module.exports = {
+assign(domData, {
 	/**
 	 * @function can-util/dom/data/data.getCid domData.getCid
 	 * @signature `domData.getCid.call(el)`
@@ -110,11 +103,11 @@ module.exports = {
 	set: function(name, value) {
 		// set up handler to clean up domData when elements are removed
 		// handler only needs to be set up the first time set is called
-		if (elementSetCount === 0) {
+		if (domData._elementSetCount === 0) {
 			mutationDocument.onAfterRemovedNodes(cleanupDomData);
 		}
 		// increment elementSetCount if set returns true
-		elementSetCount += domDataState.set.call(this, name, value) ? 1 : 0;
+		domData._elementSetCount += domDataState.set.call(this, name, value) ? 1 : 0;
 	},
 	/**
 	 * @function can-util/dom/data/data.delete domData.delete
@@ -129,5 +122,17 @@ module.exports = {
 	 * ```
 	 */
 	delete: deleteNode
-};
 
+});
+
+/**
+ * @module {{}} can-util/dom/data/data data
+ * @parent can-util/dom
+ * @description Allows associating data as a key/value pair for a particular
+ * DOM Node.
+ *
+ * ```js
+ * var domData = require("can-util/dom/data/data");
+ * ```
+ */
+module.exports = domData;
