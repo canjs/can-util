@@ -1,7 +1,7 @@
 'use strict';
 
 var events = require("../events");
-var addAttributesEvent = require('can-dom-mutate/events/compat').attributes;
+var addAttributesEvent = require('../-mutation-events/mutation-events').attributes;
 addAttributesEvent(events, 'attributes');
 
 /**

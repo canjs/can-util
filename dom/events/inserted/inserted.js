@@ -1,7 +1,7 @@
 'use strict';
 
 var events = require('../events');
-var addInsertedEvent = require('can-dom-mutate/events/compat').inserted;
+var addInsertedEvent = require('../-mutation-events/mutation-events').inserted;
 addInsertedEvent(events, 'inserted');
 
 /**

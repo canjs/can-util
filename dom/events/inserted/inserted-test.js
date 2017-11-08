@@ -35,7 +35,7 @@ function runTest(name, MUT_OBS) {
 	});
 
 	if (!isProduction()) {
-		unit.skip('basic disabled insertion', function (assert) {
+		unit.test('basic disabled insertion', function (assert) {
 			assert.expect(1);
 
 			var done = assert.async();

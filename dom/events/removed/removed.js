@@ -1,7 +1,7 @@
 'use strict';
 
 var events = require('../events');
-var addRemovedEvent = require('can-dom-mutate/events/compat').removed;
+var addRemovedEvent = require('../-mutation-events/mutation-events').removed;
 addRemovedEvent(events, 'removed');
 
 /**
