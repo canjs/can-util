@@ -1,7 +1,7 @@
 'use strict';
 
 var mutate = require('./mutate');
-var globals = require('can-globals');
+var MUTATION_OBSERVER = require("../mutation-observer/mutation-observer");
 var getDocument = require('can-globals/document/document');
 var makeDocument = require("can-vdom/make-document/make-document");
 
@@ -9,10 +9,11 @@ var unit = require('../../test/qunit');
 
 unit.module("can-util/dom/mutate");
 
-function disableMO () {
-	globals.setKeyValue('MutationObserver', null);
-	return function () {
-		globals.deleteKeyValue('MutationObserver');
+function disableMO(){
+	var old = MUTATION_OBSERVER();
+	MUTATION_OBSERVER(null);
+	return function(){
+		MUTATION_OBSERVER(old);
 	};
 }
 
