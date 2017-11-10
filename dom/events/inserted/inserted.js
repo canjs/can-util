@@ -1,11 +1,13 @@
 'use strict';
 
-var makeMutationEvent = require("../make-mutation-event/make-mutation-event");
+var events = require('../events');
+var addInsertedEvent = require('../-mutation-events/mutation-events').inserted;
+addInsertedEvent(events, 'inserted');
 
 /**
  * @module {events} can-util/dom/events/inserted/inserted inserted
  * @parent can-util/dom/events/events
- *  
+ *
  * This event fires when the bound element is added to the DOM.
  *
  * ```js
@@ -19,4 +21,3 @@ var makeMutationEvent = require("../make-mutation-event/make-mutation-event");
  *
  * document.body.appendChild(foo); // inserted event fired
  */
-makeMutationEvent("inserted", "addedNodes");
