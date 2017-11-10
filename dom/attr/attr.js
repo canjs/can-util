@@ -3,6 +3,7 @@
 // # can/util/attr.js
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
+var setImmediate = require("../../js/set-immediate/set-immediate");
 var getDocument = require("can-globals/document/document");
 var global = require("can-globals/global/global")();
 var isOfGlobalDocument = require("../is-of-global-document/is-of-global-document");
@@ -14,7 +15,6 @@ var getMutationObserver = require("can-globals/mutation-observer/mutation-observ
 var each = require("../../js/each/each");
 var types = require("can-types");
 var diff = require('../../js/diff/diff');
-var dispatchNodeAttributeChange = require('can-dom-mutate').dispatchNodeAttributeChange;
 
 require("../events/attributes/attributes");
 require("../events/inserted/inserted");
@@ -534,7 +534,18 @@ var formElements = {"INPUT": true, "TEXTAREA": true, "SELECT": true},
 		// ## attr.trigger
 		// Used to trigger an "attributes" event on an element. Checks to make sure that someone is listening for the event and then queues a function to be called asynchronously using `setImmediate.
 		trigger: function (el, attrName, oldValue) {
-			dispatchNodeAttributeChange(el, attrName, oldValue);
+			if (setData.get.call(el, "canHasAttributesBindings")) {
+				attrName = attrName.toLowerCase();
+				return setImmediate(function () {
+					domDispatch.call(el, {
+						type: "attributes",
+						attributeName: attrName,
+						target: el,
+						oldValue: oldValue,
+						bubbles: false
+					}, []);
+				});
+			}
 		},
 		// ## attr.get
 		// Gets the value of an attribute. First checks if the property is an `attr.special` and if so calls the special getter. Otherwise uses `getAttribute` to retrieve the value.
