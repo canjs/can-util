@@ -3,16 +3,20 @@
 var domDataState = require("can-dom-data-state");
 var mutationDocument = require("../mutation-observer/document/document");
 
-var deleteNode = function() {
-	return domDataState.delete.call(this);
-};
-
 // count of distinct elements that have domData set
 var elementSetCount = 0;
 
+var deleteNode = function() {
+	// decrement count when node is deleted
+	elementSetCount -= 1;
+	return domDataState.delete.call(this);
+};
+
 var cleanupDomData = function(node) {
-	// decrement count if node was deleted
-	elementSetCount -= deleteNode.call(node) ? 1 : 0;
+	
+	if(domDataState.get.call(node) !== undefined){
+		deleteNode.call(node);
+	}
 
 	// remove handler once all domData has been cleaned up
 	if (elementSetCount === 0) {
@@ -113,8 +117,11 @@ module.exports = {
 		if (elementSetCount === 0) {
 			mutationDocument.onAfterRemovedNodes(cleanupDomData);
 		}
-		// increment elementSetCount if set returns true
-		elementSetCount += domDataState.set.call(this, name, value) ? 1 : 0;
+
+		// increment elementSetCount if this element was not already set
+		elementSetCount += domDataState.get.call(this) ? 0 : 1;
+
+		domDataState.set.call(this, name, value);
 	},
 	/**
 	 * @function can-util/dom/data/data.delete domData.delete
@@ -128,6 +135,9 @@ module.exports = {
 	 * domData.delete.call(el);
 	 * ```
 	 */
-	delete: deleteNode
+	delete: deleteNode,
+	
+	_getElementSetCount: function(){
+		return elementSetCount;
+	}
 };
-

@@ -5,6 +5,7 @@ var domDataState = require("can-dom-data-state");
 var diff = require("../../js/diff-object/diff-object");
 var getDocument = require('can-globals/document/document');
 var mutate = require("../mutate/mutate");
+var mutationDocument = require("../mutation-observer/document/document");
 var unit = require('../../test/qunit');
 
 var document = getDocument();
@@ -123,3 +124,51 @@ unit.test('domData should be cleaned up if element is removed from DOM after cal
 
 	checkRemoved();
 });
+
+// MutationObserver is needed for these tests
+if(typeof MutationObserver !== 'undefined'){
+	unit.test('domData should count active elements', function (assert){
+		var done = assert.async();
+		var div = document.createElement('div');
+		var fixture = document.getElementById('qunit-fixture');
+		var startingCount = domData._getElementSetCount();
+	
+		mutate.appendChild.call(fixture, div);
+		domData.set.call(div, 'foo', 'bar');
+		domData.set.call(div, 'foo', 'baz');
+	
+		assert.equal(domData.get.call(div, 'foo'), 'baz', 'foo was set');
+		assert.equal(domData._getElementSetCount(), startingCount + 1, '_getElementSetCount() incremented');
+		
+		mutate.removeChild.call(fixture, div);
+
+		mutationDocument.onAfterRemovedNodes(function handler(){
+			mutationDocument.offAfterRemovedNodes(handler);
+			// It is possible for this event to fire before the element is deleted from domDataState
+			setTimeout(function(){
+				assert.equal(domData._getElementSetCount(), startingCount, '_getElementSetCount() decremented');
+				assert.equal(domData.get.call(div, 'foo'), undefined, 'foo was deleted');
+				done();
+			}, 0);
+		});
+		
+	});
+
+	unit.test('domData should not decrement when removing a deleted element', function (assert){
+		var done = assert.async();
+		var div = document.createElement('div');
+		var fixture = document.getElementById('qunit-fixture');
+		var startingCount = domData._getElementSetCount();
+
+		mutate.appendChild.call(fixture, div);
+		domData.set.call(div, 'foo', 'bar');
+		domData.delete.call(div);
+		mutate.removeChild.call(fixture, div);
+
+		mutationDocument.onAfterRemovedNodes(function handler(){
+			assert.equal(domData._getElementSetCount(), startingCount);
+			mutationDocument.offAfterRemovedNodes(handler);
+			done();
+		});
+	});
+}
