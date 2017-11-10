@@ -760,6 +760,15 @@ unit.test("Binding to selected updates the selectedness of options", function (a
 	assert.equal(option1.selected, false);
 });
 
+function poll (check, interval) {
+	var intervalId = setInterval(function () {
+		var isDone = check();
+		if (isDone) {
+			clearInterval(intervalId);
+		}
+	}, interval || 50);
+}
+
 unit.test("Select's value is preserved when inserted into the document", function (assert) {
 	var done = assert.async();
 	var select = document.createElement("select");
@@ -771,14 +780,16 @@ unit.test("Select's value is preserved when inserted into the document", functio
 
 	assert.equal(select.selectedIndex, -1, "was set to -1");
 
+	poll(function () {
+		if (select.selectedIndex === -1) {
+			assert.equal(select.selectedIndex, -1, "still is -1");
+			done();
+			return true;
+		}
+	});
+
 	var ta = document.getElementById("qunit-fixture");
 	mutate.appendChild.call(ta, select);
-
-	setTimeout(function(){
-		assert.equal(select.selectedIndex, -1, "still is -1");
-		done();
-	}, 50);
-
 });
 
 unit.test('multi-select does not dispatch a values change event if its selected options are unchanged (#105)', function (assert) {
