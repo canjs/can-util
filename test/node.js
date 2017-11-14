@@ -28,7 +28,6 @@ QUnit.testStart(cleanFixture);
 
 require('../dom/attr/attr-test');
 require('../dom/mutate/mutate-test');
-require('../dom/data/data-test');
 require('../dom/dispatch/dispatch-test');
 require('../dom/events/delegate/delegate-test');
 require('../dom/events/inserted/inserted-test');

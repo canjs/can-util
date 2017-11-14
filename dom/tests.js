@@ -1,7 +1,6 @@
 'use strict';
 
 require("./attr/attr-test");
-require("./data/data-test");
 require("./dispatch/dispatch-test");
 require("./events/delegate/delegate-test");
 require("./events/inserted/inserted-test");

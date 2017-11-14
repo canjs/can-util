@@ -1,28 +1,6 @@
 'use strict';
 
 var domDataState = require("can-dom-data-state");
-var mutationDocument = require("../mutation-observer/document/document");
-
-// count of distinct elements that have domData set
-var elementSetCount = 0;
-
-var deleteNode = function() {
-	// decrement count when node is deleted
-	elementSetCount -= 1;
-	return domDataState.delete.call(this);
-};
-
-var cleanupDomData = function(node) {
-	
-	if(domDataState.get.call(node) !== undefined){
-		deleteNode.call(node);
-	}
-
-	// remove handler once all domData has been cleaned up
-	if (elementSetCount === 0) {
-		mutationDocument.offAfterRemovedNodes(cleanupDomData);
-	}
-};
 
 /**
  * @module {{}} can-util/dom/data/data data
@@ -74,7 +52,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * domData.clean.call(el, "metadata");
 	 * ```
 	 */
@@ -87,7 +65,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * var metadata = domData.get.call(el, "metadata");
 	 * ```
 	 *
@@ -105,24 +83,13 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * domData.set.call(el, "metadata", {
 	 *   foo: "bar"
 	 * });
 	 * ```
 	 */
-	set: function(name, value) {
-		// set up handler to clean up domData when elements are removed
-		// handler only needs to be set up the first time set is called
-		if (elementSetCount === 0) {
-			mutationDocument.onAfterRemovedNodes(cleanupDomData);
-		}
-
-		// increment elementSetCount if this element was not already set
-		elementSetCount += domDataState.get.call(this) ? 0 : 1;
-
-		domDataState.set.call(this, name, value);
-	},
+	set: domDataState.set,
 	/**
 	 * @function can-util/dom/data/data.delete domData.delete
 	 * @signature `domData.delete.call(el)`
@@ -131,13 +98,9 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * domData.delete.call(el);
 	 * ```
 	 */
-	delete: deleteNode,
-	
-	_getElementSetCount: function(){
-		return elementSetCount;
-	}
+	delete: domDataState.delete
 };
