@@ -10,16 +10,25 @@ function getDataKey(eventType, defaultEventType) {
 	return eventType + defaultEventType + 'Data';
 }
 
-function deleteTargetListeners (doc, docKey, docData, eventType, target, targetData) {
-	if (targetData.removeListener) {
-		targetData.removeListener();
-		targetData.removeListener = null;
-	}
+function deleteTargetData (docKey, eventType, target) {
+	var doc = target.ownerDocument;
+	var documentData = domData.get.call(doc, docKey);
+	if (documentData) {
+		var targetData = documentData.get(target);
+		documentData['delete'](target);
+		if (documentData.size === 0) {
+			domData.clean.call(doc, docKey);
+		}
 
-	docData['delete'](target);
-
-	if (docData.size === 0) {
-		domData.clean.call(doc, docKey);
+		if (targetData) {
+			if (targetData.removeListener) {
+				targetData.removeListener();
+				targetData.removeListener = null;
+			}
+			targetData.listeners.forEach(function (listener) {
+				target.removeEventListener(eventType, listener);
+			});
+		}
 	}
 }
 
@@ -38,7 +47,8 @@ function makeMutationEvent(defaultEventType, subscription, options) {
 		return document.contains(target);
 	};
 
-	var dispatch = function (target, eventType, mutation) {
+	var dispatch = function (eventType, dataKey, mutation) {
+		var target = mutation.target;
 		var isInDocument = inDocument(target);
 		if (targetMustBeInsideDocument && !isInDocument) {
 			return;
@@ -59,12 +69,13 @@ function makeMutationEvent(defaultEventType, subscription, options) {
 		}
 		delete eventData.__didDispatch;
 
-		dispatchEvent.call(target, eventData);
+		dispatchEvent.call(target, eventData, [], false);
 
 		if (deleteDomData) {
 			// NOTE: The event will remove ALL dom data on the target
 			// This is for backwards-compatibility with can-util/dom/events
 			domData['delete'].call(target);
+			deleteTargetData(dataKey, eventType, target);
 		}
 
 		return true;
@@ -97,19 +108,13 @@ function makeMutationEvent(defaultEventType, subscription, options) {
 
 			if (data.listeners.size === 0) {
 				var removeListener = subscription(target, function (mutation) {
-					var didDispatch = dispatch(target, eventType, mutation);
+					var didDispatch = dispatch(eventType, dataKey, mutation);
 					if (!didDispatch) {
 						return;
 					}
 
 					if (dispatchOnce) {
-						// NOTE: The event will only ever be fired once
-						// This is for backwards-compatibility with can-util/dom/events
-						data.listeners.forEach(function (handler) {
-							target.removeEventListener(eventType, handler);
-						});
-
-						deleteTargetListeners(doc, dataKey, documentData, eventType, target, data);
+						deleteTargetData(dataKey, eventType, target);
 					}
 				});
 				data.removeListener = removeListener;
@@ -136,7 +141,7 @@ function makeMutationEvent(defaultEventType, subscription, options) {
 			data.listeners['delete'](handler);
 
 			if (data.listeners.size === 0) {
-				deleteTargetListeners(doc, dataKey, documentData, eventType, target, data);
+				deleteTargetData(dataKey, eventType, target);
 			}
 		}
 	};
@@ -147,18 +152,8 @@ function makeMutationEvent(defaultEventType, subscription, options) {
 
 		var setupDocumentSubscription = function (doc) {
 			return dispatchUnmanaged(doc.documentElement, function unmanaged (mutation) {
-				var target = mutation.target;
 				var dataKey = getDataKey(unmanagedEventType, defaultEventType);
-				var doc = target.ownerDocument;
-				var documentData = domData.get.call(doc, dataKey);
-				if (documentData) {
-					var data = documentData.get(target);
-					if (data) {
-						return;
-					}
-				}
-
-				dispatch(target, unmanagedEventType, mutation);
+				dispatch(unmanagedEventType, dataKey, mutation);
 			});
 		};
 
