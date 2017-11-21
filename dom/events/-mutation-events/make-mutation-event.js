@@ -61,13 +61,11 @@ function makeMutationEvent(defaultEventType, subscription, options) {
 		if (mutation.__didDispatch) {
 			return;
 		}
-		mutation.__didDispatch = true;
-
 		var eventData = {type: eventType};
 		for (var key in mutation) {
 			eventData[key] = mutation[key];
 		}
-		delete eventData.__didDispatch;
+		mutation.__didDispatch = true;
 
 		dispatchEvent.call(target, eventData, [], false);
 
