@@ -2,6 +2,7 @@
 
 require('./inserted');
 var domEvents = require('../events');
+var globals = require('can-globals');
 var getMutationObserver = require('can-globals/mutation-observer/mutation-observer');
 var domMutate = require("../../mutate/mutate");
 var dev = require('can-log/dev/dev');
@@ -10,14 +11,14 @@ var isProduction = require('../../../test/helpers').isProduction;
 var unit = require('../../../test/qunit');
 
 function runTest(name, MUT_OBS) {
-	var oldMutObs;
 	unit.module(name, {
 		setup: function(){
-			oldMutObs = getMutationObserver();
-			getMutationObserver(MUT_OBS);
+			globals.setKeyValue('MutationObserver', function () {
+				return MUT_OBS;
+			});
 		},
 		teardown: function(){
-			getMutationObserver(oldMutObs);
+			globals.deleteKeyValue('MutationObserver');
 		}
 	});
 

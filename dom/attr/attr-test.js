@@ -32,12 +32,7 @@ unit.test("attributes event", function (assert) {
 
 		assert.equal(div.getAttribute(ev.attributeName), "bar");
 		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
-	};
-	domEvents.addEventListener.call(div, "attributes", attrHandler1);
 
-	domAttr.set(div, "foo", "bar");
-
-	setTimeout(function () {
 		var attrHandler = function(ev) {
 			assert.ok(true, "removed event handler should be called");
 
@@ -50,11 +45,13 @@ unit.test("attributes event", function (assert) {
 			domEvents.removeEventListener.call(div, "attributes", attrHandler);
 			done();
 		};
+
 		domEvents.addEventListener.call(div, "attributes", attrHandler);
 		domAttr.remove(div, "foo");
+	};
 
-	}, 50);
-
+	domEvents.addEventListener.call(div, "attributes", attrHandler1);
+	domAttr.set(div, "foo", "bar");
 });
 
 unit.test("attr events without MUTATION_OBSERVER", function (assert) {
@@ -64,7 +61,6 @@ unit.test("attr events without MUTATION_OBSERVER", function (assert) {
 	getMutationObserver(null);
 
 	var div = document.createElement("div");
-
 	var attrHandler1 = function(ev) {
 		assert.equal(ev.attributeName, "foo", "attribute name is correct");
 		assert.equal(ev.target, div, "target");
@@ -72,12 +68,7 @@ unit.test("attr events without MUTATION_OBSERVER", function (assert) {
 
 		assert.equal(div.getAttribute(ev.attributeName), "bar");
 		domEvents.removeEventListener.call(div, "attributes", attrHandler1);
-	};
-	domEvents.addEventListener.call(div, "attributes", attrHandler1);
 
-	domAttr.set(div, "foo", "bar");
-
-	setTimeout(function () {
 		var attrHandler = function(ev) {
 			assert.ok(true, "removed event handler should be called");
 
@@ -93,12 +84,11 @@ unit.test("attr events without MUTATION_OBSERVER", function (assert) {
 		};
 		domEvents.addEventListener.call(div, "attributes", attrHandler);
 		domAttr.remove(div, "foo");
+	};
 
-	}, 50);
-
+	domEvents.addEventListener.call(div, "attributes", attrHandler1);
+	domAttr.set(div, "foo", "bar");
 });
-
-
 
 unit.test("attr.set CHECKED attribute works", function (assert) {
 
@@ -643,8 +633,8 @@ if (!isServer()) {
 			assert.equal(domAttr.get(input, "focused"), true, "it is now focused");
 			done();
 		});
-		mutate.appendChild.call(ta, input);
 
+		mutate.appendChild.call(ta, input);
 	});
 }
 
@@ -770,6 +760,15 @@ unit.test("Binding to selected updates the selectedness of options", function (a
 	assert.equal(option1.selected, false);
 });
 
+function poll (check, interval) {
+	var intervalId = setInterval(function () {
+		var isDone = check();
+		if (isDone) {
+			clearInterval(intervalId);
+		}
+	}, interval || 50);
+}
+
 unit.test("Select's value is preserved when inserted into the document", function (assert) {
 	var done = assert.async();
 	var select = document.createElement("select");
@@ -781,14 +780,16 @@ unit.test("Select's value is preserved when inserted into the document", functio
 
 	assert.equal(select.selectedIndex, -1, "was set to -1");
 
+	poll(function () {
+		if (select.selectedIndex === -1) {
+			assert.equal(select.selectedIndex, -1, "still is -1");
+			done();
+			return true;
+		}
+	});
+
 	var ta = document.getElementById("qunit-fixture");
 	mutate.appendChild.call(ta, select);
-
-	setTimeout(function(){
-		assert.equal(select.selectedIndex, -1, "still is -1");
-		done();
-	}, 50);
-
 });
 
 unit.test('multi-select does not dispatch a values change event if its selected options are unchanged (#105)', function (assert) {
