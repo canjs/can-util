@@ -17,7 +17,7 @@ domAttr.get(input, "focused"); // -> true
 Use `focused` in event bindings to have a way to set focus to an input. In this example we are one-way binding to `focused` to a function that will recompute:
 
 ```handlebars
-<input type="text" {$focused}="isEditing()" />
+<input type="text" focused:to="isEditing()" />
 
 <button></button>
 ```
