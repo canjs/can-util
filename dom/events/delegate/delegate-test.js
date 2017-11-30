@@ -7,6 +7,7 @@ var domDispatch = require('../../dispatch/dispatch');
 require('../inserted/inserted');
 require('./delegate');
 require('./enter-leave');
+require('../enter/enter');
 
 var QUnit = require('../../../test/qunit');
 var isServer = require('../../../test/helpers').isServer;
@@ -112,5 +113,24 @@ if (supportsMatchesMethod) {
 			view: window,
 			relatedTarget: div
 		}, [], true);
+	});
+
+	test("delegated custom events", 2, function () {
+		stop();
+		var frag = buildFrag("<div><input type='text'></div>");
+
+		var div = frag.firstChild;
+
+		document.getElementById('qunit-fixture').appendChild(div);
+
+		var handler = function(ev){
+			ok(true, "called");
+			domEvents.removeDelegateListener.call(div, "enter", "input", handler);
+			var dE = domData.get.call(this, "delegateEvents");
+			equal(dE, undefined, "data removed");
+			start();
+		};
+		domEvents.addDelegateListener.call(div, "enter", "input", handler);
+		domDispatch.call(div.firstChild, {type: "keyup", keyCode: 13}, [], true);
 	});
 }

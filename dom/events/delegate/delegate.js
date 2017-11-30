@@ -5,6 +5,7 @@ var domData = require("../../data/data");
 var domMatches = require("../../matches/matches");
 var each = require("../../../js/each/each");
 var isEmptyObject = require("../../../js/is-empty-object/is-empty-object");
+var canCid = require("can-cid");
 
 var dataName = "delegateEvents";
 
@@ -33,7 +34,7 @@ var useCapture = function(eventType) {
  * el.appendChild(sub);
  *
  * function delegateEventsHandler() {
- * 	console.log("delegate event fired");
+ *  console.log("delegate event fired");
  * }
  *
  * events.addDelegateListener.call(el, "click", ".foo", delegateEventsHandler, false);
@@ -41,9 +42,9 @@ var useCapture = function(eventType) {
  * events.removeDelegateListener.call(el, "click", ".foo", delegateEventsHandler);
  * ```
  */
-var handleEvent = function(ev){
+var handleEvent = function (overrideEventType, ev) {
 	var events = domData.get.call(this, dataName);
-	var eventTypeEvents = events[ev.type];
+	var eventTypeEvents = events[overrideEventType || ev.type];
 	// contains the element and the handlers to call back
 	var matches = [];
 
@@ -69,27 +70,26 @@ var handleEvent = function(ev){
 			});
 			cur = cur.parentNode;
 		} while (cur && cur !== ev.currentTarget);
-
 	}
 
 	// make sure `cancelBubble` is  set
 	var oldStopProp = ev.stopPropagation;
 	ev.stopPropagation = function() {
 		oldStopProp.apply(this, arguments);
-    this.cancelBubble = true;
-  };
+		this.cancelBubble = true;
+	};
 
 	for(var i = 0; i < matches.length; i++) {
 		var match = matches[i];
 		var delegates = match.delegates;
 
 		for(var d = 0, dLen = delegates.length; d < dLen; d++) {
-			if( delegates[d].handler.call(match.target, ev) === false) {
+			if (delegates[d].handler.call(match.target, ev) === false) {
 				return false;
 			}
 			if (ev.cancelBubble) {
-                return;
-            }
+				return;
+			}
 		}
 	}
 };
@@ -108,8 +108,6 @@ var handleEvent = function(ev){
  * Delegate events are limited to firing in the bubble phase.
  */
 domEvents.addDelegateListener = function(eventType, selector, handler) {
-
-
 	var events = domData.get.call(this, dataName),
 		eventTypeEvents;
 
@@ -120,7 +118,10 @@ domEvents.addDelegateListener = function(eventType, selector, handler) {
 	// if the first of that event type, bind
 	if (!(eventTypeEvents = events[eventType])) {
 		eventTypeEvents = events[eventType] = {};
-		domEvents.addEventListener.call(this, eventType, handleEvent, useCapture(eventType));
+
+		var delegateHandler = handleEvent.bind(this, eventType);
+		domData.set.call(this, canCid(handler), delegateHandler);
+		domEvents.addEventListener.call(this, eventType, delegateHandler, useCapture(eventType));
 	}
 
 	if (!eventTypeEvents[selector]) {
@@ -131,7 +132,6 @@ domEvents.addDelegateListener = function(eventType, selector, handler) {
 		handler: handler,
 		selector: selector
 	});
-
 };
 
 /**
@@ -165,7 +165,8 @@ domEvents.removeDelegateListener = function(eventType, selector, handler) {
 			delete eventTypeEvents[selector];
 			// if there are no more events for that eventType, unbind
 			if(isEmptyObject(eventTypeEvents)) {
-				domEvents.removeEventListener.call(this, eventType, handleEvent, useCapture(eventType));
+				var delegateHandler = domData.get.call(this, canCid(handler));
+				domEvents.removeEventListener.call(this, eventType, delegateHandler, useCapture(eventType));
 				delete events[eventType];
 				if(isEmptyObject(events)) {
 					domData.clean.call(this, dataName);
