@@ -35,8 +35,13 @@ module.exports = function(moduleName, parentName) {
 			} else if(global.require){
 				resolve(global.require(moduleName));
 			} else {
-				// ideally this will use can.getObject
-				resolve();
+				// steal optimized build
+				if (typeof stealRequire !== "undefined") {
+					steal.import(moduleName, { name: parentName }).then(resolve, reject);
+				} else {
+					// ideally this will use can.getObject
+					resolve();
+				}
 			}
 		} catch(err) {
 			reject(err);
