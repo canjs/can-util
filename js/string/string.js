@@ -7,7 +7,7 @@ var isArray = require('../is-array/is-array');
 
 // ##string.js
 // _Miscellaneous string utility functions._
-// Several of the methods in this plugin use code adapated from Prototype
+// Several of the methods in this plugin use code adapted from Prototype
 // Prototype JavaScript framework, version 1.6.0.1.
 // © 2005-2007 Sam Stephenson
 /**
@@ -230,6 +230,37 @@ var string = {
 		}));
 		return obs === null ? obs : obs.length <= 1 ? obs[0] : obs;
 	},
+
+	/**
+	 * @function can-util/js/string/string.replaceWith string.replaceWith
+	 * @signature `string.replaceWith(str, data, replacer, remove)`
+	 * @param {String} str string with {curly brace} delimited property names
+	 * @param {Object} data object from which to read properties
+	 * @param {Function} replacer function which returns string replacements
+	 * @param {Boolean} shouldRemoveMatchedPaths whether to remove properties found in delimiters in `str` from `data`
+	 * @return {String} the supplied string with delimited properties replaced with their values
+	 *
+	 *
+	 * ```js
+	 * var string = require("can-util/js/string/string");
+	 * var answer = string.replaceWith(
+	 *   '{.}{.}{.}{.}{.} Batman!',
+	 *   {},
+	 *   () => 'Na'
+	 * );
+	 * // => 'NaNaNaNaNa Batman!'
+	 * ```
+	 */
+	replaceWith: function (str, data, replacer, shouldRemoveMatchedPaths) {
+		return str.replace(strReplacer, function (whole, path) {
+			var value = get(data, path);
+			if(shouldRemoveMatchedPaths) {
+				deleteAtPath(data, path);
+			}
+			return replacer(path, value);
+		});
+	},
+
 	/**
 	 * @property {RegExp} can-util/js/string/string.strReplacer string.strReplacer
 	 *
