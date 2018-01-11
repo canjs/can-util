@@ -21,7 +21,6 @@
     "release:minor": "npm version minor && npm publish",
     "release:major": "npm version major && npm publish",
     "build": "node build.js",
-    "http-server": "http-server -p 3000 --silent",
     "ci": "npm run build && npm run test && node test/test-sauce-labs.js",
     "detect-cycle": "detect-cyclic-packages --ignore done-serve"
   },
@@ -35,7 +34,6 @@
     "async": "^2.2.0",
     "can-vdom": "^3.2.3",
     "detect-cyclic-packages": "^1.1.0",
-    "http-server": "^0.10.0",
     "jshint": "^2.9.1",
     "qunitjs": "^2.4.0",
     "saucelabs": "^1.4.0",
