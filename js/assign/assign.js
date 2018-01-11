@@ -1,6 +1,6 @@
 'use strict';
 
-//var canDev = require("can-log/dev/dev");
+var canDev = require("can-log/dev/dev");
 
 /**
  * @module can-util/js/assign/assign assign
@@ -8,8 +8,8 @@
  * @description Deprecated. Use [can-assign] instead.
  */
 
- //!steal-remove-start
-//  canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
- //!steal-remove-end
+//!steal-remove-start
+canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
+//!steal-remove-end
 
 module.exports = require('can-assign');

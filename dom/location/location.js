@@ -1,6 +1,6 @@
 'use strict';
 
-//var canDev = require("can-log/dev/dev");
+var canDev = require("can-log/dev/dev");
 
 /**
  * @module can-util/js/location/location location
@@ -8,8 +8,8 @@
  * @description Deprecated. Use [can-globals] instead.
  */
 
- //!steal-remove-start
-//  canDev.warn('js/location/location is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
- //!steal-remove-end
+//!steal-remove-start
+canDev.warn('js/location/localtion is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
+//!steal-remove-end
 
 module.exports = require('can-globals/location/location');
