@@ -37,7 +37,7 @@ function get(obj, name) {
 
     // Walk current to the 2nd to last object or until there
     // is not a container.
-    for (i = 0; i < length && isContainer(current); i++) {
+    for (i = 0; i < length && isContainer(current) && current !== null; i++) {
         container = current;
         current = container[parts[i]];
     }

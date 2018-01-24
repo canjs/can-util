@@ -36,6 +36,9 @@ QUnit.test('get Deep objects', function (assert) {
 	// not exists
 	result = get(root, 'foo.world');
 	assert.equal(result, undefined, 'got \'undefined\'');
+
+	result = get(root, 'baz.world');
+	assert.equal(result, undefined, 'got \'undefined\'');
 });
 
 QUnit.test('get with numeric index', function (assert) {
