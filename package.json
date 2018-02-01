@@ -59,7 +59,7 @@
     "can-deparam": "^1.0.0",
     "can-dom-data-state": "^0.2.0",
     "can-event-dom-enter": "^1.0.4",
-    "can-event-dom-radiochange": "^1.0.4",
+    "can-event-dom-radiochange": "^2.1.0",
     "can-globals": "<2.0.0",
     "can-log": "^1.0.0",
     "can-namespace": "1.0.0",
