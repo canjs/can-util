@@ -11,11 +11,11 @@ A generic iterator function that can be used to iterate over both Array-Like and
 
   @return {Object|ArrayLike}  the original elements
 
-```javascript
- import each from "can-util/js/each/each";
+```js
+import each from "can-util/js/each/each";
 
- each([2,1,0], function(i) { console.log(this[i]); }, [4,5,6]); // -> 6 \n 5 \n 4
- each({foo: 'bar', abc: 'xyz'}, function(val, key) {
-     console.log(key + ': ' + val);
- }); // -> "foo: bar" \n "abc: xyz"
+each([2,1,0], function(i) { console.log(this[i]); }, [4,5,6]); // -> 6 \n 5 \n 4
+each({foo: 'bar', abc: 'xyz'}, function(val, key) {
+	console.log(key + ': ' + val);
+}); // -> "foo: bar" \n "abc: xyz"
 ```

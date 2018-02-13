@@ -5,7 +5,7 @@
 
 Provides a convenient way to join together URIs handling relative paths.
 
-```javascript
+```js
 import joinURIs from "can-util/js/join-uris";
 
 const base = "http://example.com/some/long/path";

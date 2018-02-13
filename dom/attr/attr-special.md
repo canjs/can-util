@@ -3,17 +3,17 @@
 
 An object used to set up special properties. Each key on `attr.special` is a name of a property/attribute that has special behaviors when being get, set, or bound to.
 
-```javascript
+```js
 attr.special.foo = {
-  get: function(){
-    return this.foo;
-  },
-  set: function(val){
-    this.foo = val;
-  },
-  addEventListener: function(){
-    // Listen to this property changing some how
-  }
+	get: function(){
+		return this.foo;
+	},
+	set: function(val){
+		this.foo = val;
+	},
+	addEventListener: function(){
+		// Listen to this property changing some how
+	}
 };
 ```
 

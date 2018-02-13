@@ -9,7 +9,7 @@ Attempts to determine if an object is a plain object like those you would create
 3. Numbers.
 4. NaN.
 
-```javascript
+```js
 import isPlainObject from "can-util/js/is-plain-object/is-plain-object";
 
 // Created with {}

@@ -4,7 +4,7 @@
 
 Determines if an object is "array like", meaning it can be looped over. Any object with a `.length` property is array like.
 
-```javascript
+```js
 import isArrayLike from "can-util/js/is-array-like/is-array-like";
 
 // Arrays

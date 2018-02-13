@@ -4,15 +4,15 @@
 
 Assign properties from a source object to a target object, deeply copying properties that are objects or arrays.
 
-```javascript
+```js
 import deepAssign from "can-util/js/deep-assign/deep-assign";
 
 const dest = deepAssign({}, {
-  obj: {
-    foo: "bar"
-  }
+	obj: {
+		foo: "bar"
+	}
 }, {
-  arr: [{ hello: "world" }]
+	arr: [{ hello: "world" }]
 });
 
 console.log(dest.obj.foo); // -> "bar"
