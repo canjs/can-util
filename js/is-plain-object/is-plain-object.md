@@ -9,8 +9,8 @@ Attempts to determine if an object is a plain object like those you would create
 3. Numbers.
 4. NaN.
 
-```js
-var isPlainObject = require("can-util/js/is-plain-object/is-plain-object");
+```javascript
+import isPlainObject from "can-util/js/is-plain-object/is-plain-object";
 
 // Created with {}
 console.log(isPlainObject({})); // -> true
@@ -19,8 +19,8 @@ console.log(isPlainObject({})); // -> true
 console.log(isPlainObject(new Object())); // -> true
 
 // Custom object
-var Ctr = function(){};
-var obj = new Ctr();
+const Ctr = function(){};
+const obj = new Ctr();
 
 console.log(isPlainObject(obj)); // -> false
 ```

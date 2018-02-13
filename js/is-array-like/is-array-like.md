@@ -4,8 +4,8 @@
 
 Determines if an object is "array like", meaning it can be looped over. Any object with a `.length` property is array like.
 
-```js
-var isArrayLike = require("can-util/js/is-array-like/is-array-like");
+```javascript
+import isArrayLike from "can-util/js/is-array-like/is-array-like";
 
 // Arrays
 console.log(isArrayLike([{ foo: "bar" }])); // -> true

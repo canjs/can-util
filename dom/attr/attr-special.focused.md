@@ -3,7 +3,7 @@
 
 Signifies if an element, usually an `<input>` is the focused element on the page.
 
-```js
+```javascript
 domAttr.get(input, "focused"); // -> false
 
 domAttr.set(input, "focused", true);
@@ -22,17 +22,17 @@ Use `focused` in event bindings to have a way to set focus to an input. In this 
 <button></button>
 ```
 
-```js
-var ViewModel = DefineMap.extend({
-	editing: {
-		value: false
-	},
-	isEditing: function(){
-		return this.editing;
-	}
+```javascript
+const ViewModel = DefineMap.extend({
+  editing: {
+    value: false
+  },
+  isEditing: function(){
+    return this.editing;
+  }
 });
 
-...
+// ...
 ```
 
 In this example whenever the `editing` property changes to `true`, `isEditing` will be reevaluated to `true` when will set focus on the input. You can imagine there might be some other use, such as a button, that triggers the editing status to change.
