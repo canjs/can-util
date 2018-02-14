@@ -4,10 +4,10 @@
 Signifies if an element, usually an `<input>` is the focused element on the page.
 
 ```js
-domAttr.get(input, "focused"); // -> false
+domAttr.get( input, "focused" ); // -> false
 
-domAttr.set(input, "focused", true);
-domAttr.get(input, "focused"); // -> true
+domAttr.set( input, "focused", true );
+domAttr.get( input, "focused" ); // -> true
 ```
 
 @body
@@ -23,14 +23,14 @@ Use `focused` in event bindings to have a way to set focus to an input. In this 
 ```
 
 ```js
-const ViewModel = DefineMap.extend({
+const ViewModel = DefineMap.extend( {
 	editing: {
 		value: false
 	},
-	isEditing: function(){
+	isEditing: function() {
 		return this.editing;
 	}
-});
+} );
 
 // ...
 ```

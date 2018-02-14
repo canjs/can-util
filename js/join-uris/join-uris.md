@@ -11,9 +11,9 @@ import joinURIs from "can-util/js/join-uris";
 const base = "http://example.com/some/long/path";
 const href = "../../images/foo.png";
 
-const res = joinURIs(base, href);
+const res = joinURIs( base, href );
 
-console.log(res); // -> http://example.com/images/foo.png
+console.log( res ); // -> http://example.com/images/foo.png
 ```
 
 @param {String} base

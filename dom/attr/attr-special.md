@@ -5,13 +5,14 @@ An object used to set up special properties. Each key on `attr.special` is a nam
 
 ```js
 attr.special.foo = {
-	get: function(){
+	get: function() {
 		return this.foo;
 	},
-	set: function(val){
+	set: function( val ) {
 		this.foo = val;
 	},
-	addEventListener: function(){
+	addEventListener: function() {
+
 		// Listen to this property changing some how
 	}
 };

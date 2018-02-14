@@ -13,16 +13,16 @@ Attempts to determine if an object is a plain object like those you would create
 import isPlainObject from "can-util/js/is-plain-object/is-plain-object";
 
 // Created with {}
-console.log(isPlainObject({})); // -> true
+console.log( isPlainObject( {} ) ); // -> true
 
 // new Object
-console.log(isPlainObject(new Object())); // -> true
+console.log( isPlainObject( new Object() ) ); // -> true
 
 // Custom object
-const Ctr = function(){};
+const Ctr = function() {};
 const obj = new Ctr();
 
-console.log(isPlainObject(obj)); // -> false
+console.log( isPlainObject( obj ) ); // -> false
 ```
 
 @param {Object} obj
