@@ -6,14 +6,14 @@
 Provides a convenient way to join together URIs handling relative paths.
 
 ```js
-var joinURIs = require("can-util/js/join-uris");
+import joinURIs from "can-util/js/join-uris";
 
-var base = "http://example.com/some/long/path";
-var href = "../../images/foo.png";
+const base = "http://example.com/some/long/path";
+const href = "../../images/foo.png";
 
-var res = joinURIs(base, href);
+const res = joinURIs( base, href );
 
-console.log(res); // -> http://example.com/images/foo.png
+console.log( res ); // -> http://example.com/images/foo.png
 ```
 
 @param {String} base

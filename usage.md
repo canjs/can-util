@@ -5,7 +5,7 @@
 With StealJS, you can import this module directly in a template that is autorendered:
 
 ```js
-import plugin from 'can-util';
+import plugin from "can-util";
 ```
 
 ### CommonJS use
@@ -14,7 +14,7 @@ Use `require` to load `can-util` and everything else
 needed to create a template that uses `can-util`:
 
 ```js
-var plugin = require("can-util");
+import plugin from "can-util";
 ```
 
 ## AMD use

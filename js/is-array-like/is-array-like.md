@@ -5,20 +5,20 @@
 Determines if an object is "array like", meaning it can be looped over. Any object with a `.length` property is array like.
 
 ```js
-var isArrayLike = require("can-util/js/is-array-like/is-array-like");
+import isArrayLike from "can-util/js/is-array-like/is-array-like";
 
 // Arrays
-console.log(isArrayLike([{ foo: "bar" }])); // -> true
+console.log( isArrayLike( [ { foo: "bar" } ] ) ); // -> true
 
 // Strings
-console.log(isArrayLike("some string")); // -> true
+console.log( isArrayLike( "some string" ) ); // -> true
 
 // Objects with .length property
-console.log(isArrayLike({ length: 11 })); // -> true
+console.log( isArrayLike( { length: 11 } ) ); // -> true
 
 // Numbers and Booleans are not.
-console.log(isArrayLike(true)); // -> false
-console.log(isArrayLike(13)); // -> false
+console.log( isArrayLike( true ) ); // -> false
+console.log( isArrayLike( 13 ) ); // -> false
 ```
 
 @param {*} obj Any object type.
