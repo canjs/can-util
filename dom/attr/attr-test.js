@@ -604,6 +604,15 @@ unit.test("setting .value on an input to undefined or null makes value empty (#8
 	assert.equal(input.value, "", "undefined");
 });
 
+unit.test("setting .value on a textarea to undefined or null makes value empty", function (assert) {
+	var textarea = document.createElement("textarea");
+	textarea.value = "something";
+	domAttr.set(textarea, "value", null);
+	assert.equal(textarea.value, "", "null");
+	domAttr.set(textarea, "value", undefined);
+	assert.equal(textarea.value, "", "undefined");
+});
+
 if (!isServer()) {
 	unit.test("attr.special.focused calls after previous events", function (assert) {
 		var oldQueue = types.queueTask;
