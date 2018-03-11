@@ -33,7 +33,7 @@ var platforms = [{
 }, {
 	browserName: 'Browser',
 	'appium-version': '1.7.1',
-	platform: 'Android 7.1',
+	platform: 'Android 4.4',
 	deviceName: 'Android Emulator'
 }, {
 	browserName: 'Safari',
