@@ -31,6 +31,11 @@ var platforms = [{
 	browserName: 'googlechrome',
 	platform: 'Windows 10'
 }, {
+	browserName: 'Browser',
+	'appium-version': '1.7.1',
+	platform: 'Android 7.1',
+	deviceName: 'Android Emulator'
+}, {
 	browserName: 'Safari',
 	'appium-version': '1.6.3',
 	platformName: 'iOS',
