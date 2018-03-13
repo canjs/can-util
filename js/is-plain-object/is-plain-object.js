@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 var core_hasOwn = Object.prototype.hasOwnProperty;
 
 function isWindow(obj) {
@@ -31,4 +33,4 @@ function isPlainObject(obj) {
 	return key === undefined || core_hasOwn.call(obj, key);
 }
 
-module.exports = isPlainObject;
+module.exports = namespace.isPlainObject = isPlainObject;

@@ -1,6 +1,8 @@
 'use strict';
 
 var getDocument = require('can-globals/document/document');
-module.exports = function(el) {
+var namespace = require("can-namespace");
+
+module.exports = namespace.isOfGlobalDocument = function(el) {
 	return (el.ownerDocument || el) === getDocument();
 };

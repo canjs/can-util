@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 var slice = [].slice;
 // a b c
 // a b c d
@@ -78,7 +80,7 @@ function reverseDiff(oldDiffStopIndex, newDiffStopIndex, oldList, newList, ident
 //    @param {can-util/diff/diff/typedefs.identity} identity(a, b)
 //    @option {*} a
 
-module.exports = exports = function(oldList, newList, identity){
+module.exports = namespace.diff = function(oldList, newList, identity){
 	identity = identity || defaultIdentity;
 
 	var oldIndex = 0,

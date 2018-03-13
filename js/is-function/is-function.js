@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/js/is-function/is-function is-function
  * @parent can-util/js
@@ -29,4 +31,4 @@ var isFunction = (function() {
 	};
 }());
 
-module.exports = isFunction;
+module.exports = namespace.isFunction = isFunction;

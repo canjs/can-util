@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/dom/child-nodes/child-nodes child-nodes
  * @parent can-util/dom
@@ -35,4 +37,4 @@ function childNodes(node) {
 	}
 }
 
-module.exports = childNodes;
+module.exports = namespace.childNodes = childNodes;

@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 // The following is from jQuery
 function isArrayLike(obj){
 	var type = typeof obj;
@@ -20,4 +22,4 @@ function isArrayLike(obj){
 		( length === 0 || typeof length === "number" && length > 0 && ( length - 1 ) in obj );
 }
 
-module.exports = isArrayLike;
+module.exports = namespace.isArrayLike = isArrayLike;

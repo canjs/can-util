@@ -1,6 +1,7 @@
 'use strict';
 
 //var canDev = require("can-log/dev/dev");
+var namespace = require("can-namespace");
 
 /**
  * @module can-util/js/dev/dev dev
@@ -12,4 +13,4 @@
 //  canDev.warn('js/dev/dev is deprecated; please use can-log/dev/dev instead: https://github.com/canjs/can-log');
  //!steal-remove-end
 
-module.exports = require('can-log/dev/dev');
+module.exports = namespace.dev = require('can-log/dev/dev');

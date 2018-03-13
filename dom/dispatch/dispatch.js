@@ -1,6 +1,7 @@
 'use strict';
 
 var domEvents = require("../events/events");
+var namespace = require("can-namespace");
 
 /**
  * @module {function} can-util/dom/dispatch/dispatch dispatch
@@ -14,6 +15,6 @@ var domEvents = require("../events/events");
  * @param {Boolean} [bubbles=true] Specifies whether this event should bubble (by default it will).
  */
 
-module.exports = function(){
+module.exports = namespace.dispatch = function() {
 	return domEvents.dispatch.apply(this, arguments);
 };

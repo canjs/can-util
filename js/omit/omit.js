@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/js/omit/omit omit
  * @parent can-util/js
@@ -22,7 +24,7 @@
  *
  * @return {Object} Returns a new object with all of the properties from `source` that were not omitted.
  */
-module.exports = function (source, propsToOmit) {
+module.exports = namespace.omit = function (source, propsToOmit) {
 	var result = {};
 	for (var prop in source) {
 		if (propsToOmit.indexOf(prop) < 0) {

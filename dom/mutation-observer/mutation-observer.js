@@ -2,6 +2,7 @@
 
 //var canDev = require("can-log/dev/dev");
 var globals = require('can-globals');
+var namespace = require("can-namespace");
 
 /**
  * @module can-util/js/mutation-observer/mutation-observer mutation-observer
@@ -13,7 +14,7 @@ var globals = require('can-globals');
 // canDev.warn('js/mutation-observer/mutation-observer is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
 //!steal-remove-end
 
-module.exports = function(setMO){
+module.exports = namespace.mutationObserver = function(setMO) {
 	if(setMO !== undefined) {
 		globals.setKeyValue('MutationObserver', function(){
 			return setMO;

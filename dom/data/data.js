@@ -2,6 +2,7 @@
 
 var domDataState = require("can-dom-data-state");
 var mutationDocument = require("../mutation-observer/document/document");
+var namespace = require("can-namespace");
 
 // count of distinct elements that have domData set
 var elementSetCount = 0;
@@ -13,7 +14,7 @@ var deleteNode = function() {
 };
 
 var cleanupDomData = function(node) {
-	
+
 	if(domDataState.get.call(node) !== undefined){
 		deleteNode.call(node);
 	}
@@ -34,7 +35,7 @@ var cleanupDomData = function(node) {
  * var domData = require("can-util/dom/data/data");
  * ```
  */
-module.exports = {
+module.exports = namespace.data = {
 	/**
 	 * @function can-util/dom/data/data.getCid domData.getCid
 	 * @signature `domData.getCid.call(el)`
@@ -74,7 +75,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * domData.clean.call(el, "metadata");
 	 * ```
 	 */
@@ -87,7 +88,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * var metadata = domData.get.call(el, "metadata");
 	 * ```
 	 *
@@ -105,7 +106,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * domData.set.call(el, "metadata", {
 	 *   foo: "bar"
 	 * });
@@ -131,12 +132,12 @@ module.exports = {
 	 *
 	 * ```js
 	 * var domData = require("can-util/dom/data/data");
-	 * 
+	 *
 	 * domData.delete.call(el);
 	 * ```
 	 */
 	delete: deleteNode,
-	
+
 	_getElementSetCount: function(){
 		return elementSetCount;
 	}

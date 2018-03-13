@@ -3,6 +3,7 @@
 // # can/util/attr.js
 // Central location for attribute changing to occur, used to trigger an
 // `attributes` event on elements. This enables the user to do (jQuery example): `$(el).bind("attributes", function(ev) { ... })` where `ev` contains `attributeName` and `oldValue`.
+var namespace = require("can-namespace");
 var setImmediate = require("../../js/set-immediate/set-immediate");
 var getDocument = require("can-globals/document/document");
 var global = require("can-globals/global/global")();
@@ -655,4 +656,4 @@ domEvents.removeEventListener = function(eventName, handler){
 	return oldRemoveEventListener.apply(this, arguments);
 };
 
-module.exports = exports = attr;
+module.exports = namespace.attr = attr;

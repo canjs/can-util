@@ -2,6 +2,8 @@
 
 /* jshint unused: false */
 
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/js/is-empty-object/is-empty-object is-empty-object
  * @parent can-util/js
@@ -27,7 +29,7 @@
  * @param {Object} obj Any object.
  * @return {Boolean} True if the object is an object with no enumerable properties.
  */
-module.exports = function(obj){
+module.exports = namespace.isEmptyObject = function(obj) {
 	for(var prop in obj) {
 		return false;
 	}

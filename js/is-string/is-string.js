@@ -1,6 +1,8 @@
 'use strict';
 
 var dev = require('can-log/dev/dev');
+var namespace = require("can-namespace");
+
 var hasWarned = false;
 
 /**
@@ -26,7 +28,7 @@ var hasWarned = false;
  * @param {*} obj An object to test if is a string.
  * @return {Boolean} True if the object is a string.
  */
-module.exports = function isString(obj){
+module.exports = namespace.isString = function isString(obj) {
 	//!steal-remove-start
 	if (!hasWarned) {
 		dev.warn('js/is-string/is-string is deprecated; use typeof x === "string"');

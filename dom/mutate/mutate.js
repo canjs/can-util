@@ -5,6 +5,7 @@
 // Given a list of elements, check if the first is in the DOM, and if so triggers the `inserted` event on all elements and their descendants.
 
 var makeArray = require("../../js/make-array/make-array");
+var namespace = require("can-namespace");
 var setImmediate = require("../../js/set-immediate/set-immediate");
 var CID = require("can-cid");
 
@@ -111,7 +112,7 @@ var mutated = function(elements, type) {
  * mutate.appendChild.call(document.body, el);
  * ```
  */
-module.exports = {
+module.exports = namespace.mutate = {
 	/**
 	 * @function can-util/dom/mutate/mutate.appendChild appendChild
 	 * @signature `mutate.appendChild.call(el, child)`

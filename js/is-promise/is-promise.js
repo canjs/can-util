@@ -1,6 +1,8 @@
 'use strict';
 
 var canReflect = require('can-reflect');
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/js/is-promise/is-promise is-promise
  * @parent can-util/js
@@ -22,6 +24,6 @@ var canReflect = require('can-reflect');
  * @param {Object} obj An object to be tested.
  * @return {Boolean} True if the object is a Promise.
  */
-module.exports = function(obj) {
+module.exports = namespace.isPromise = function(obj) {
 	return canReflect.isPromise(obj);
 };

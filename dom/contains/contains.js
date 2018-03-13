@@ -1,5 +1,7 @@
 'use strict';
 
-module.exports = function(child){
+var namespace = require("can-namespace");
+
+module.exports = namespace.contains = function(child){
 	return this.contains(child);
 };
