@@ -4,6 +4,7 @@ var getDocument = require('can-globals/document/document');
 var fragment = require('../fragment/fragment');
 var each = require('../../js/each/each');
 var childNodes = require('../child-nodes/child-nodes');
+var namespace = require("can-namespace");
 
 /**
 @module {function} can-util/dom/frag/frag frag
@@ -73,4 +74,4 @@ var makeFrag = function(item, doc){
 	}
 };
 
-module.exports = makeFrag;
+module.exports = namespace.frag = makeFrag;

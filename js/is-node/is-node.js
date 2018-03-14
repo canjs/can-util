@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/js/is-node/is-node is-node
  * @parent can-util/js
@@ -18,7 +20,7 @@
  * @return {Boolean} True if running in Node.js
  */
 
-module.exports = function(){
+module.exports = namespace.isNode = function() {
 	return typeof process === "object" &&
 		{}.toString.call(process) === "[object process]";
 };

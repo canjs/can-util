@@ -1,7 +1,9 @@
 'use strict';
 
-var getDocument = require('can-globals/document/document'),
-	childNodes = require("../child-nodes/child-nodes");
+var getDocument = require('can-globals/document/document');
+var childNodes = require("../child-nodes/child-nodes");
+var namespace = require("can-namespace");
+
 // fragment.js
 // ---------
 // _DOM Fragment support._
@@ -74,4 +76,4 @@ var buildFragment = function (html, doc) {
 // a text node that is set to the content.
 
 
-module.exports = buildFragment;
+module.exports = namespace.fragment = buildFragment;

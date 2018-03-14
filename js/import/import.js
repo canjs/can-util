@@ -2,6 +2,7 @@
 
 var isFunction = require('../is-function/is-function');
 var global = require('can-globals/global/global')();
+var namespace = require("can-namespace");
 
 /**
  * @module {function} can-util/js/import/import import
@@ -21,7 +22,7 @@ var global = require('can-globals/global/global')();
  * @return {Promise} A Promise that will resolve when the module has been imported.
  */
 
-module.exports = function(moduleName, parentName) {
+module.exports = namespace.import = function(moduleName, parentName) {
 	return new Promise(function(resolve, reject) {
 		try {
 			if(typeof global.System === "object" && isFunction(global.System["import"])) {

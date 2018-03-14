@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 // From http://jaketrent.com/post/addremove-classes-raw-javascript/
 
 var has = function(className) {
@@ -23,7 +25,7 @@ var has = function(className) {
  * fooDiv.outerHTML; //-> '<div class="foo"></div>'
  * ```
  */
-module.exports = {
+module.exports = namespace.className = {
 	/**
 	 * @function can-util/dom/class-name/class-name.has className.has
 	 * @parent can-util/dom/class-name/class-name
@@ -33,7 +35,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var className = require("can-util/dom/class-name/class-name");
-	 * 
+	 *
 	 * var isContainer = className.has.call(el, "container");
 	 * ```
 	 *
@@ -51,7 +53,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var className = require("can-util/dom/class-name/class-name");
-	 * 
+	 *
 	 * className.add.call(el, "container");
 	 * ```
 	 *
@@ -76,7 +78,7 @@ module.exports = {
 	 *
 	 * ```js
 	 * var className = require("can-util/dom/class-name/class-name");
-	 * 
+	 *
 	 * className.remove.call(el, "container");
 	 * ```
 	 *

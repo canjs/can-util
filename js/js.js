@@ -3,7 +3,7 @@
 
 
 module.exports = {
-	assign: require('can-assign'),
+	assign: require('./assign/assign'),
 	cid: require('can-cid'),
 	deepAssign: require('./deep-assign/deep-assign'),
 	dev: require('./dev/dev'),

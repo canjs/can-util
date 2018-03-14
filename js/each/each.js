@@ -5,6 +5,7 @@ var isArrayLike = require('../is-array-like/is-array-like');
 var has = Object.prototype.hasOwnProperty;
 var isIterable = require("../is-iterable/is-iterable");
 var canSymbol = require("can-symbol");
+var namespace = require("can-namespace");
 
 function each(elements, callback, context) {
 	var i = 0,
@@ -45,4 +46,4 @@ function each(elements, callback, context) {
 	return elements;
 }
 
-module.exports = each;
+module.exports = namespace.each = each;

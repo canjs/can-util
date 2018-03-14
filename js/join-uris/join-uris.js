@@ -1,8 +1,9 @@
 'use strict';
 
+var namespace = require("can-namespace");
 var parseURI = require('can-parse-uri');
 
-module.exports = function(base, href) {
+module.exports = namespace.joinURIs = function(base, href) {
 	function removeDotSegments(input) {
 		var output = [];
 		input.replace(/^(\.\.?(\/|$))+/, '')

@@ -1,6 +1,7 @@
 'use strict';
 
 //var canDev = require("can-log/dev/dev");
+var namespace = require("can-namespace");
 
 /**
  * @module can-util/js/assign/assign assign
@@ -12,4 +13,4 @@
 //  canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
  //!steal-remove-end
 
-module.exports = require('can-assign');
+module.exports = namespace.assign = require('can-assign');

@@ -2,6 +2,7 @@
 
 var isFunction = require('../is-function/is-function');
 var isPlainObject = require('../is-plain-object/is-plain-object');
+var namespace = require("can-namespace");
 
 function deepAssign() {
 	/*jshint maxdepth:6 */
@@ -60,4 +61,4 @@ function deepAssign() {
 	return target;
 }
 
-module.exports = deepAssign;
+module.exports = namespace.deepAssign = deepAssign;

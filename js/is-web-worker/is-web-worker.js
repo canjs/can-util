@@ -1,5 +1,7 @@
 'use strict';
 
+var namespace = require("can-namespace");
+
 /**
  * @module {function} can-util/js/is-web-worker/is-web-worker is-web-worker
  * @parent can-util/js
@@ -19,7 +21,7 @@
  */
 
 /* globals WorkerGlobalScope */
-module.exports = function(){
+module.exports = namespace.isWebWorker = function() {
 	return typeof WorkerGlobalScope !== "undefined" &&
 		(this instanceof WorkerGlobalScope);
 };

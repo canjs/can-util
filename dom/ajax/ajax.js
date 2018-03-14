@@ -1,6 +1,7 @@
 'use strict';
 
 var canDev = require("can-log/dev/dev");
+var namespace = require("can-namespace");
 
 /**
  * @module can-util/dom/ajax/ajax ajax
@@ -12,4 +13,4 @@ var canDev = require("can-log/dev/dev");
  canDev.warn('dom/ajax/ajax is deprecated; please use can-ajax instead: https://github.com/canjs/can-ajax');
  //!steal-remove-end
 
-module.exports = require('can-ajax');
+module.exports = namespace.ajax = require('can-ajax');

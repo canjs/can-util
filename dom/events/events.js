@@ -5,6 +5,7 @@ var isBrowserWindow = require('can-globals/is-browser-window/is-browser-window')
 var isPlainObject = require('../../js/is-plain-object/is-plain-object');
 var fixSyntheticEventsOnDisabled = false;
 var dev = require('can-log/dev/dev');
+var namespace = require("can-namespace");
 
 function isDispatchingOnDisabled(element, ev) {
 	var isInsertedOrRemoved = isPlainObject(ev) ? (ev.type === 'inserted' || ev.type === 'removed') : (ev === 'inserted' || ev === 'removed');
@@ -21,7 +22,7 @@ function isDispatchingOnDisabled(element, ev) {
  * var domEvents = require("can-util/dom/events/events");
  * ```
  */
-module.exports = {
+module.exports = namespace.events = {
 	addEventListener: function(){
 		this.addEventListener.apply(this, arguments);
 	},
