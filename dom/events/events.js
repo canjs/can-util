@@ -54,11 +54,13 @@ module.exports = namespace.events = {
 		// ignore events from feature detection below
 		if(this.disabled === true && ev.type !== 'fix_synthetic_events_on_disabled_test') {
 			//!steal-remove-start
-			dev.warn(
-				"can-util/dom/events::dispatch: Dispatching a synthetic event on a disabled is " +
-				"problematic in FireFox and Internet Explorer. We recommend avoiding this if at " +
-				"all possible. see https://github.com/canjs/can-util/issues/294"
-			);
+			if (process.env.NODE_ENV !== 'production') {
+				dev.warn(
+					"can-util/dom/events::dispatch: Dispatching a synthetic event on a disabled is " +
+					"problematic in FireFox and Internet Explorer. We recommend avoiding this if at " +
+					"all possible. see https://github.com/canjs/can-util/issues/294"
+				);
+			}
 			//!steal-remove-end
 		}
 

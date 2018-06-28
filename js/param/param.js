@@ -9,7 +9,9 @@ var canDev = require("can-log/dev/dev");
  */
 
  //!steal-remove-start
- canDev.warn('js/param/param is deprecated; please use can-param instead: https://github.com/canjs/can-param');
+if (process.env.NODE_ENV !== 'production') {
+	canDev.warn('js/param/param is deprecated; please use can-param instead: https://github.com/canjs/can-param');
+}
  //!steal-remove-end
 
 module.exports = require('can-param');

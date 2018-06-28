@@ -9,7 +9,9 @@
  */
 
  //!steal-remove-start
-//  canDev.warn('js/location/location is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
+if (process.env.NODE_ENV !== 'production') {
+	//  canDev.warn('js/location/location is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
+}
  //!steal-remove-end
 
 module.exports = require('can-globals/location/location');

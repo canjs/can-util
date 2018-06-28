@@ -9,7 +9,9 @@ var canDev = require("can-log/dev/dev");
  */
 
 //!steal-remove-start
-canDev.warn('js/cid/cid is deprecated; please use can-cid instead: https://github.com/canjs/can-cid');
+if (process.env.NODE_ENV !== 'production') {
+	canDev.warn('js/cid/cid is deprecated; please use can-cid instead: https://github.com/canjs/can-cid');
+}
 //!steal-remove-end
 
 module.exports = require('can-cid');

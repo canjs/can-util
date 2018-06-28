@@ -27,7 +27,9 @@ var canDev = require('can-log/dev/dev');
  */
 
  //!steal-remove-start
- canDev.warn('dom/events/enter/enter is deprecated; please use can-event-dom-enter instead: https://github.com/canjs/can-event-dom-enter');
+if (process.env.NODE_ENV !== 'production') {
+	canDev.warn('dom/events/enter/enter is deprecated; please use can-event-dom-enter instead: https://github.com/canjs/can-event-dom-enter');
+}
  //!steal-remove-end
 
 var addEnter = require('can-event-dom-enter/compat');

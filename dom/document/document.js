@@ -10,7 +10,9 @@ var namespace = require("can-namespace");
  */
 
  //!steal-remove-start
+if (process.env.NODE_ENV !== 'production') {
 //  canDev.warn('js/document/document is deprecated; please use can-globals instead: https://github.com/canjs/can-globals');
+}
  //!steal-remove-end
 
 module.exports = namespace.document = require('can-globals/document/document');

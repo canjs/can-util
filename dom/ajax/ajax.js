@@ -10,7 +10,9 @@ var namespace = require("can-namespace");
  */
 
  //!steal-remove-start
- canDev.warn('dom/ajax/ajax is deprecated; please use can-ajax instead: https://github.com/canjs/can-ajax');
+if (process.env.NODE_ENV !== 'production') {
+	canDev.warn('dom/ajax/ajax is deprecated; please use can-ajax instead: https://github.com/canjs/can-ajax');
+}
  //!steal-remove-end
 
 module.exports = namespace.ajax = require('can-ajax');
