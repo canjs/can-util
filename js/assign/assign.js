@@ -10,7 +10,9 @@ var namespace = require("can-namespace");
  */
 
  //!steal-remove-start
-//  canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
+if (process.env.NODE_ENV !== 'production') {
+	//  canDev.warn('js/assign/assign is deprecated; please use can-assign instead: https://github.com/canjs/can-assign');
+}
  //!steal-remove-end
 
 module.exports = namespace.assign = require('can-assign');

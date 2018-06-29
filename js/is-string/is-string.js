@@ -30,9 +30,11 @@ var hasWarned = false;
  */
 module.exports = namespace.isString = function isString(obj) {
 	//!steal-remove-start
-	if (!hasWarned) {
-		dev.warn('js/is-string/is-string is deprecated; use typeof x === "string"');
-		hasWarned = true;
+	if (process.env.NODE_ENV !== 'production') {
+		if (!hasWarned) {
+			dev.warn('js/is-string/is-string is deprecated; use typeof x === "string"');
+			hasWarned = true;
+		}
 	}
 	//!steal-remove-end
 

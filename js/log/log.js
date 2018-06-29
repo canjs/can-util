@@ -9,7 +9,9 @@
  */
 
  //!steal-remove-start
-//  canDev.warn('js/log/log is deprecated; please use can-log instead: https://github.com/canjs/can-log');
+if (process.env.NODE_ENV !== 'production') {
+	//  canDev.warn('js/log/log is deprecated; please use can-log instead: https://github.com/canjs/can-log');
+}
  //!steal-remove-end
 
 module.exports = require('can-log');

@@ -98,7 +98,9 @@ var string = {
 	 */
 	getObject: function (name, roots) {
 		//!steal-remove-start
-		canDev.warn('string.getObject is deprecated, please use can-util/js/get/get instead.');
+		if (process.env.NODE_ENV !== 'production') {
+			canDev.warn('string.getObject is deprecated, please use can-util/js/get/get instead.');
+		}
 		//!steal-remove-end
 
 		roots = isArray(roots) ? roots : [roots || window];

@@ -9,7 +9,9 @@ var canDev = require("can-log/dev/dev");
  */
 
 //!steal-remove-start
-canDev.warn('js/types/types is deprecated; please use can-types instead: https://github.com/canjs/can-types');
+if (process.env.NODE_ENV !== 'production') {
+	canDev.warn('js/types/types is deprecated; please use can-types instead: https://github.com/canjs/can-types');
+}
 //!steal-remove-end
 
 module.exports = require('can-types');
