@@ -1,3 +1,4 @@
+"use strict";
 var setNotEnumerable = require("../set-not-enumerable/set-not-enumerable");
 
 /**

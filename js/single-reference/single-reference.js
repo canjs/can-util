@@ -1,3 +1,4 @@
+"use strict";
 var CID = require("can-cid");
 
 var singleReference;
@@ -24,21 +25,21 @@ function getKeyName(key, extraKey) {
 		references: globalMap
 	};
 } else {*/
-	singleReference = {
-		// obj is a function ... we need to place `value` on it so we can retreive it
-		// we can't use a global map
-		set: function(obj, key, value, extraKey){
-			// check if it has a single reference map
-			obj[getKeyName(key, extraKey)] = value;
-		},
+singleReference = {
+    // obj is a function ... we need to place `value` on it so we can retreive it
+    // we can't use a global map
+    set: function(obj, key, value, extraKey){
+        // check if it has a single reference map
+        obj[getKeyName(key, extraKey)] = value;
+    },
 
-		getAndDelete: function(obj, key, extraKey){
-			var keyName = getKeyName(key, extraKey);
-			var value = obj[keyName];
-			delete obj[keyName];
-			return value;
-		}
-	};
+    getAndDelete: function(obj, key, extraKey){
+        var keyName = getKeyName(key, extraKey);
+        var value = obj[keyName];
+        delete obj[keyName];
+        return value;
+    }
+};
 /*}*/
 
 module.exports = singleReference;

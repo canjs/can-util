@@ -1,3 +1,4 @@
+"use strict";
 var namespace = require('can-namespace');
 
 require('./js/js');
