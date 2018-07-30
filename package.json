@@ -36,7 +36,7 @@
     "can-vdom": "^3.2.3",
     "detect-cyclic-packages": "^1.1.0",
     "http-server": "^0.10.0",
-    "jshint": "^2.9.1",
+    "jshint": "^2.9.6",
     "qunitjs": "^2.4.0",
     "saucelabs": "^1.4.0",
     "steal": "^1.11.4",
