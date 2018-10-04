@@ -4,7 +4,9 @@ var CID = require("can-cid");
 var singleReference;
 
 function getKeyName(key, extraKey) {
-	var keyName = extraKey ? CID(key) + ":" + extraKey : CID(key);
+	var keyCID = key != null && (typeof key === "object" || typeof key === "function") ?
+		CID(key) : ""+key;
+	var keyName = extraKey ? keyCID + ":" + extraKey : keyCID;
 	return keyName || key;
 }
 
