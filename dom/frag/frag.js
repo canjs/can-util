@@ -5,6 +5,9 @@ var fragment = require('../fragment/fragment');
 var each = require('../../js/each/each');
 var childNodes = require('../child-nodes/child-nodes');
 var namespace = require("can-namespace");
+var canSymbol = require("can-symbol");
+
+var toDOMSymbol = canSymbol.for("can.toDOM");
 
 /**
 @module {function} can-util/dom/frag/frag frag
@@ -45,10 +48,12 @@ var makeFrag = function(item, doc){
 	if(!item || typeof item === "string"){
 		frag = fragment(item == null ? "" : ""+item, document);
 		// If we have an empty frag...
-		if (!frag.childNodes.length) {
+		if (!frag.firstChild) {
 			frag.appendChild(document.createTextNode(''));
 		}
 		return frag;
+	} else if(typeof item[toDOMSymbol] === "function") {
+		return makeFrag(item[toDOMSymbol]());
 	} else if(item.nodeType === 11) {
 		return item;
 	} else if(typeof item.nodeType === "number") {
