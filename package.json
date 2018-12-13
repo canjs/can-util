@@ -53,7 +53,7 @@
     "url": "git://github.com/canjs/can-util.git"
   },
   "dependencies": {
-    "can-ajax": "^1.0.0",
+    "can-ajax": "^2.2.1",
     "can-assign": "^1.0.0",
     "can-cid": "^1.1.0",
     "can-deparam": "^1.0.0",
