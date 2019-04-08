@@ -42,7 +42,7 @@
     "steal": "^1.11.4",
     "steal-css": "^1.2.5",
     "steal-qunit": "^1.0.0",
-    "steal-tools": "^1.4.1",
+    "steal-tools": "^2.2.1",
     "test-saucelabs": "0.0.3",
     "testee": "^0.8.0",
     "wd": "^1.1.3",
