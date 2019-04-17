@@ -45,7 +45,7 @@
     "steal-tools": "^1.4.1",
     "test-saucelabs": "0.0.3",
     "testee": "^0.8.0",
-    "wd": "^1.1.3",
+    "wd": "^1.11.2",
     "xmlhttprequest2": "^1.0.0"
   },
   "repository": {
