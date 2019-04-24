@@ -44,7 +44,7 @@
     "steal-qunit": "^1.0.0",
     "steal-tools": "^1.4.1",
     "test-saucelabs": "0.0.3",
-    "testee": "^0.8.0",
+    "testee": "^0.9.0",
     "wd": "^1.1.3",
     "xmlhttprequest2": "^1.0.0"
   },
