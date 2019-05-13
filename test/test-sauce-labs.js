@@ -32,9 +32,9 @@ var platforms = [{
 	platform: 'Windows 10'
 }, {
 	browserName: 'Safari',
-	'appium-version': '1.6.3',
+	'appium-version': '1.9.1',
 	platformName: 'iOS',
-	platformVersion: '10.0',
+	platformVersion: '10.3',
 	deviceName: 'iPhone 7 Simulator'
 }];
 
