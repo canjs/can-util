@@ -63,7 +63,7 @@
     "can-globals": "^1.1.1",
     "can-log": "^1.0.0",
     "can-namespace": "1.0.0",
-    "can-param": "^1.0.0",
+    "can-param": "^1.1.2",
     "can-parse-uri": "^1.0.0",
     "can-reflect": "^1.2.0",
     "can-symbol": "^1.0.0",
