@@ -28,7 +28,7 @@ var removeEvents = function() {
 
 
 QUnit.module("can-util/dom/events/removed", {
-	teardown: removeEvents
+	afterEach: removeEvents
 });
 
 var _MutationObserver = getMutationObserver();

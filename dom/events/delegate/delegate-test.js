@@ -22,8 +22,8 @@ var supportsMatchesMethod = !isServer();
 QUnit.module("can-util/dom/events/delegate");
 
 if (supportsMatchesMethod) {
-	test("basics", 2, function () {
-		stop();
+	QUnit.test("basics", 2, function(assert) {
+		var done = assert.async();
 		var frag = buildFrag("<ul><li><span/></li><li></li></ul>");
 		var ul = frag.firstChild;
 		var parent = document.getElementById('qunit-fixture');
@@ -31,28 +31,28 @@ if (supportsMatchesMethod) {
 		parent.appendChild(ul);
 
 		var handler = function(ev){
-			ok(true, "called");
+			assert.ok(true, "called");
 			domEvents.removeDelegateListener.call(ul, "click", "li", handler);
 			var dE = domData.get.call(this, "delegateEvents");
-			equal(dE, undefined, "data removed");
-			start();
+			assert.equal(dE, undefined, "data removed");
+			done();
 		};
 		domEvents.addDelegateListener.call(ul, "click", "li", handler);
 		domDispatch.call(ul.firstChild.firstChild,"click");
 	});
 
-	test("can call removeDelegateListener without having previously called addDelegateListener", 1, function(){
+	QUnit.test("can call removeDelegateListener without having previously called addDelegateListener", 1, function(assert) {
 		try {
 			var ul = document.createElement("ul");
 			domEvents.removeDelegateListener.call(ul, "click", "li", function(){});
-			ok(true, "Calling removeDelegateListener does not throw");
+			assert.ok(true, "Calling removeDelegateListener does not throw");
 		} catch(er) {
-			ok(false, "Calling removeDelegateListener throws");
+			assert.ok(false, "Calling removeDelegateListener throws");
 		}
 	});
 
-	test("focus", 2, function () {
-		stop();
+	QUnit.test("focus", 2, function(assert) {
+		var done = assert.async();
 		var frag = buildFrag("<div><input type='text'></div>");
 
 		var div = frag.firstChild;
@@ -60,18 +60,18 @@ if (supportsMatchesMethod) {
 		document.getElementById('qunit-fixture').appendChild(div);
 
 		var handler = function(ev){
-			ok(true, "called");
+			assert.ok(true, "called");
 			domEvents.removeDelegateListener.call(div, "focus", "input", handler);
 			var dE = domData.get.call(this, "delegateEvents");
-			equal(dE, undefined, "data removed");
-			start();
+			assert.equal(dE, undefined, "data removed");
+			done();
 		};
 		domEvents.addDelegateListener.call(div, "focus", "input", handler);
 		domDispatch.call(div.firstChild, "focus", [], false);
 	});
 
-	test("blur", 2, function () {
-		stop();
+	QUnit.test("blur", 2, function(assert) {
+		var done = assert.async();
 		var frag = buildFrag("<div><input type='text'></div>");
 
 		var div = frag.firstChild;
@@ -79,18 +79,18 @@ if (supportsMatchesMethod) {
 		document.getElementById('qunit-fixture').appendChild(div);
 
 		var handler = function(ev){
-			ok(true, "called");
+			assert.ok(true, "called");
 			domEvents.removeDelegateListener.call(div, "blur", "input", handler);
 			var dE = domData.get.call(this, "delegateEvents");
-			equal(dE, undefined, "data removed");
-			start();
+			assert.equal(dE, undefined, "data removed");
+			done();
 		};
 		domEvents.addDelegateListener.call(div, "blur", "input", handler);
 		domDispatch.call(div.firstChild, "blur", [], false);
 	});
 
-	test("mouseenter", 3, function() {
-		stop();
+	QUnit.test("mouseenter", 3, function(assert) {
+		var done = assert.async();
 
 		var frag = buildFrag("<div><button></button></div>"),
 		div = frag.firstChild;
@@ -98,12 +98,12 @@ if (supportsMatchesMethod) {
 		document.getElementById('qunit-fixture').appendChild(div);
 
 		var handler = function(ev) {
-			ok(true, "called");
-			equal(ev.type, 'mouseenter', 'event in handler has delegated event type');
+			assert.ok(true, "called");
+			assert.equal(ev.type, 'mouseenter', 'event in handler has delegated event type');
 			domEvents.removeDelegateListener.call(div, 'mouseenter', "button", handler);
 			var dE = domData.get.call(this, "delegateEvents");
-			equal(dE, undefined, "data removed");
-			start();
+			assert.equal(dE, undefined, "data removed");
+			done();
 		};
 		domEvents.addDelegateListener.call(div, "mouseenter", "button", handler);
 
@@ -115,8 +115,8 @@ if (supportsMatchesMethod) {
 		}, [], true);
 	});
 
-	test("delegated custom events", 2, function () {
-		stop();
+	QUnit.test("delegated custom events", 2, function(assert) {
+		var done = assert.async();
 		var frag = buildFrag("<div><input type='text'></div>");
 
 		var div = frag.firstChild;
@@ -124,11 +124,11 @@ if (supportsMatchesMethod) {
 		document.getElementById('qunit-fixture').appendChild(div);
 
 		var handler = function(ev){
-			ok(true, "called");
+			assert.ok(true, "called");
 			domEvents.removeDelegateListener.call(div, "enter", "input", handler);
 			var dE = domData.get.call(this, "delegateEvents");
-			equal(dE, undefined, "data removed");
-			start();
+			assert.equal(dE, undefined, "data removed");
+			done();
 		};
 		domEvents.addDelegateListener.call(div, "enter", "input", handler);
 		domDispatch.call(div.firstChild, {type: "keyup", keyCode: 13}, [], true);
