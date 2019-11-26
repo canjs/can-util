@@ -35,7 +35,7 @@
     "async": "^2.2.0",
     "can-vdom": "^3.2.3",
     "detect-cyclic-packages": "^1.1.0",
-    "http-server": "^0.10.0",
+    "http-server": "^0.12.0",
     "jshint": "^2.9.1",
     "qunitjs": "^2.4.0",
     "saucelabs": "^2.0.0",
